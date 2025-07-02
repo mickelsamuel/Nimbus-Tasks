@@ -85,7 +85,7 @@ router.get('/unread-count', protect, [
   query('category').optional().isIn(['learning', 'social', 'system', 'achievement', 'reminder', 'security'])
 ], async (req, res) => {
   try {
-    const { category } = req.query;
+    const { category: _category } = req.query;
     const unreadCount = await notificationService.getUnreadCount(req.user._id);
     
     res.json({
@@ -849,9 +849,9 @@ router.post('/broadcast', protect, [
     const { notification, targetRole, targetDepartment, sendEmail = false } = req.body;
     
     // Build user query
-    let userQuery = { isActive: true };
-    if (targetRole) userQuery.role = targetRole;
-    if (targetDepartment) userQuery.department = targetDepartment;
+    const userQuery = { isActive: true };
+    if (targetRole) {userQuery.role = targetRole;}
+    if (targetDepartment) {userQuery.department = targetDepartment;}
 
     const users = await User.find(userQuery).select('_id email firstName lastName');
     

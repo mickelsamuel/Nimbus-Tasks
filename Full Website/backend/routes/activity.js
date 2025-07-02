@@ -465,13 +465,13 @@ router.post('/:activityId/read', protect, async (req, res) => {
 
 // Helper function to generate mock activities
 function generateMockActivities({
-  type,
+  type: _type,
   filter,
   timeRange,
   limit,
-  teamId,
+  teamId: _teamId,
   userId,
-  department,
+  department: _department,
   currentUser,
   since
 }) {

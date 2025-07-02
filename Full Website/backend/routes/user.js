@@ -1,7 +1,6 @@
 const express = require('express');
 const router = express.Router();
 const User = require('../models/User');
-const Achievement = require('../models/Achievement');
 const { protect } = require('../middleware/auth');
 
 // @route   GET /api/user/achievements

@@ -390,7 +390,7 @@ Policies Accepted:
 };
 
 // Template loading functionality
-let templates = new Map();
+const templates = new Map();
 let baseTemplate = null;
 
 const loadTemplates = async () => {

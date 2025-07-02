@@ -201,8 +201,7 @@ router.get('/team', (req, res) => {
 
 // GET /api/manager/analytics - Get team analytics
 router.get('/analytics', (req, res) => {
-  // eslint-disable-next-line no-unused-vars
-  const { period = '7d' } = req.query;
+  const { period: _period = '7d' } = req.query;
   
   // Mock analytics data
   const analyticsData = {
@@ -413,7 +412,6 @@ router.post('/team-progress', protect, async (req, res) => {
   try {
     const { userIds } = req.body;
     const User = require('../models/User');
-    const Module = require('../models/Module');
 
     if (!userIds || !Array.isArray(userIds)) {
       return res.status(400).json({

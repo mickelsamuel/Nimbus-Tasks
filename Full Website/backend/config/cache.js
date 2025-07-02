@@ -95,7 +95,7 @@ class SimpleCache {
   
   has(key) {
     const item = this.cache.get(key);
-    if (!item) return false;
+    if (!item) {return false;}
     
     if (item.expiry && Date.now() > item.expiry) {
       this.del(key);
@@ -155,7 +155,7 @@ class SimpleCache {
   }
   
   // Event emitter simulation
-  on(event, callback) {
+  on(_event, _callback) {
     // Simple event handling - can be expanded if needed
   }
 }
@@ -224,17 +224,17 @@ class CacheManager {
     Object.keys(this.caches).forEach(cacheName => {
       const cache = this.caches[cacheName];
       
-      cache.on('set', (key, value) => {
+      cache.on('set', (key, _value) => {
         this.stats.sets++;
         console.log(`Cache SET [${cacheName}]: ${key}`);
       });
       
-      cache.on('del', (key, value) => {
+      cache.on('del', (key, _value) => {
         this.stats.deletes++;
         console.log(`Cache DELETE [${cacheName}]: ${key}`);
       });
       
-      cache.on('expired', (key, value) => {
+      cache.on('expired', (key, _value) => {
         console.log(`Cache EXPIRED [${cacheName}]: ${key}`);
       });
       

@@ -4,7 +4,6 @@ const { protect } = require('../middleware/auth');
 const { logUserAction } = require('../utils/auditLogger');
 const WorkspaceRoom = require('../models/WorkspaceRoom');
 const Booking = require('../models/Booking');
-const mongoose = require('mongoose');
 
 // GET /api/workspaces/rooms - Get all available rooms
 router.get('/rooms', protect, async (req, res) => {
@@ -12,7 +11,7 @@ router.get('/rooms', protect, async (req, res) => {
     const { type, capacity, floor, date, startTime, endTime } = req.query;
     
     // Build query
-    let query = { isActive: true };
+    const query = { isActive: true };
     
     // Filter by type
     if (type && type !== 'all') {
@@ -192,7 +191,7 @@ router.get('/bookings', protect, async (req, res) => {
     const { status, upcoming } = req.query;
     
     // Build query for user's bookings
-    let query = { user: req.user._id };
+    const query = { user: req.user._id };
     
     // Filter by status
     if (status) {

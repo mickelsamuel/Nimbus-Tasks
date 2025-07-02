@@ -7,14 +7,13 @@ const User = require('../models/User');
 const { protect: auth } = require('../middleware/auth');
 const multer = require('multer');
 const path = require('path');
-const fs = require('fs');
 
 // Configure multer for file uploads
 const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
+  destination: function (_req, _file, cb) {
     cb(null, 'uploads/challenges/')
   },
-  filename: function (req, file, cb) {
+  filename: function (_req, file, cb) {
     cb(null, Date.now() + '-' + file.originalname)
   }
 });
@@ -22,7 +21,7 @@ const storage = multer.diskStorage({
 const upload = multer({ 
   storage: storage,
   limits: { fileSize: 10 * 1024 * 1024 }, // 10MB limit
-  fileFilter: (req, file, cb) => {
+  fileFilter: (_req, file, cb) => {
     const allowedTypes = /jpeg|jpg|png|gif|pdf|doc|docx|zip|txt|mp4|mov/;
     const extname = allowedTypes.test(path.extname(file.originalname).toLowerCase());
     const mimetype = allowedTypes.test(file.mimetype);
@@ -204,7 +203,7 @@ router.post('/public/:id/submit', upload.array('attachments', 5), async (req, re
         const token = req.headers.authorization.replace('Bearer ', '');
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
         submitterId = decoded.userId;
-      } catch (e) {
+      } catch (_e) {
         // Not authenticated, continue as public
       }
     }
@@ -340,7 +339,7 @@ router.post('/submissions/:id/vote', async (req, res) => {
         const token = req.headers.authorization.replace('Bearer ', '');
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
         userId = decoded.userId;
-      } catch (e) {
+      } catch (_e) {
         // Not authenticated
       }
     }

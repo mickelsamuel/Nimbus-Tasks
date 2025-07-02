@@ -114,7 +114,7 @@ class PerformanceMonitor {
     const samples = [...this.metrics.responseTime.samples].sort((a, b) => a - b);
     const length = samples.length;
     
-    if (length === 0) return;
+    if (length === 0) {return;}
     
     this.metrics.responseTime.p50 = samples[Math.floor(length * 0.5)];
     this.metrics.responseTime.p95 = samples[Math.floor(length * 0.95)];
@@ -166,7 +166,7 @@ class PerformanceMonitor {
 
   // Get metrics summary
   getMetricsSummary() {
-    const now = Date.now();
+    const _now = Date.now();
     return {
       timestamp: new Date().toISOString(),
       requests: {

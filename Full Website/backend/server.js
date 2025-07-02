@@ -367,7 +367,8 @@ io.use((socket, next) => {
     const decoded = jwt.verify(token, process.env.JWT_SECRET || 'fallback-secret');
     socket.userId = decoded.userId;
     next();
-  } catch {
+  } catch (error) {
+    console.error('Socket authentication error:', error);
     next(new Error('Authentication error'));
   }
 });
@@ -391,7 +392,8 @@ io.on('connection', (socket) => {
       // Add team membership validation here
       socket.join(`team-${teamId}`);
       logUserAction(socket.userId, 'JOINED_TEAM_ROOM', socket.handshake.address, null, { teamId });
-    } catch {
+    } catch (error) {
+      console.error('Failed to join team room:', error);
       socket.emit('error', 'Failed to join team room');
     }
   });
@@ -411,7 +413,8 @@ io.on('connection', (socket) => {
         socket.join('support-team');
         logUserAction(socket.userId, 'JOINED_SUPPORT_TEAM', socket.handshake.address, null);
       }
-    } catch {
+    } catch (error) {
+      console.error('Failed to join support team:', error);
       socket.emit('error', 'Failed to join support team');
     }
   });
@@ -425,7 +428,8 @@ io.on('connection', (socket) => {
         socket.join('moderators');
         logUserAction(socket.userId, 'JOINED_MODERATORS', socket.handshake.address, null);
       }
-    } catch {
+    } catch (error) {
+      console.error('Failed to join moderators room:', error);
       socket.emit('error', 'Failed to join moderators room');
     }
   });
@@ -453,7 +457,8 @@ io.on('connection', (socket) => {
         
         logUserAction(socket.userId, 'JOINED_VIRTUAL_SPACE', socket.handshake.address, null, { spaceId });
       }
-    } catch {
+    } catch (error) {
+      console.error('Failed to join virtual space:', error);
       socket.emit('error', 'Failed to join virtual space');
     }
   });
@@ -524,7 +529,8 @@ io.on('connection', (socket) => {
         });
         logUserAction(socket.userId, 'AGENT_STATUS_CHANGED', socket.handshake.address, null, { status: data.status });
       }
-    } catch {
+    } catch (error) {
+      console.error('Failed to update agent status:', error);
       socket.emit('error', 'Failed to update agent status');
     }
   });
