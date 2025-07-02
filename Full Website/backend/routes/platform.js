@@ -4,7 +4,6 @@ const User = require('../models/User');
 const Module = require('../models/Module');
 const SupportChat = require('../models/SupportChat');
 const Achievement = require('../models/Achievement');
-const Team = require('../models/Team');
 
 // GET /api/platform/stats - Get public platform statistics
 router.get('/stats', async (req, res) => {
@@ -13,19 +12,13 @@ router.get('/stats', async (req, res) => {
     const [
       totalUsers,
       activeUsers,
-      totalModules,
       publishedModules,
-      totalTeams,
-      totalAchievements,
       userRatings,
       completedModules
     ] = await Promise.all([
       User.countDocuments(),
       User.countDocuments({ status: 'active', lastLogin: { $gte: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000) } }), // Active in last 30 days
-      Module.countDocuments(),
       Module.countDocuments({ status: 'published' }),
-      Team.countDocuments({ isActive: true }),
-      Achievement.distinct('_id').then(ids => ids.length),
       SupportChat.find({ rating: { $exists: true, $ne: null } }).select('rating').lean(),
       User.aggregate([
         { $match: { completedModules: { $exists: true, $not: { $size: 0 } } } },

@@ -2,7 +2,17 @@
 
 import React from 'react';
 
-const EnvironmentStats = () => {
+interface EnvironmentStatsProps {
+  teamStats?: {
+    totalPoints: number;
+    level: number;
+    memberCount: number;
+  };
+  memberCount?: number;
+}
+
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const EnvironmentStats: React.FC<EnvironmentStatsProps> = ({ teamStats: _teamStats, memberCount: _memberCount }) => {
   const stats = [
     {
       icon: '⚡',

@@ -695,7 +695,6 @@ router.get('/:teamId/analytics', protect, async (req, res) => {
 
     // Calculate period dates
     const periodDays = period === '7d' ? 7 : period === '30d' ? 30 : 90;
-    const periodStart = new Date(Date.now() - periodDays * 24 * 60 * 60 * 1000);
 
     // Get all team members including leader
     const allMembers = [...team.members.map(m => m.userId), team.leader];
@@ -875,8 +874,8 @@ router.get('/:teamId/channels', protect, async (req, res) => {
     res.json({
       success: true,
       data: channelData.sort((a, b) => {
-        if (a.isDefault) return -1;
-        if (b.isDefault) return 1;
+        if (a.isDefault) {return -1;}
+        if (b.isDefault) {return 1;}
         return a.name.localeCompare(b.name);
       })
     });
@@ -1064,7 +1063,6 @@ function generateTeamPerformanceData(team, timeRange) {
 
   // Generate weekly data
   const weeklyData = Array.from({ length: 8 }, (_, index) => {
-    const weekDate = new Date(now.getTime() - (7 - index) * 7 * 24 * 60 * 60 * 1000);
     return {
       week: `Week ${index + 1}`,
       modulesCompleted: Math.floor(Math.random() * 20) + 5,
@@ -1302,8 +1300,7 @@ router.post('/:teamId/tasks', protect, async (req, res) => {
 // @access  Private
 router.patch('/:teamId/tasks/:taskId', protect, async (req, res) => {
   try {
-    const { teamId, taskId } = req.params;
-    const updates = req.body;
+    const { teamId } = req.params;
     
     // Check if user is team member
     const team = await Team.findById(teamId);

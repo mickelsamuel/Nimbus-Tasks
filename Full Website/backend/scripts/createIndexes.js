@@ -43,7 +43,7 @@ async function createIndexes() {
     console.log(`Found ${modelNames.length} models:`, modelNames.join(', '));
 
     let totalIndexes = 0;
-    let errors = [];
+    const errors = [];
 
     for (const modelName of modelNames) {
       try {
@@ -66,10 +66,10 @@ async function createIndexes() {
           if (indexName !== '_id_') {
             const keys = Object.keys(indexDef.key || {}).join(', ');
             const options = [];
-            if (indexDef.unique) options.push('unique');
-            if (indexDef.sparse) options.push('sparse');
-            if (indexDef.background) options.push('background');
-            if (indexDef.expireAfterSeconds) options.push(`ttl:${indexDef.expireAfterSeconds}s`);
+            if (indexDef.unique) {options.push('unique');}
+            if (indexDef.sparse) {options.push('sparse');}
+            if (indexDef.background) {options.push('background');}
+            if (indexDef.expireAfterSeconds) {options.push(`ttl:${indexDef.expireAfterSeconds}s`);}
             
             const optionsStr = options.length ? ` (${options.join(', ')})` : '';
             console.log(`    - ${indexName}: ${keys}${optionsStr}`);

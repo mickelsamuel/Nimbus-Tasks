@@ -104,7 +104,7 @@ class MongoShell {
           console.log(`Role: ${user.role} | Department: ${user.department}`);
           console.log(`Approved: ${user.isApproved ? '✅' : '❌'} | Active: ${user.isActive ? '✅' : '❌'}`);
           console.log(`Created: ${user.createdAt}`);
-          if (user.lastLogin) console.log(`Last Login: ${user.lastLogin}`);
+          if (user.lastLogin) {console.log(`Last Login: ${user.lastLogin}`);}
         } else {
           console.log(`❌ User not found: ${email}`);
         }

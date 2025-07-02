@@ -154,8 +154,7 @@ export function validateForm(formData: Record<string, any>, schema: FormValidati
  */
 export function validateFieldRealtime(
   value: any, 
-  rules: ValidationRule,
-  debounceMs: number = 300
+  rules: ValidationRule
 ): ValidationResult {
   // This would be used with a debounce hook in React
   return validateField(value, rules)

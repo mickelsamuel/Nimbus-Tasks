@@ -1,7 +1,8 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
+import Image from 'next/image'
 import {
   X, CheckCircle, AlertCircle, Info, AlertTriangle, 
   Trophy, BookOpen, Users, Bell, MessageSquare, Shield,
@@ -45,6 +46,11 @@ export function NotificationToast({
   const [visible, setVisible] = useState<string[]>([])
   const [hoveredId, setHoveredId] = useState<string | null>(null)
 
+  const handleDismiss = useCallback((id: string) => {
+    setVisible(prev => prev.filter(vid => vid !== id))
+    setTimeout(() => onDismiss(id), 300) // Allow animation to complete
+  }, [onDismiss])
+
   useEffect(() => {
     // Auto-dismiss non-persistent notifications
     notifications.forEach(notification => {
@@ -58,12 +64,7 @@ export function NotificationToast({
         return () => clearTimeout(timer)
       }
     })
-  }, [notifications, handleDismiss, visible])
-
-  const handleDismiss = (id: string) => {
-    setVisible(prev => prev.filter(vid => vid !== id))
-    setTimeout(() => onDismiss(id), 300) // Allow animation to complete
-  }
+  }, [notifications, visible, handleDismiss])
 
   const handleAction = (notificationId: string, action: string) => {
     onAction(notificationId, action)
@@ -206,9 +207,11 @@ export function NotificationToast({
                           {notification.sender && (
                             <div className="flex items-center gap-2 mt-1">
                               {notification.avatar && (
-                                <img
+                                <Image
                                   src={notification.avatar}
                                   alt={notification.sender}
+                                  width={16}
+                                  height={16}
                                   className="w-4 h-4 rounded-full"
                                 />
                               )}

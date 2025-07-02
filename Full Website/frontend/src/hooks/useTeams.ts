@@ -116,6 +116,20 @@ export const useTeams = () => {
     }
   };
 
+  const getTeamById = async (teamId: string) => {
+    try {
+      const response = await TeamsAPI.getTeamById(teamId);
+      if (response.success) {
+        return response.team;
+      } else {
+        throw new Error('Failed to get team details');
+      }
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to get team details');
+      throw err;
+    }
+  };
+
   // Compute derived data
   const myTeams = teams.filter(team => 
     team.members?.some(member => {
@@ -135,7 +149,8 @@ export const useTeams = () => {
     joinTeam,
     leaveTeam,
     updateTeam,
-    deleteTeam
+    deleteTeam,
+    getTeamById
   };
 };
 

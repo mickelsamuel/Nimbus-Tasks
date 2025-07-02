@@ -737,7 +737,7 @@ async function calculateUserGrowthPercentage() {
       createdAt: { $gte: twoWeeksAgo, $lt: lastWeek }
     });
     
-    if (lastWeekUsers === 0) return thisWeekUsers > 0 ? 100 : 0;
+    if (lastWeekUsers === 0) {return thisWeekUsers > 0 ? 100 : 0;}
     
     return Math.round(((thisWeekUsers - lastWeekUsers) / lastWeekUsers) * 100);
   } catch (error) {
@@ -764,7 +764,7 @@ async function calculateSessionGrowthPercentage() {
       lastLogin: { $gte: yesterday, $lt: today }
     });
     
-    if (yesterdaySessions === 0) return todaySessions > 0 ? 100 : 0;
+    if (yesterdaySessions === 0) {return todaySessions > 0 ? 100 : 0;}
     
     return Math.round(((todaySessions - yesterdaySessions) / yesterdaySessions) * 100);
   } catch (error) {
@@ -788,7 +788,7 @@ async function calculateModuleGrowthPercentage() {
       createdAt: { $gte: twoMonthsAgo, $lt: lastMonth }
     });
     
-    if (lastMonthModules === 0) return thisMonthModules > 0 ? 100 : 0;
+    if (lastMonthModules === 0) {return thisMonthModules > 0 ? 100 : 0;}
     
     return Math.round(((thisMonthModules - lastMonthModules) / lastMonthModules) * 100);
   } catch (error) {
@@ -814,7 +814,7 @@ async function calculateTeamGrowthPercentage() {
       isActive: true
     });
     
-    if (lastMonthTeams === 0) return thisMonthTeams > 0 ? 100 : 0;
+    if (lastMonthTeams === 0) {return thisMonthTeams > 0 ? 100 : 0;}
     
     return Math.round(((thisMonthTeams - lastMonthTeams) / lastMonthTeams) * 100);
   } catch (error) {

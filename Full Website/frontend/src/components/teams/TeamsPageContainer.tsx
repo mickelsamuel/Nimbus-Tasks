@@ -1,11 +1,11 @@
 'use client'
 
-import React, { useState, useMemo, memo, useCallback } from 'react'
+import React, { useState, useMemo } from 'react'
 import { useRouter } from 'next/navigation'
 import dynamic from 'next/dynamic'
-import { motion, AnimatePresence, useReducedMotion } from 'framer-motion'
+import { motion, AnimatePresence } from 'framer-motion'
 import { useTheme } from '@/contexts/ThemeContext'
-import { useScrollPerformance, useInViewport, useDebounce } from '@/hooks/usePerformance'
+import { useScrollPerformance, useDebounce } from '@/hooks/usePerformance'
 import {
   Users,
   Plus,
@@ -128,8 +128,6 @@ interface Tab {
   description?: string
 }
 
-// Memoized team card component
-const MemoizedTeamCard = memo(TeamCard)
 
 // Memoized teams filters
 const useTeamFilters = (teams: TeamUIData[], searchQuery: string) => {
@@ -162,8 +160,7 @@ const TeamsPageContainer: React.FC = () => {
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid')
   
   // Performance hooks
-  const { isScrolling } = useScrollPerformance()
-  const shouldReduceMotion = useReducedMotion()
+  useScrollPerformance()
   const debouncedSearchQuery = useDebounce(searchQuery, 300)
   
   // Use real teams hook
@@ -178,19 +175,6 @@ const TeamsPageContainer: React.FC = () => {
   // Use memoized filters
   const { myTeams, availableTeams } = useTeamFilters(teams, debouncedSearchQuery)
   
-  // Memoized handlers
-  const handleTabChange = useCallback((tabId: string) => {
-    setActiveTab(tabId)
-    setSearchQuery('') // Clear search when switching tabs
-  }, [])
-  
-  const handleSearchChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchQuery(e.target.value)
-  }, [])
-  
-  const handleViewModeChange = useCallback((mode: 'grid' | 'list') => {
-    setViewMode(mode)
-  }, [])
 
   const tabs: Tab[] = [
     { 
@@ -487,7 +471,7 @@ const TeamsPageContainer: React.FC = () => {
               color: 'green',
               bgColor: 'from-green-50 to-green-100 dark:from-green-900/30 dark:to-green-800/30'
             }
-          ].map((stat, index) => {
+          ].map((stat) => {
             const IconComponent = stat.icon
             return (
               <div

@@ -3,8 +3,6 @@
 import React from 'react'
 import { motion } from 'framer-motion'
 import { 
-  Skeleton, 
-  CardSkeleton, 
   StatCardSkeleton, 
   ChartSkeleton,
   TextSkeleton,

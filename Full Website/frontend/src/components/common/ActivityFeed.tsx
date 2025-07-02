@@ -1,7 +1,8 @@
 'use client'
 
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef, useCallback } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
+import Image from 'next/image'
 import { 
   Bell, Users, Award, BookOpen, MessageSquare, 
   TrendingUp, Target, ChevronDown,
@@ -86,24 +87,7 @@ export function ActivityFeed({
   const lastFetchTime = useRef<Date>(new Date())
   const intervalRef = useRef<NodeJS.Timeout>()
 
-  useEffect(() => {
-    fetchActivities()
-    
-    if (enableRealtime) {
-      // Set up real-time polling every 30 seconds
-      intervalRef.current = setInterval(() => {
-        fetchActivities(true)
-      }, 30000)
-      
-      return () => {
-        if (intervalRef.current) {
-          clearInterval(intervalRef.current)
-        }
-      }
-    }
-  }, [feedType, teamId, userId, department, filter, timeRange, enableRealtime, fetchActivities])
-
-  const fetchActivities = async (isRefresh = false) => {
+  const fetchActivities = useCallback(async (isRefresh = false) => {
     try {
       if (isRefresh) {
         setRefreshing(true)
@@ -146,7 +130,24 @@ export function ActivityFeed({
       setLoading(false)
       setRefreshing(false)
     }
-  }
+  }, [feedType, teamId, userId, department, filter, timeRange, maxItems])
+
+  useEffect(() => {
+    fetchActivities()
+    
+    if (enableRealtime) {
+      // Set up real-time polling every 30 seconds
+      intervalRef.current = setInterval(() => {
+        fetchActivities(true)
+      }, 30000)
+      
+      return () => {
+        if (intervalRef.current) {
+          clearInterval(intervalRef.current)
+        }
+      }
+    }
+  }, [feedType, teamId, userId, department, filter, timeRange, enableRealtime, fetchActivities])
 
   const getActivityIcon = (type: string) => {
     switch (type) {
@@ -455,9 +456,11 @@ export function ActivityFeed({
                         
                         <div className="flex items-center gap-4 mt-3">
                           <div className="flex items-center gap-2">
-                            <img
+                            <Image
                               src={activity.user.avatar || '/avatars/default.jpg'}
                               alt={activity.user.name}
+                              width={24}
+                              height={24}
                               className="w-6 h-6 rounded-full"
                             />
                             <span className="text-sm text-gray-600 dark:text-gray-400">

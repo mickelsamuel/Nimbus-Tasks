@@ -1,6 +1,6 @@
 'use client'
 
-import { useRef, useEffect, useState } from 'react'
+import { useRef, useEffect, useState, useCallback } from 'react'
 import mapboxgl from 'mapbox-gl'
 import { motion } from 'framer-motion'
 import { 
@@ -128,7 +128,7 @@ export default function EnhancedGlobe() {
   }
 
   // Apply dynamic lighting
-  const applyLighting = (mapInstance: mapboxgl.Map, mode: 'day' | 'dusk' | 'night' | 'dawn') => {
+  const applyLighting = useCallback((mapInstance: mapboxgl.Map, mode: 'day' | 'dusk' | 'night' | 'dawn') => {
     const config = getLightingConfig(mode)
     // Note: setLight is deprecated, using setLights instead
     mapInstance.setLights([{
@@ -141,7 +141,7 @@ export default function EnhancedGlobe() {
       }
     }])
     mapInstance.setFog(config.fog)
-  }
+  }, [])
 
   // Performance-optimized 3D building configuration
   const configure3DBuildings = (mapInstance: mapboxgl.Map) => {
@@ -251,7 +251,7 @@ export default function EnhancedGlobe() {
   }
 
   // Ultra-smooth orbital camera animation with performance optimization
-  const cinematicFlyTo = (targetBuilding: string, callback?: () => void) => {
+  const cinematicFlyTo = useCallback((targetBuilding: string, callback?: () => void) => {
     if (!map.current || animationInProgress) return
     
     setAnimationInProgress(true)
@@ -315,7 +315,7 @@ export default function EnhancedGlobe() {
     
     // Start the smooth animation
     requestAnimationFrame(animateCamera)
-  }
+  }, [animationInProgress])
 
   // Auto-cycle through lighting modes
   const cycleLighting = () => {
@@ -399,7 +399,8 @@ export default function EnhancedGlobe() {
         refreshExpiredTiles: false, // Reduce network requests
         // Rendering optimizations
         maxTileCacheSize: 200, // Limit cache size
-        transformRequest: (url, resourceType) => {
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        transformRequest: (url, _resourceType) => {
           // Fix authentication for Mapbox requests
           if (url.includes('api.mapbox.com')) {
             // Ensure the URL has the correct parameters

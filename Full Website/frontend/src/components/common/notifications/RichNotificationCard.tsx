@@ -2,12 +2,13 @@
 
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
+import Image from 'next/image'
 import {
-  X, Clock, Check, Star, MessageSquare, ExternalLink,
+  X, Clock, Check, MessageSquare, ExternalLink,
   ChevronRight, Info, AlertTriangle, CheckCircle, AlertCircle,
-  Trophy, BookOpen, Users, Bell, Calendar, Shield, Zap,
-  ThumbsUp, ThumbsDown, Share2, Archive, Bookmark,
-  Play, Pause, Download, Eye, Heart, User
+  Trophy, BookOpen, Users, Bell, Shield,
+  Share2, Archive, Bookmark,
+  Heart
 } from 'lucide-react'
 
 interface NotificationAction {
@@ -209,9 +210,11 @@ export function RichNotificationCard({
               {/* Sender Info */}
               {notification.sender && (
                 <div className="flex items-center gap-2 mb-1">
-                  <img
+                  <Image
                     src={notification.sender.avatar || '/avatars/default.jpg'}
                     alt={notification.sender.name}
+                    width={16}
+                    height={16}
                     className="w-4 h-4 rounded-full"
                   />
                   <span className="text-xs text-gray-500 dark:text-gray-400">

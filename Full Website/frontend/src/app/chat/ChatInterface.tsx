@@ -1,16 +1,15 @@
 'use client';
 
 import React, { useState, useRef, useEffect, useMemo, Suspense, lazy } from 'react';
-import { MessageSquare, Plus, Loader2, Bot, Maximize2, Minimize2, Send, Mic, MicOff, Volume2, VolumeX, Sparkles, BrainCircuit, TrendingUp, Shield, Layers } from 'lucide-react';
+import { MessageSquare, Plus, Loader2, Bot, Maximize2, Minimize2, Send, Mic, MicOff, Volume2, VolumeX, Layers } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { aiChatService, type AIResponse } from '@/services/aiChatService';
-import { speechService, speechRecognition, type Viseme } from '@/services/speechService';
+import { type Viseme } from '@/services/speechService';
+import { bankingSpeechService, bankingSpeechRecognition, type VoiceProfile } from '@/services/enhancedSpeechService';
 
 // Lazy load heavy 3D components
 const Canvas = lazy(() => import('@react-three/fiber').then(module => ({ default: module.Canvas })));
-const ImmersiveChatScene = lazy(() => import('./components/ImmersiveChatScene'));
 const Professional3DChatScene = lazy(() => import('./components/Professional3DChatScene'));
-const FloatingChatInput = lazy(() => import('./components/FloatingChatInput'));
 const ModernChatInterface = lazy(() => import('./components/ModernChatInterface'));
 
 // Simple error boundary for 3D scene
@@ -60,7 +59,7 @@ interface ChatSession {
 
 const initialMessage: Message = {
   id: '1',
-  content: 'Welcome! I\'m Max, your AI banking assistant from National Bank. With over 160 years of banking excellence, I\'m here to help you with accounts, loans, investments, and any financial questions. How can I assist you today?',
+  content: 'Welcome! I&apos;m Max, your AI banking assistant from National Bank. With over 160 years of banking excellence, I&apos;m here to help you with accounts, loans, investments, and any financial questions. How can I assist you today?',
   sender: 'ai',
   timestamp: new Date(),
   type: 'text',
@@ -107,6 +106,8 @@ export default function ChatInterface() {
   const [currentAIMessage, setCurrentAIMessage] = useState('');
   const [show3D, setShow3D] = useState(false);
   const [currentViseme, setCurrentViseme] = useState<string>('sil');
+  const [speechConfidence, setSpeechConfidence] = useState<number>(0);
+  const [availableVoices, setAvailableVoices] = useState<VoiceProfile[]>([]);
   const [isRecognitionSupported, setIsRecognitionSupported] = useState(false);
   const [isSpeechSupported, setIsSpeechSupported] = useState(false);
   const [interimTranscript, setInterimTranscript] = useState('');
@@ -116,7 +117,6 @@ export default function ChatInterface() {
   const [view3D, setView3D] = useState(true);
   
   const messagesEndRef = useRef<HTMLDivElement>(null);
-  const inputRef = useRef<HTMLTextAreaElement>(null);
   
   const activeSession = sessions.find(s => s.id === activeSessionId);
   const messages = useMemo(() => activeSession?.messages || [], [activeSession?.messages]);
@@ -143,9 +143,16 @@ export default function ChatInterface() {
       setShow3D(true);
     }, 1000);
     
-    // Check speech capabilities
-    setIsRecognitionSupported(speechRecognition.isSupported());
-    setIsSpeechSupported(speechService.isSupported());
+    // Check enhanced speech capabilities
+    setIsRecognitionSupported(bankingSpeechRecognition.isSupported());
+    setIsSpeechSupported(bankingSpeechService.isSupported());
+    
+    // Load available voice profiles
+    if (bankingSpeechService.isSupported()) {
+      const profiles = bankingSpeechService.getVoiceProfiles();
+      setAvailableVoices(profiles);
+      console.log('🎤 Available voice profiles:', profiles.length);
+    }
     
     return () => clearTimeout(timer);
   }, []);
@@ -243,26 +250,31 @@ export default function ChatInterface() {
       setCurrentAIMessage(response.message);
       setIsAISpeaking(true);
       
-      // Speak the response if not muted
+      
+      // Speak the response if not muted using enhanced speech service
       if (!isMuted && isSpeechSupported) {
         try {
-          await speechService.speak(
+          await bankingSpeechService.speakBankingMessage(
             response.message,
-            { rate: 1.0, pitch: 1.1, volume: 0.9 },
-            (viseme: Viseme) => setCurrentViseme(viseme.type),
+            (viseme: Viseme) => {
+              setCurrentViseme(viseme.type);
+              setSpeechConfidence(viseme.confidence || 1);
+            },
             () => {
               setIsAISpeaking(false);
               setCurrentAIMessage('');
               setCurrentViseme('sil');
+              setSpeechConfidence(0);
             }
           );
         } catch (error) {
-          console.error('Speech synthesis error:', error);
+          console.error('Enhanced speech synthesis error:', error);
           // Fallback to timer-based animation end
           setTimeout(() => {
             setIsAISpeaking(false);
             setCurrentAIMessage('');
             setCurrentViseme('sil');
+            setSpeechConfidence(0);
           }, 3000);
         }
       } else {
@@ -272,6 +284,7 @@ export default function ChatInterface() {
           setIsAISpeaking(false);
           setCurrentAIMessage('');
           setCurrentViseme('sil');
+          setSpeechConfidence(0);
         }, duration);
       }
       
@@ -296,40 +309,52 @@ export default function ChatInterface() {
     }
 
     if (isListening) {
-      speechRecognition.stopListening();
+      bankingSpeechRecognition.stopListening();
       setIsListening(false);
       setInterimTranscript('');
+      setSpeechConfidence(0);
     } else {
       try {
-        await speechRecognition.startListening(
-          (transcript: string, isFinal: boolean) => {
+        await bankingSpeechRecognition.startBankingListening(
+          (transcript: string, isFinal: boolean, confidence?: number) => {
+            setSpeechConfidence(confidence || 0);
+            
             if (isFinal) {
-              setInputMessage(prev => prev + ' ' + transcript);
+              setInputMessage(prev => {
+                const newMessage = prev.trim() + (prev.trim() ? ' ' : '') + transcript;
+                return newMessage;
+              });
               setInterimTranscript('');
+              setSpeechConfidence(0);
             } else {
               setInterimTranscript(transcript);
             }
           },
           (error: string) => {
-            console.error('Speech recognition error:', error);
+            console.error('Enhanced speech recognition error:', error);
             setIsListening(false);
             setInterimTranscript('');
+            setSpeechConfidence(0);
+            
+            // Show user-friendly error message
+            alert(`Speech Recognition Error: ${error}`);
           }
         );
         setIsListening(true);
       } catch (error) {
-        console.error('Failed to start speech recognition:', error);
-        alert('Failed to start speech recognition. Please check your microphone permissions.');
+        console.error('Failed to start enhanced speech recognition:', error);
+        alert('Failed to start speech recognition. Please check your microphone permissions and try again.');
       }
     }
   };
 
   const toggleMute = () => {
     if (isMuted && isAISpeaking) {
-      speechService.stop();
+      bankingSpeechService.stop();
       setIsAISpeaking(false);
       setCurrentAIMessage('');
       setCurrentViseme('sil');
+      setSpeechConfidence(0);
     }
     setIsMuted(!isMuted);
   };
@@ -526,6 +551,9 @@ export default function ChatInterface() {
                         onHistoryToggle={toggleHistory}
                         onMessageClick={handleMessageClick}
                         onSuggestionClick={handleSuggestionClick}
+                        isListening={isListening}
+                        speechConfidence={speechConfidence}
+                        availableVoices={availableVoices}
                       />
                     </Suspense>
                   </Canvas>
@@ -564,7 +592,7 @@ export default function ChatInterface() {
                   {/* Interim transcript display */}
                   {interimTranscript && (
                     <div className="text-blue-300 text-sm mt-2 opacity-70">
-                      Listening: "{interimTranscript}"
+                      Listening: &quot;{interimTranscript}&quot;
                     </div>
                   )}
                 </div>

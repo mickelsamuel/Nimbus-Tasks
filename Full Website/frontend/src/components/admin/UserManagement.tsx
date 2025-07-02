@@ -7,9 +7,6 @@ import {
   XCircle, 
   Clock, 
   Search, 
-  Filter,
-  MoreHorizontal,
-  Eye,
   UserCheck,
   UserX,
   Shield,
@@ -278,7 +275,7 @@ export default function UserManagement() {
                         </p>
                         {getStatusBadge(user)}
                         {user.role === 'admin' && (
-                          <Shield className="h-4 w-4 text-red-500" title="Admin" />
+                          <Shield className="h-4 w-4 text-red-500" />
                         )}
                       </div>
                       

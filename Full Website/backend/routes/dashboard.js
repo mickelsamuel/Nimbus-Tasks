@@ -710,7 +710,7 @@ router.get('/wallet/history', protect, async (req, res) => {
 
 // Helper functions for new endpoints
 function calculateLearningStreak(lastActivity) {
-  if (!lastActivity) return 0;
+  if (!lastActivity) {return 0;}
   
   const today = new Date();
   const lastActiveDate = new Date(lastActivity);
@@ -718,7 +718,7 @@ function calculateLearningStreak(lastActivity) {
   const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
   
   // If last activity was more than 1 day ago, streak is broken
-  if (diffDays > 1) return 0;
+  if (diffDays > 1) {return 0;}
   
   // Return a reasonable streak based on activity
   return Math.min(30, Math.max(1, 7 - diffDays));
@@ -819,7 +819,7 @@ function generateEarningHistory(currentCoins, days) {
 }
 
 function calculateWeeklyGrowth(earningHistory) {
-  if (earningHistory.length === 0) return 0;
+  if (earningHistory.length === 0) {return 0;}
   
   const now = new Date();
   const weekAgo = new Date();
@@ -836,7 +836,7 @@ function calculateWeeklyGrowth(earningHistory) {
   const thisWeekTotal = thisWeek.reduce((sum, entry) => sum + entry.amount, 0);
   const lastWeekTotal = lastWeek.reduce((sum, entry) => sum + entry.amount, 0);
   
-  if (lastWeekTotal === 0) return thisWeekTotal > 0 ? 100 : 0;
+  if (lastWeekTotal === 0) {return thisWeekTotal > 0 ? 100 : 0;}
   
   return Math.round(((thisWeekTotal - lastWeekTotal) / lastWeekTotal) * 100);
 }

@@ -31,7 +31,7 @@ async function bulkApproveUsers(options = {}) {
       return;
     }
 
-    let query = { isApproved: false };
+    const query = { isApproved: false };
     let users = [];
 
     if (options.all) {

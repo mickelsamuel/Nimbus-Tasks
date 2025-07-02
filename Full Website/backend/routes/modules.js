@@ -1094,7 +1094,7 @@ router.get('/:moduleId/discussions/:discussionId', protect, async (req, res) => 
 
     // Add view for this user
     await ModuleDiscussion.findById(discussionId).then(doc => {
-      if (doc) doc.addView(req.user.id);
+      if (doc) {doc.addView(req.user.id);}
     });
 
     // Filter out deleted replies

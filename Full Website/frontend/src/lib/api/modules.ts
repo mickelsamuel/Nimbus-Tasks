@@ -64,5 +64,22 @@ export const modulesApi = {
   }> => {
     const response = await api.post(`/modules/${id}/like`)
     return response.data
+  },
+
+  getChapter: async (moduleId: string, chapterId: string): Promise<{ 
+    success: boolean; 
+    data: any; 
+    message?: string 
+  }> => {
+    const response = await api.get(`/modules/${moduleId}/chapters/${chapterId}`)
+    return response.data
+  },
+
+  markChapterComplete: async (moduleId: string, chapterId: string): Promise<{ 
+    success: boolean; 
+    message: string 
+  }> => {
+    const response = await api.post(`/modules/${moduleId}/chapters/${chapterId}/complete`)
+    return response.data
   }
 }

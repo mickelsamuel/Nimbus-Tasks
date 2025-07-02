@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useRouter } from 'next/navigation';
-import { Search, Filter, Star, Users, TrendingUp, ChevronDown, Loader2 } from 'lucide-react';
+import { Search, Filter, Star, Users, TrendingUp, ChevronDown } from 'lucide-react';
 import TeamCard from './cards/TeamCard';
 import { useTeamCategories } from '@/lib/api/teamCategories';
 
@@ -71,7 +71,7 @@ const TeamDiscovery: React.FC<TeamDiscoveryProps> = ({
       });
 
       if (response.ok) {
-        const result = await response.json();
+        await response.json();
         alert('Successfully joined the team!');
         // Refresh teams data or update local state
         window.location.reload();

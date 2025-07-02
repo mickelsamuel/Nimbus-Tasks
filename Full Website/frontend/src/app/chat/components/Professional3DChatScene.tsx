@@ -19,7 +19,7 @@ interface Message {
 
 interface Professional3DChatSceneProps {
   messages: Message[];
-  currentMessage: string;
+  currentMessage?: string;
   isAISpeaking: boolean;
   currentViseme?: string;
   isLoading: boolean;
@@ -27,6 +27,9 @@ interface Professional3DChatSceneProps {
   onHistoryToggle: () => void;
   onMessageClick?: (message: Message) => void;
   onSuggestionClick?: (suggestion: string) => void;
+  isListening?: boolean;
+  speechConfidence?: number;
+  availableVoices?: Array<{ name: string; quality: number; naturalness: number }>;
 }
 
 function LoadingIndicator() {
@@ -63,14 +66,16 @@ function LoadingIndicator() {
 
 export default function Professional3DChatScene({
   messages,
-  currentMessage,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  currentMessage: _currentMessage,
   isAISpeaking,
   currentViseme,
   isLoading,
   showHistory,
   onHistoryToggle,
-  onMessageClick,
-  onSuggestionClick
+  isListening = false,
+  speechConfidence = 0,
+  availableVoices = []
 }: Professional3DChatSceneProps) {
   const controlsRef = useRef<any>(null);
   
@@ -110,12 +115,14 @@ export default function Professional3DChatScene({
           speed={0.3} 
         />
         
-        {/* Main robot assistant */}
+        {/* Enhanced robot assistant with new states */}
         <ProfessionalRobot 
           isAISpeaking={isAISpeaking}
           currentViseme={currentViseme}
-          emotion={isAISpeaking ? 'happy' : isLoading ? 'thinking' : 'neutral'}
+          emotion={isAISpeaking ? 'happy' : isLoading ? 'thinking' : isListening ? 'listening' : 'neutral'}
           position={[0, 0, 0]}
+          isListening={isListening}
+          isProcessing={isLoading}
         />
         
         {/* 3D Chat bubbles */}
@@ -147,35 +154,55 @@ export default function Professional3DChatScene({
                 : 'bg-white/20 text-white hover:bg-white/30 border border-white/30'
             }`}
           >
-            {showHistory ? 'Hide History' : 'Show All Messages'}
+            {showHistory ? 'Hide History' : `Show All Messages (${messages.length})`}
           </button>
           
           <div className="text-center text-white/80 text-sm bg-black/20 backdrop-blur-lg rounded-lg px-4 py-2">
             <div className="font-medium">💬 {recentMessages.length} messages</div>
             <div className="text-xs opacity-75">
-              {isAISpeaking ? '🎤 AI Speaking' : isLoading ? '💭 Thinking...' : '✨ Ready'}
+              {isAISpeaking ? '🎤 AI Speaking' : 
+               isListening ? `🎧 Listening${speechConfidence > 0 ? ` (${Math.round(speechConfidence * 100)}%)` : '...'}` :
+               isLoading ? '💭 Thinking...' : '✨ Ready'}
             </div>
+            {availableVoices.length > 0 && (
+              <div className="text-xs opacity-60 mt-1">
+                🗣️ {availableVoices.length} voices available
+              </div>
+            )}
           </div>
         </div>
       </Html>
 
-      {/* Ambient sound visualization */}
-      {isAISpeaking && (
+      {/* Enhanced audio visualization */}
+      {(isAISpeaking || isListening) && (
         <Html position={[0, 3, 0]} center>
           <div className="flex items-center gap-1">
-            {Array.from({ length: 5 }, (_, i) => (
+            {Array.from({ length: 7 }, (_, i) => (
               <div
                 key={i}
-                className="bg-green-400 rounded-full animate-pulse"
+                className={`rounded-full animate-pulse ${
+                  isAISpeaking ? 'bg-green-400' : 'bg-blue-400'
+                }`}
                 style={{
-                  width: '8px',
-                  height: `${12 + Math.sin(Date.now() * 0.01 + i) * 8}px`,
+                  width: isListening ? '6px' : '8px',
+                  height: `${
+                    12 + 
+                    Math.sin(Date.now() * 0.01 + i) * 
+                    (isListening ? 6 : 8) * 
+                    (speechConfidence || 1)
+                  }px`,
                   animationDelay: `${i * 0.1}s`,
-                  animationDuration: '0.8s'
+                  animationDuration: isListening ? '0.6s' : '0.8s',
+                  opacity: isListening ? 0.6 + (speechConfidence * 0.4) : 1
                 }}
               />
             ))}
           </div>
+          {isListening && speechConfidence > 0 && (
+            <div className="text-xs text-blue-300 mt-2 text-center">
+              Confidence: {Math.round(speechConfidence * 100)}%
+            </div>
+          )}
         </Html>
       )}
     </>

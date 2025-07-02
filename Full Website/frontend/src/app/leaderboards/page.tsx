@@ -16,6 +16,7 @@ export interface AnalyticsData {
   userPercentile?: string
   weeklyXP?: number
   weeklyTrend?: string
+  weeklyPoints?: number
   recentActivities: Array<{
     id: string
     user: string

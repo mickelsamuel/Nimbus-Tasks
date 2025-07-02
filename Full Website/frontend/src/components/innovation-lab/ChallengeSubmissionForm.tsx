@@ -75,7 +75,7 @@ export default function ChallengeSubmissionForm({ onSubmit }: ChallengeSubmissio
         throw new Error('Failed to create challenge');
       }
 
-      const result = await response.json();
+      await response.json();
       alert('Challenge created successfully!');
       onSubmit();
     } catch (error) {

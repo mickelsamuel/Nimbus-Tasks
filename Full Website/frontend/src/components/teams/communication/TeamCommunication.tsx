@@ -1,7 +1,8 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
+import Image from 'next/image'
 import { MessageSquare, Users, Settings, Plus, Video, Phone, Mic, MicOff, VideoOff } from 'lucide-react'
 import { TeamChat } from './TeamChat'
 
@@ -31,13 +32,7 @@ export function TeamCommunication({ teamId, teamName, isOpen, onClose }: TeamCom
   const [isMuted, setIsMuted] = useState(false)
   const [isVideoEnabled, setIsVideoEnabled] = useState(true)
 
-  useEffect(() => {
-    if (isOpen && teamId) {
-      fetchTeamMembers()
-    }
-  }, [isOpen, teamId, fetchTeamMembers])
-
-  const fetchTeamMembers = async () => {
+  const fetchTeamMembers = useCallback(async () => {
     try {
       setLoading(true)
       const response = await fetch(`/api/teams/${teamId}/members`, {
@@ -55,7 +50,13 @@ export function TeamCommunication({ teamId, teamName, isOpen, onClose }: TeamCom
     } finally {
       setLoading(false)
     }
-  }
+  }, [teamId])
+
+  useEffect(() => {
+    if (isOpen && teamId) {
+      fetchTeamMembers()
+    }
+  }, [isOpen, teamId, fetchTeamMembers])
 
   const getStatusColor = (status: string) => {
     switch (status) {
@@ -314,9 +315,11 @@ export function TeamCommunication({ teamId, teamName, isOpen, onClose }: TeamCom
                           >
                             <div className="flex items-center gap-3 mb-3">
                               <div className="relative">
-                                <img
+                                <Image
                                   src={member.avatar || '/avatars/default.jpg'}
                                   alt={member.name}
+                                  width={48}
+                                  height={48}
                                   className="w-12 h-12 rounded-full"
                                 />
                                 <div className={`absolute -bottom-1 -right-1 w-4 h-4 ${getStatusColor(member.status)} rounded-full border-2 border-white dark:border-gray-800`} />

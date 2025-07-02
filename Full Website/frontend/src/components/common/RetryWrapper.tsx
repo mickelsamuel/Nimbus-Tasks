@@ -33,7 +33,7 @@ const RetryWrapper: React.FC<RetryWrapperProps> = ({
   const [error, setError] = useState<string | null>(null)
   const [retryCount, setRetryCount] = useState(0)
   const [isRetrying, setIsRetrying] = useState(false)
-  const [isLoading, setIsLoading] = useState(false)
+  const [, setIsLoading] = useState(false)
 
   const calculateDelay = useCallback((attempt: number) => {
     if (!exponentialBackoff) return retryDelay

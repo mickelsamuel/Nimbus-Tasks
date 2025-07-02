@@ -23,7 +23,7 @@ interface SpacesSidePanelProps {
   recentActivity?: ActivityItem[];
 }
 
-export default function SpacesSidePanel({ achievements, recentActivity = [] }: SpacesSidePanelProps) {
+export default function SpacesSidePanel({ achievements }: SpacesSidePanelProps) {
   return (
     <div className="spaces-side-panel w-72 bg-white/60 dark:bg-gray-900/60 backdrop-blur-xl border-l border-gray-200/50 dark:border-gray-700/50 overflow-y-auto">
       <div className="p-6 space-y-6">

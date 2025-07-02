@@ -98,7 +98,7 @@ export default function EventsPage() {
     }
   }
 
-  const handleNotifyEvent = async (eventId: number) => {
+  const handleNotifyEvent = async () => {
     if (!user) {
       setError('Please log in to set notifications')
       return

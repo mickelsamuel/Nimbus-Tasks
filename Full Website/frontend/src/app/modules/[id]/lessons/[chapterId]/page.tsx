@@ -3,7 +3,7 @@
 import { useParams } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { modulesApi } from '@/lib/api/modules'
-import { ChevronLeft, ChevronRight, Play, CheckCircle } from 'lucide-react'
+import { ChevronLeft, Play, CheckCircle } from 'lucide-react'
 import Link from 'next/link'
 
 interface Chapter {

@@ -8,9 +8,11 @@ import * as THREE from 'three';
 interface FinancialRobotProps {
   isAISpeaking: boolean;
   currentViseme?: string;
+  emotion?: string;
 }
 
-export default function FinancialRobot({ isAISpeaking, currentViseme = 'sil' }: FinancialRobotProps) {
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+export default function FinancialRobot({ isAISpeaking, currentViseme = 'sil', emotion: _emotion = 'neutral' }: FinancialRobotProps) {
   const groupRef = useRef<THREE.Group>(null);
   const headGroupRef = useRef<THREE.Group>(null);
   const bodyRef = useRef<THREE.Mesh>(null);

@@ -85,7 +85,6 @@ router.get('/unread-count', protect, [
   query('category').optional().isIn(['learning', 'social', 'system', 'achievement', 'reminder', 'security'])
 ], async (req, res) => {
   try {
-    const { category: _category } = req.query;
     const unreadCount = await notificationService.getUnreadCount(req.user._id);
     
     res.json({

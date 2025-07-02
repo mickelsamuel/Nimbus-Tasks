@@ -2,10 +2,8 @@
 
 import React, { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { useTheme } from '@/contexts/ThemeContext'
 import { 
   ArrowLeft, 
-  Building2, 
   Sparkles, 
   Shield, 
   Users, 
@@ -84,7 +82,7 @@ function SimpleForgotPasswordForm() {
         <div>
           <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2">Check Your Email</h3>
           <p className="text-gray-600 dark:text-gray-400">
-            We've sent a password reset link to <strong>{email}</strong>
+            We&apos;ve sent a password reset link to <strong>{email}</strong>
           </p>
         </div>
         <button
@@ -155,7 +153,6 @@ function SimpleForgotPasswordForm() {
 
 export default function AuthPage() {
   const [currentView, setCurrentView] = useState<AuthView>('login')
-  const { isDark } = useTheme()
 
   const pageVariants = {
     initial: { opacity: 0, x: 300 },
@@ -462,7 +459,7 @@ export default function AuthPage() {
                             Reset Password
                           </h2>
                           <p className="text-gray-600 dark:text-gray-400 mt-1 text-xs">
-                            We'll send you a reset link
+                            We&apos;ll send you a reset link
                           </p>
                         </div>
 

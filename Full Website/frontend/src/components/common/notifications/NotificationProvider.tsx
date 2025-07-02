@@ -70,6 +70,29 @@ export function NotificationProvider({
     }
   }, [userId])
 
+  const dismissToast = useCallback((id: string) => {
+    setToastNotifications(prev => prev.filter(toast => toast.id !== id))
+  }, [])
+
+  const showToast = useCallback((notification: any) => {
+    const toastId = notification.id || `toast-${Date.now()}`
+    
+    setToastNotifications(prev => [
+      {
+        ...notification,
+        id: toastId
+      },
+      ...prev.slice(0, maxToasts - 1)
+    ])
+
+    // Auto-dismiss if not persistent
+    if (!notification.persistent) {
+      setTimeout(() => {
+        dismissToast(toastId)
+      }, notification.duration || 5000)
+    }
+  }, [maxToasts, dismissToast])
+
   // Set up real-time connection
   useEffect(() => {
     if (!enableRealtime || !userId) return
@@ -169,29 +192,6 @@ export function NotificationProvider({
       return () => clearInterval(interval)
     }
   }, [enableRealtime, fetchNotifications])
-
-  const showToast = useCallback((notification: any) => {
-    const toastId = notification.id || `toast-${Date.now()}`
-    
-    setToastNotifications(prev => [
-      {
-        ...notification,
-        id: toastId
-      },
-      ...prev.slice(0, maxToasts - 1)
-    ])
-
-    // Auto-dismiss if not persistent
-    if (!notification.persistent) {
-      setTimeout(() => {
-        dismissToast(toastId)
-      }, notification.duration || 5000)
-    }
-  }, [maxToasts, dismissToast])
-
-  const dismissToast = useCallback((id: string) => {
-    setToastNotifications(prev => prev.filter(toast => toast.id !== id))
-  }, [])
 
   const markAsRead = useCallback(async (id: string) => {
     try {

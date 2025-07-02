@@ -35,7 +35,14 @@ export interface UserProfile {
     emailNotifications?: boolean
     pushNotifications?: boolean
     sounds?: boolean
+    doNotDisturb?: boolean
   }
+  badges?: Array<{
+    icon?: string
+    name?: string
+    title?: string
+    color?: string
+  }>
 }
 
 export type ProfilePanel = 'personal' | 'accessibility' | 'security' | 'activity' | 'notifications'

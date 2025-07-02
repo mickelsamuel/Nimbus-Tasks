@@ -1,7 +1,6 @@
 const express = require('express');
 const router = express.Router();
 const Team = require('../models/Team');
-const User = require('../models/User');
 const { protect } = require('../middleware/auth');
 
 // @route   GET /api/teams/:teamId/channels
@@ -89,8 +88,7 @@ router.get('/:teamId/channels', protect, async (req, res) => {
 // @access  Private
 router.get('/:teamId/channels/:channelId/messages', protect, async (req, res) => {
   try {
-    const { teamId, channelId } = req.params;
-    const { limit = 50, before } = req.query;
+    const { teamId } = req.params;
     
     // Check team membership
     const team = await Team.findById(teamId);
@@ -168,7 +166,7 @@ router.get('/:teamId/channels/:channelId/messages', protect, async (req, res) =>
 // @access  Private
 router.post('/:teamId/channels/:channelId/messages', protect, async (req, res) => {
   try {
-    const { teamId, channelId } = req.params;
+    const { teamId } = req.params;
     const { content, type = 'text', replyTo } = req.body;
     
     // Validation
@@ -233,7 +231,7 @@ router.post('/:teamId/channels/:channelId/messages', protect, async (req, res) =
 // @access  Private
 router.post('/:teamId/channels/:channelId/messages/:messageId/reactions', protect, async (req, res) => {
   try {
-    const { teamId, channelId, messageId } = req.params;
+    const { teamId } = req.params;
     const { emoji } = req.body;
     
     if (!emoji) {

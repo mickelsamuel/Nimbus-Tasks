@@ -3,7 +3,6 @@ const router = express.Router();
 const jwt = require('jsonwebtoken');
 const Challenge = require('../models/Challenge');
 const ChallengeSubmission = require('../models/ChallengeSubmission');
-const User = require('../models/User');
 const { protect: auth } = require('../middleware/auth');
 const multer = require('multer');
 const path = require('path');
@@ -203,7 +202,7 @@ router.post('/public/:id/submit', upload.array('attachments', 5), async (req, re
         const token = req.headers.authorization.replace('Bearer ', '');
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
         submitterId = decoded.userId;
-      } catch (_e) {
+      } catch {
         // Not authenticated, continue as public
       }
     }
@@ -339,7 +338,7 @@ router.post('/submissions/:id/vote', async (req, res) => {
         const token = req.headers.authorization.replace('Bearer ', '');
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
         userId = decoded.userId;
-      } catch (_e) {
+      } catch {
         // Not authenticated
       }
     }

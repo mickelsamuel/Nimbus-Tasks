@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import Image from 'next/image'
 import { 
   Target, Zap, Clock, Users, Eye, Crown
@@ -36,11 +36,7 @@ export default function TrainingTab({ teamMembers }: TrainingTabProps) {
   const [progressData, setProgressData] = useState<ProgressData[]>([])
   const [loading, setLoading] = useState(true)
 
-  useEffect(() => {
-    fetchModulesAndProgress()
-  }, [teamMembers, fetchModulesAndProgress])
-
-  const fetchModulesAndProgress = async () => {
+  const fetchModulesAndProgress = useCallback(async () => {
     try {
       const token = localStorage.getItem('auth_token')
       const baseURL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000'
@@ -80,7 +76,11 @@ export default function TrainingTab({ teamMembers }: TrainingTabProps) {
     } finally {
       setLoading(false)
     }
-  }
+  }, [teamMembers])
+
+  useEffect(() => {
+    fetchModulesAndProgress()
+  }, [teamMembers, fetchModulesAndProgress])
 
   const handleDragStart = (e: React.DragEvent, module: Module) => {
     e.dataTransfer.setData('text/plain', JSON.stringify(module))

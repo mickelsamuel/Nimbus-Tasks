@@ -20,10 +20,9 @@ export default function SpacesSidebar({
   onSpaceNavigation
 }: SpacesSidebarProps) {
   // Calculate analytics from spaces data
-  const mostPopularSpace = spaces.reduce((max, space) => 
-    (space.currentUsers || 0) > (max.currentUsers || 0) ? space : max, 
-    spaces[0] || { name: 'None' }
-  );
+  const mostPopularSpace = spaces.length > 0 ? spaces.reduce((max, space) => 
+    (space.currentUsers || 0) > ((max as any).currentUsers || 0) ? space : max
+  ) : { name: 'None' };
   
   const avgStayDuration = Math.round(
     spaces.reduce((sum, space) => sum + (space.averageStayDuration || 0), 0) / Math.max(spaces.length, 1)

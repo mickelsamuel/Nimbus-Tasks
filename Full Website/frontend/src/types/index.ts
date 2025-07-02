@@ -1,3 +1,5 @@
+import React from 'react'
+
 // User Types
 export interface User {
   id: number
@@ -79,6 +81,7 @@ export interface VirtualSpace {
   status?: 'available' | 'busy' | 'reserved'
   occupancy?: number
   capacity?: number
+  averageStayDuration?: number
   location?: string
   image?: string
   activities?: Array<{
@@ -238,6 +241,20 @@ export interface Project {
   github: string
   demo: string
   impact: string
+  // Additional properties for innovation lab
+  status?: string
+  color?: string
+  icon?: React.ComponentType<{ className?: string }>
+  category?: string
+  difficulty?: string
+  sponsor?: string
+  prize?: string
+  timeLeft?: string
+  participants?: number
+  submissions?: number
+  rating?: number
+  progress?: number
+  requirements?: string[]
 }
 
 // Portfolio Types

@@ -1,7 +1,8 @@
 'use client'
 
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef, useCallback } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
+import Image from 'next/image'
 import { Send, Smile, Paperclip, Phone, Video, MoreVertical, Search, Users, Hash, Plus, UserPlus } from 'lucide-react'
 import { useAuth } from '@/contexts/AuthContext'
 
@@ -61,26 +62,7 @@ export function TeamChat({ teamId, teamName }: TeamChatProps) {
   const messagesEndRef = useRef<HTMLDivElement>(null)
   const fileInputRef = useRef<HTMLInputElement>(null)
 
-  useEffect(() => {
-    fetchChannels()
-  }, [teamId, fetchChannels])
-
-  useEffect(() => {
-    if (activeChannel) {
-      fetchMessages(activeChannel.id)
-      // Set up real-time message polling
-      const interval = setInterval(() => {
-        fetchMessages(activeChannel.id)
-      }, 3000)
-      return () => clearInterval(interval)
-    }
-  }, [activeChannel, fetchMessages])
-
-  useEffect(() => {
-    scrollToBottom()
-  }, [messages])
-
-  const fetchChannels = async () => {
+  const fetchChannels = useCallback(async () => {
     try {
       setLoading(true)
       const response = await fetch(`/api/teams/${teamId}/channels`, {
@@ -101,9 +83,9 @@ export function TeamChat({ teamId, teamName }: TeamChatProps) {
     } finally {
       setLoading(false)
     }
-  }
+  }, [teamId])
 
-  const fetchMessages = async (channelId: string) => {
+  const fetchMessages = useCallback(async (channelId: string) => {
     try {
       const response = await fetch(`/api/teams/${teamId}/channels/${channelId}/messages`, {
         headers: {
@@ -118,7 +100,26 @@ export function TeamChat({ teamId, teamName }: TeamChatProps) {
     } catch (error) {
       console.error('Error fetching messages:', error)
     }
-  }
+  }, [teamId])
+
+  useEffect(() => {
+    fetchChannels()
+  }, [teamId, fetchChannels])
+
+  useEffect(() => {
+    if (activeChannel) {
+      fetchMessages(activeChannel.id)
+      // Set up real-time message polling
+      const interval = setInterval(() => {
+        fetchMessages(activeChannel.id)
+      }, 3000)
+      return () => clearInterval(interval)
+    }
+  }, [activeChannel, fetchMessages])
+
+  useEffect(() => {
+    scrollToBottom()
+  }, [messages])
 
   const sendMessage = async () => {
     if (!newMessage.trim() || !activeChannel || sending) return
@@ -377,9 +378,11 @@ export function TeamChat({ teamId, teamName }: TeamChatProps) {
                       >
                         <div className="w-8 h-8 flex-shrink-0">
                           {showAvatar ? (
-                            <img
+                            <Image
                               src={message.senderAvatar || '/avatars/default.jpg'}
                               alt={message.senderName}
+                              width={32}
+                              height={32}
                               className="w-8 h-8 rounded-full"
                             />
                           ) : (

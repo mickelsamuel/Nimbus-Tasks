@@ -4,7 +4,6 @@ import React, { useMemo, Suspense } from 'react'
 import ProtectedLayout from '@/components/layout/ProtectedLayout'
 import { 
   DashboardHeroSection,
-  DashboardLoadingState,
   DashboardErrorState
 } from '@/components/dashboard'
 import { useDashboardData } from '@/hooks/useDashboardData'

@@ -1,7 +1,8 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
+import Image from 'next/image'
 import { Star, MessageCircle, ThumbsUp, Filter } from 'lucide-react'
 import { useAuth } from '@/contexts/AuthContext'
 
@@ -41,11 +42,7 @@ export function ModuleReviews({
   const [filter, setFilter] = useState('all') // all, recent, helpful
   const [userHasReviewed, setUserHasReviewed] = useState(false)
 
-  useEffect(() => {
-    fetchReviews()
-  }, [moduleId, filter, fetchReviews])
-
-  const fetchReviews = async () => {
+  const fetchReviews = useCallback(async () => {
     try {
       setLoading(true)
       const response = await fetch(`/api/modules/${moduleId}/reviews?filter=${filter}`, {
@@ -64,7 +61,11 @@ export function ModuleReviews({
     } finally {
       setLoading(false)
     }
-  }
+  }, [moduleId, filter])
+
+  useEffect(() => {
+    fetchReviews()
+  }, [moduleId, filter, fetchReviews])
 
   const handleSubmitReview = async () => {
     if (!newRating || newRating < 1) return
@@ -282,9 +283,11 @@ export function ModuleReviews({
             >
               <div className="flex items-start justify-between mb-4">
                 <div className="flex items-center gap-3">
-                  <img
+                  <Image
                     src={review.userAvatar || '/avatars/default.jpg'}
                     alt={review.userName}
+                    width={40}
+                    height={40}
                     className="w-10 h-10 rounded-full"
                   />
                   <div>

@@ -64,21 +64,6 @@ const MemberActivity3D = memo(({ members = [] }: MemberActivity3DProps) => {
     displayName: member.userId.firstName || 'Unknown'
   }));
 
-  const staticConnections = [
-    {
-      transform: 'translate3d(120px, 80px, 0px) rotateZ(35deg) scaleX(1.2)',
-      activity: 'active'
-    },
-    {
-      transform: 'translate3d(200px, 160px, 0px) rotateZ(-45deg) scaleX(0.8)',
-      activity: 'moderate'
-    },
-    {
-      transform: 'translate3d(80px, 200px, 0px) rotateZ(25deg) scaleX(1.5)',
-      activity: 'active'
-    }
-  ];
-
   // Generate connections between active members
   const generateConnections = () => {
     const activeMembers = membersWithPositions.filter(m => m.activity === 'active');

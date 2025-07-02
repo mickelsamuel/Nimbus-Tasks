@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import {
   Bell, Filter, Search, CheckCircle, Star,
@@ -48,12 +48,7 @@ export function NotificationCenter({ userId, className = '' }: NotificationCente
     byPriority: {}
   })
 
-  useEffect(() => {
-    fetchNotifications()
-    fetchStats()
-  }, [userId, filters, sortBy, sortOrder, fetchNotifications])
-
-  const fetchNotifications = async () => {
+  const fetchNotifications = useCallback(async () => {
     try {
       const queryParams = new URLSearchParams({
         ...(filters.status !== 'all' && { isRead: String(filters.status === 'read') }),
@@ -79,7 +74,7 @@ export function NotificationCenter({ userId, className = '' }: NotificationCente
     } finally {
       setLoading(false)
     }
-  }
+  }, [filters, sortBy, sortOrder])
 
   const fetchStats = async () => {
     try {
@@ -97,6 +92,11 @@ export function NotificationCenter({ userId, className = '' }: NotificationCente
       console.error('Error fetching stats:', error)
     }
   }
+
+  useEffect(() => {
+    fetchNotifications()
+    fetchStats()
+  }, [userId, filters, sortBy, sortOrder, fetchNotifications])
 
   const refreshNotifications = async () => {
     setRefreshing(true)

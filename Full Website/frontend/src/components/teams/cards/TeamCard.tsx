@@ -44,6 +44,7 @@ interface TeamCardProps {
   onJoin?: (teamId: string) => void
   onLeave?: (teamId: string) => void
   onView?: (teamId: string) => void
+  isJoining?: boolean
 }
 
 const TeamCard = memo(function TeamCard({ team, onJoin, onLeave, onView }: TeamCardProps) {

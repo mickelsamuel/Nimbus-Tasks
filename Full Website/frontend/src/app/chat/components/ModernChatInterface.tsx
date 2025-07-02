@@ -270,7 +270,7 @@ export default function ModernChatInterface({
               animate={{ opacity: 1, y: 0 }}
               className="mt-2 text-sm text-blue-600 dark:text-blue-400"
             >
-              Listening: "{interimTranscript}"
+              Listening: &quot;{interimTranscript}&quot;
             </motion.div>
           )}
         </div>

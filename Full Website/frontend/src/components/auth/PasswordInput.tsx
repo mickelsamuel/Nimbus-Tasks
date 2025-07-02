@@ -45,7 +45,7 @@ export function PasswordInput({
   const [showPassword, setShowPassword] = useState(false)
   const [showConfirmPassword, setShowConfirmPassword] = useState(false)
   const [focused, setFocused] = useState(false)
-  const [confirmFocused, setConfirmFocused] = useState(false)
+  const [, setConfirmFocused] = useState(false)
 
   const validation = validatePassword(value, requirements)
   const confirmValidation = showConfirmation ? validatePasswordConfirmation(value, confirmValue) : { isValid: true }

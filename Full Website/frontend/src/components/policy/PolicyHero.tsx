@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState } from 'react'
+import React from 'react'
 import { motion } from 'framer-motion'
 import { Shield, Sparkles, Award } from 'lucide-react'
 
@@ -9,16 +9,12 @@ interface PolicyHeroProps {
 }
 
 export const PolicyHero: React.FC<PolicyHeroProps> = ({ className = '' }) => {
-  const [isHovered, setIsHovered] = useState(false)
-
   return (
     <motion.div
       className={`text-center mb-20 ${className}`}
       initial={{ opacity: 0, y: 50 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 1, delay: 0.2, type: 'spring', stiffness: 100 }}
-      onHoverStart={() => setIsHovered(true)}
-      onHoverEnd={() => setIsHovered(false)}
     >
       {/* Simple Hero Icon */}
       <motion.div 

@@ -1,13 +1,13 @@
 'use client'
 
-import { useState, useEffect, useMemo, memo } from 'react'
+import { useState, useEffect, useMemo } from 'react'
 import { useRouter } from 'next/navigation'
 import dynamic from 'next/dynamic'
 import ProtectedLayout from '@/components/layout/ProtectedLayout'
 import { useModules } from '@/hooks/useModules'
 import { ModuleFilters } from '@/types/modules'
 import { AlertTriangle, RefreshCw } from 'lucide-react'
-import { useInViewport, useScrollPerformance } from '@/hooks/usePerformance'
+import { useScrollPerformance } from '@/hooks/usePerformance'
 
 // Lazy load heavy components
 const ModulesHero = dynamic(() => import('@/components/modules/ModulesHero'), {
@@ -226,7 +226,7 @@ export default function ModulesPage() {
     }
   }
 
-  const handleBookmark = async (moduleId: number, bookmarked: boolean) => {
+  const handleBookmark = async (moduleId: number) => {
     try {
       const { modulesApi } = await import('@/lib/api/modules')
       const response = await modulesApi.toggleBookmark(moduleId)
@@ -239,7 +239,7 @@ export default function ModulesPage() {
     }
   }
 
-  const handleLike = async (moduleId: number, liked: boolean) => {
+  const handleLike = async (moduleId: number) => {
     try {
       const { modulesApi } = await import('@/lib/api/modules')
       const response = await modulesApi.toggleLike(moduleId)

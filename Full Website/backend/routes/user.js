@@ -82,7 +82,7 @@ router.get('/badges', protect, async (req, res) => {
       const achievementBadges = user.achievements
         .filter(ua => ua.achievementId)
         .slice(0, 6) // Limit to 6 badges
-        .map((ua, index) => ({
+        .map((ua) => ({
           id: `achievement_badge_${ua.achievementId._id}`,
           name: ua.achievementId.name,
           icon: ua.achievementId.icon || '🏅',

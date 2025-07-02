@@ -65,9 +65,9 @@ const sendEmailWithFallback = async (mailOptions, emailType, maxRetries = 3) => 
         console.log(`Email sent successfully via ${backupProviders[providerIndex].name}:`, info.messageId);
         return { success: true, messageId: info.messageId, provider: backupProviders[providerIndex].name };
         
-      } catch (error) {
-        lastError = error;
-        console.error(`Email send attempt ${attempt + 1} failed via ${backupProviders[providerIndex].name}:`, error.message);
+      } catch (err) {
+        lastError = err;
+        console.error(`Email send attempt ${attempt + 1} failed via ${backupProviders[providerIndex].name}:`, err.message);
         
         // Track failed delivery attempt
         await emailMonitor.trackDelivery(
@@ -75,7 +75,7 @@ const sendEmailWithFallback = async (mailOptions, emailType, maxRetries = 3) => 
           mailOptions.to,
           false,
           null,
-          error
+          err
         );
         
         // Wait before retry (exponential backoff)
@@ -403,7 +403,7 @@ const loadTemplates = async () => {
       const baseTemplateContent = await fs.readFile(baseTemplatePath, 'utf8');
       baseTemplate = Handlebars.compile(baseTemplateContent);
       console.log('Loaded base email template');
-    } catch (error) {
+    } catch {
       console.warn('Base email template not found, using inline templates');
     }
     
@@ -423,7 +423,7 @@ const loadTemplates = async () => {
         const templateName = path.basename(templateFile, '.html');
         templates.set(templateName, Handlebars.compile(templateContent));
         console.log(`Loaded email template: ${templateName}`);
-      } catch (error) {
+      } catch {
         console.warn(`Email template ${templateFile} not found, using fallback`);
       }
     }
@@ -500,9 +500,9 @@ const sendModuleAssignmentEmail = async (user, module, assignment, assignedBy) =
     };
     
     return await sendEmailWithFallback(mailOptions, 'module-assignment');
-  } catch (error) {
-    console.error('Failed to send module assignment email:', error);
-    throw error;
+  } catch (err) {
+    console.error('Failed to send module assignment email:', err);
+    throw err;
   }
 };
 
@@ -545,9 +545,9 @@ const sendAchievementEmail = async (user, achievement) => {
     };
     
     return await sendEmailWithFallback(mailOptions, 'achievement');
-  } catch (error) {
-    console.error('Failed to send achievement email:', error);
-    throw error;
+  } catch (err) {
+    console.error('Failed to send achievement email:', err);
+    throw err;
   }
 };
 
@@ -601,23 +601,23 @@ const sendModuleReminderEmail = async (user, module, assignment, options = {}) =
     };
     
     return await sendEmailWithFallback(mailOptions, 'module-reminder');
-  } catch (error) {
-    console.error('Failed to send module reminder email:', error);
-    throw error;
+  } catch (err) {
+    console.error('Failed to send module reminder email:', err);
+    throw err;
   }
 };
 
 // Utility functions
 const formatDuration = (minutes) => {
-  if (!minutes) return '0 min';
+  if (!minutes) {return '0 min';}
   const hours = Math.floor(minutes / 60);
   const mins = minutes % 60;
   return hours > 0 ? `${hours}h ${mins}m` : `${mins}m`;
 };
 
 const formatTimeRemaining = (days) => {
-  if (days <= 0) return 'Overdue';
-  if (days === 1) return '1 day';
+  if (days <= 0) {return 'Overdue';}
+  if (days === 1) {return '1 day';}
   return `${days} days`;
 };
 
@@ -672,8 +672,8 @@ const queueEmail = async (mailOptions, emailType, priority = 'normal', scheduleA
     } else {
       return await emailQueue.add(emailData, priority);
     }
-  } catch (error) {
-    console.error('Failed to queue email:', error);
+  } catch (err) {
+    console.error('Failed to queue email:', err);
     // Fallback to direct sending if queue fails
     return await sendEmailWithFallback(mailOptions, emailType);
   }
@@ -686,8 +686,8 @@ const sendModuleAssignmentEmailQueued = async (user, module, assignment, assigne
     const priority = assignment.priority === 'high' ? 'high' : 'normal';
     
     return await queueEmail(mailOptions, 'module-assignment', priority, options.scheduleAt);
-  } catch (error) {
-    console.error('Failed to queue module assignment email:', error);
+  } catch (err) {
+    console.error('Failed to queue module assignment email:', err);
     // Fallback to direct sending
     return await sendModuleAssignmentEmail(user, module, assignment, assignedBy);
   }
@@ -740,9 +740,9 @@ const buildModuleAssignmentEmail = async (user, module, assignment, assignedBy) 
 const sendBulkEmails = async (emails, priority = 'normal') => {
   try {
     return await emailQueue.addBulk(emails, priority);
-  } catch (error) {
-    console.error('Failed to send bulk emails:', error);
-    throw error;
+  } catch (err) {
+    console.error('Failed to send bulk emails:', err);
+    throw err;
   }
 };
 

@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import {
   X, Plus, Minus
@@ -39,6 +39,23 @@ export function CreateTaskModal({ isOpen, onClose, onSubmit, teamId, projectId }
   const [newSubtask, setNewSubtask] = useState('')
   const [loading, setLoading] = useState(false)
 
+  const fetchTeamMembers = useCallback(async () => {
+    try {
+      const response = await fetch(`/api/teams/${teamId}/members`, {
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('auth_token')}`
+        }
+      })
+      
+      if (response.ok) {
+        const data = await response.json()
+        setTeamMembers(data.members || [])
+      }
+    } catch (error) {
+      console.error('Error fetching team members:', error)
+    }
+  }, [teamId])
+
   useEffect(() => {
     if (isOpen) {
       fetchTeamMembers()
@@ -55,23 +72,6 @@ export function CreateTaskModal({ isOpen, onClose, onSubmit, teamId, projectId }
       })
     }
   }, [isOpen, user?.id, fetchTeamMembers])
-
-  const fetchTeamMembers = async () => {
-    try {
-      const response = await fetch(`/api/teams/${teamId}/members`, {
-        headers: {
-          'Authorization': `Bearer ${localStorage.getItem('auth_token')}`
-        }
-      })
-      
-      if (response.ok) {
-        const data = await response.json()
-        setTeamMembers(data.members || [])
-      }
-    } catch (error) {
-      console.error('Error fetching team members:', error)
-    }
-  }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()

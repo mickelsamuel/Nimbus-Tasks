@@ -380,25 +380,19 @@ function generateMostActiveDay() {
 router.get('/feed', protect, async (req, res) => {
   try {
     const {
-      type = 'global',
       filter = 'all',
       timeRange = 'week',
       limit = 50,
-      teamId,
       userId,
-      department,
       since
     } = req.query;
 
     // Generate mock activities based on type and filters
     const activities = generateMockActivities({
-      type,
       filter,
       timeRange,
       limit: parseInt(limit),
-      teamId,
       userId: userId || req.user._id,
-      department,
       currentUser: req.user,
       since
     });
@@ -465,13 +459,10 @@ router.post('/:activityId/read', protect, async (req, res) => {
 
 // Helper function to generate mock activities
 function generateMockActivities({
-  type: _type,
   filter,
   timeRange,
   limit,
-  teamId: _teamId,
   userId,
-  department: _department,
   currentUser,
   since
 }) {

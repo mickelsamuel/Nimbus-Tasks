@@ -123,7 +123,7 @@ WorkspaceRoomSchema.index({ 'timeSlots.start': 1, 'timeSlots.end': 1 });
 
 // Virtual for utilization calculation
 WorkspaceRoomSchema.virtual('utilizationRate').get(function() {
-  if (!this.timeSlots || this.timeSlots.length === 0) return 0;
+  if (!this.timeSlots || this.timeSlots.length === 0) {return 0;}
   const bookedSlots = this.timeSlots.filter(slot => slot.isBooked).length;
   return Math.round((bookedSlots / this.timeSlots.length) * 100);
 });
@@ -155,7 +155,7 @@ WorkspaceRoomSchema.methods.isAvailable = function(startTime, endTime) {
 // Static methods
 WorkspaceRoomSchema.statics.findAvailableRooms = function(startTime, endTime, type = null) {
   const query = { isActive: true, status: 'available' };
-  if (type) query.type = type;
+  if (type) {query.type = type;}
   
   return this.find(query).then(rooms => 
     rooms.filter(room => room.isAvailable(startTime, endTime))

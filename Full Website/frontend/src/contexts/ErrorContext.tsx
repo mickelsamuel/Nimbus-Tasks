@@ -30,9 +30,12 @@ const errorReducer = (state: ErrorState, action: ErrorAction): ErrorState => {
         isLoading: { ...state.isLoading, [action.key]: false }
       }
     case 'CLEAR_ERROR':
-      const { [action.key]: removedError, ...remainingErrors } = state.errors
-      const { [action.key]: removedLoading, ...remainingLoading } = state.isLoading
-      const { [action.key]: removedCallback, ...remainingCallbacks } = state.retryCallbacks
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const { [action.key]: _removed, ...remainingErrors } = state.errors
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const { [action.key]: _removedLoading, ...remainingLoading } = state.isLoading
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const { [action.key]: _removedCallback, ...remainingCallbacks } = state.retryCallbacks
       return {
         errors: remainingErrors,
         isLoading: remainingLoading,

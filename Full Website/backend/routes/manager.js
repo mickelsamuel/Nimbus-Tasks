@@ -201,7 +201,6 @@ router.get('/team', (req, res) => {
 
 // GET /api/manager/analytics - Get team analytics
 router.get('/analytics', (req, res) => {
-  const { period: _period = '7d' } = req.query;
   
   // Mock analytics data
   const analyticsData = {

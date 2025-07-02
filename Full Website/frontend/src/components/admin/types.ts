@@ -67,9 +67,12 @@ export interface UserCardProps {
 }
 
 export interface ModuleCardProps {
-  module: Module
+  module: AdminModule
   index: number
 }
+
+// Export Module as an alias for AdminModule for backward compatibility
+export type Module = AdminModule
 
 export interface ActivityItem {
   id: number

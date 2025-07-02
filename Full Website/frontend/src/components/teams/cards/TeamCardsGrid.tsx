@@ -91,7 +91,9 @@ const TeamCardsGrid = () => {
       description: team.description || 'No description available',
       category: team.category || team.department || 'General',
       avatar: team.avatar || team.name?.substring(0, 2).toUpperCase() || 'TM',
-      status: team.status || 'active' as const,
+      status: (team.status === 'idle' ? 'inactive' : 
+               team.status === 'rising' ? 'recruiting' : 
+               team.status || 'active') as 'active' | 'recruiting' | 'inactive',
       memberCount: team.stats?.memberCount || team.members?.length || 0,
       maxMembers: team.settings?.maxMembers || 10,
       // Calculate performance based on team stats

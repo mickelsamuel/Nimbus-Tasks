@@ -155,7 +155,7 @@ class SimpleCache {
   }
   
   // Event emitter simulation
-  on(_event, _callback) {
+  on() {
     // Simple event handling - can be expanded if needed
   }
 }
@@ -224,17 +224,17 @@ class CacheManager {
     Object.keys(this.caches).forEach(cacheName => {
       const cache = this.caches[cacheName];
       
-      cache.on('set', (key, _value) => {
+      cache.on('set', (key) => {
         this.stats.sets++;
         console.log(`Cache SET [${cacheName}]: ${key}`);
       });
       
-      cache.on('del', (key, _value) => {
+      cache.on('del', (key) => {
         this.stats.deletes++;
         console.log(`Cache DELETE [${cacheName}]: ${key}`);
       });
       
-      cache.on('expired', (key, _value) => {
+      cache.on('expired', (key) => {
         console.log(`Cache EXPIRED [${cacheName}]: ${key}`);
       });
       
@@ -320,7 +320,7 @@ class CacheManager {
         return false;
       }
       return cache.has(key);
-    } catch (error) {
+    } catch {
       this.stats.errors++;
       return false;
     }

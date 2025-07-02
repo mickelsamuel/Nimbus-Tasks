@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { Eye, EyeOff, Mail, Lock, User, ArrowLeft, ArrowRight } from 'lucide-react';
+import { Mail, User, ArrowLeft, ArrowRight } from 'lucide-react';
 import { PasswordInput } from '@/components/auth/PasswordInput';
 
 const SignupPage: React.FC = () => {

@@ -35,7 +35,7 @@ interface MetricData {
 
 export const DashboardMetricsOverview = React.memo(function DashboardMetricsOverview({ stats }: DashboardMetricsOverviewProps) {
   const router = useRouter()
-  const { trends, loading: metricsLoading } = useDashboardMetrics()
+  const { trends } = useDashboardMetrics()
   const [animatedValues, setAnimatedValues] = useState<Record<string, number>>({})
   const [selectedMetric, setSelectedMetric] = useState<string | null>(null)
   const [hoveredMetric, setHoveredMetric] = useState<string | null>(null)

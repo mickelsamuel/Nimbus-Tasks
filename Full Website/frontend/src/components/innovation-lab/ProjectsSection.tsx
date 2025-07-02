@@ -6,12 +6,10 @@ import {
   Play, 
   TrendingUp, 
   Brain, 
-  Shield,
   ChevronRight,
   Timer,
   Target,
-  Star,
-  Zap
+  Star
 } from 'lucide-react';
 import { useUniversityData } from '@/hooks/useUniversityData';
 

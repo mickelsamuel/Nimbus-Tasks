@@ -40,6 +40,7 @@ export interface Team {
   badges?: Array<Record<string, unknown>>;
   goals?: Array<Record<string, unknown>>;
   focusAreas?: string[];
+  tags?: string[];
   currentModules?: Array<Record<string, unknown>>;
   announcements?: Array<Record<string, unknown>>;
   settings?: {
@@ -82,6 +83,8 @@ export interface TeamStats {
   monthlyActivity: number;
   rank: number;
   level: number;
+  averagePerformance?: number;
+  achievementCount?: number;
 }
 
 export interface CreateTeamData {

@@ -48,7 +48,8 @@ export default function ProfilePageContainer() {
   const [editedUser, setEditedUser] = useState<UserProfile | null>(null)
   const [isEditing, setIsEditing] = useState(false)
   const [activePanel, setActivePanel] = useState<ProfilePanel>('personal')
-  const [uploadingAvatar, setUploadingAvatar] = useState(false)
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [_uploadingAvatar, setUploadingAvatar] = useState(false)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [successMessage, setSuccessMessage] = useState<string | null>(null)
@@ -152,52 +153,52 @@ export default function ProfilePageContainer() {
     }
   }
 
-  const handleAvatarUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0]
-    if (!file) return
+  // const handleAvatarUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
+  //   const file = event.target.files?.[0]
+  //   if (!file) return
 
-    // Validate file size and type
-    if (file.size > 5 * 1024 * 1024) { // 5MB limit
-      setError('File size must be less than 5MB')
-      setTimeout(() => setError(null), 5000)
-      return
-    }
+  //   // Validate file size and type
+  //   if (file.size > 5 * 1024 * 1024) { // 5MB limit
+  //     setError('File size must be less than 5MB')
+  //     setTimeout(() => setError(null), 5000)
+  //     return
+  //   }
 
-    if (!file.type.startsWith('image/')) {
-      setError('Please select a valid image file')
-      setTimeout(() => setError(null), 5000)
-      return
-    }
+  //   if (!file.type.startsWith('image/')) {
+  //     setError('Please select a valid image file')
+  //     setTimeout(() => setError(null), 5000)
+  //     return
+  //   }
 
-    setUploadingAvatar(true)
-    setError(null)
-    try {
-      const result = await profileApi.uploadPhoto(file)
-      const updatedUser = { ...user, avatar: result.avatar }
-      setUser(updatedUser)
-      setEditedUser(updatedUser)
-      setSuccessMessage('Avatar updated successfully!')
-      setTimeout(() => setSuccessMessage(null), 3000)
-    } catch (error) {
-      console.error('Error uploading avatar:', error)
-      let errorMessage = 'Failed to upload avatar. Please try again.'
-      
-      if (error instanceof Error) {
-        if (error.message.includes('network')) {
-          errorMessage = 'Network error. Please check your connection and try again.'
-        } else if (error.message.includes('size')) {
-          errorMessage = 'File size too large. Please choose a smaller image.'
-        } else if (error.message.includes('type')) {
-          errorMessage = 'Invalid file type. Please choose an image file.'
-        }
-      }
-      
-      setError(errorMessage)
-      setTimeout(() => setError(null), 5000)
-    } finally {
-      setUploadingAvatar(false)
-    }
-  }
+  //   setUploadingAvatar(true)
+  //   setError(null)
+  //   try {
+  //     const result = await profileApi.uploadPhoto(file)
+  //     const updatedUser = { ...user, avatar: result.avatar }
+  //     setUser(updatedUser)
+  //     setEditedUser(updatedUser)
+  //     setSuccessMessage('Avatar updated successfully!')
+  //     setTimeout(() => setSuccessMessage(null), 3000)
+  //   } catch (error) {
+  //     console.error('Error uploading avatar:', error)
+  //     let errorMessage = 'Failed to upload avatar. Please try again.'
+  //     
+  //     if (error instanceof Error) {
+  //       if (error.message.includes('network')) {
+  //         errorMessage = 'Network error. Please check your connection and try again.'
+  //       } else if (error.message.includes('size')) {
+  //         errorMessage = 'File size too large. Please choose a smaller image.'
+  //       } else if (error.message.includes('type')) {
+  //         errorMessage = 'Invalid file type. Please choose an image file.'
+  //       }
+  //     }
+  //     
+  //     setError(errorMessage)
+  //     setTimeout(() => setError(null), 5000)
+  //   } finally {
+  //     setUploadingAvatar(false)
+  //   }
+  // }
 
   if (loading) {
     return (

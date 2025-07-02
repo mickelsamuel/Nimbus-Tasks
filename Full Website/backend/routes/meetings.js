@@ -276,16 +276,16 @@ router.put('/:id', protect, async (req, res) => {
     }
 
     // Update fields
-    if (title !== undefined) meeting.title = title;
-    if (description !== undefined) meeting.description = description;
-    if (type !== undefined) meeting.type = type;
-    if (startTime !== undefined) meeting.startTime = new Date(startTime);
-    if (endTime !== undefined) meeting.endTime = new Date(endTime);
-    if (location !== undefined) meeting.location = location;
-    if (agenda !== undefined) meeting.agenda = agenda;
-    if (privacy !== undefined) meeting.privacy = privacy;
-    if (tags !== undefined) meeting.tags = tags;
-    if (status !== undefined) meeting.status = status;
+    if (title !== undefined) {meeting.title = title;}
+    if (description !== undefined) {meeting.description = description;}
+    if (type !== undefined) {meeting.type = type;}
+    if (startTime !== undefined) {meeting.startTime = new Date(startTime);}
+    if (endTime !== undefined) {meeting.endTime = new Date(endTime);}
+    if (location !== undefined) {meeting.location = location;}
+    if (agenda !== undefined) {meeting.agenda = agenda;}
+    if (privacy !== undefined) {meeting.privacy = privacy;}
+    if (tags !== undefined) {meeting.tags = tags;}
+    if (status !== undefined) {meeting.status = status;}
 
     await meeting.save();
 
@@ -526,7 +526,7 @@ router.post('/:id/attendees', protect, async (req, res) => {
         try {
           await meeting.addAttendee(attendeeId);
           addedAttendees.push(attendeeId);
-        } catch (error) {
+        } catch {
           // Skip if already attendee
           continue;
         }

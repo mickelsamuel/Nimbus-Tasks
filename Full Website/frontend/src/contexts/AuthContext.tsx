@@ -57,7 +57,7 @@ interface AuthContextType {
   isAuthenticated: boolean
   login: (email: string, password: string, rememberMe?: boolean) => Promise<{ success: boolean; error?: string }>
   logout: () => void
-  register: (userData: RegisterData) => Promise<{ success: boolean; error?: string }>
+  register: (userData: RegisterData) => Promise<{ success: boolean; error?: string; pendingApproval?: boolean; message?: string }>
   updateProfile: (updates: Partial<User>) => Promise<{ success: boolean; error?: string }>
   refreshToken: () => Promise<boolean>
   acceptPolicy: () => Promise<{ success: boolean; error?: string }>

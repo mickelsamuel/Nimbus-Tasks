@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Calendar, Users, Trophy, Clock, ArrowRight, Filter, Search, Tag, TrendingUp, Star } from 'lucide-react';
+import { Calendar, Users, Trophy, ArrowRight, Search, TrendingUp, Star } from 'lucide-react';
 
 interface Challenge {
   id: string;
@@ -94,7 +94,7 @@ export default function PublishedChallenges() {
     }
   ];
 
-  const categories = ['all', ...new Set(challenges.map(c => c.category))];
+  const categories = ['all', ...Array.from(new Set(challenges.map(c => c.category)))];
 
   const filteredChallenges = challenges
     .filter(challenge => {

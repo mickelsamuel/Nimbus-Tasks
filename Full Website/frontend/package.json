@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "@hookform/resolvers": "^3.3.2",
+    "@react-spring/three": "^9.7.3",
     "@react-three/drei": "^9.122.0",
     "@react-three/fiber": "^8.18.0",
     "@tailwindcss/forms": "^0.5.7",
@@ -56,6 +57,7 @@
     "react-select": "^5.8.0",
     "react-speech-kit": "^3.0.1",
     "react-spring": "^9.7.3",
+    "react-use": "^17.6.0",
     "react-virtualized": "^9.22.5",
     "recharts": "^2.8.0",
     "socket.io-client": "^4.7.4",

@@ -50,7 +50,7 @@ api.interceptors.response.use(
     const originalRequest = error.config;
     
     // Handle cancelled requests gracefully
-    if (axios.isCancel(error) || error.code === 'ERR_CANCELED' || error.message === 'canceled') {
+    if (axios.isCancel(error) || (error as any).code === 'ERR_CANCELED' || (error as any).message === 'canceled') {
       console.log('Request was cancelled - this is normal during navigation or component unmounting');
       return Promise.reject({ 
         name: 'AbortError', 
@@ -61,8 +61,8 @@ api.interceptors.response.use(
     }
     
     // Handle common error responses
-    if (error.response) {
-      const { status, data } = error.response;
+    if ((error as any).response) {
+      const { status, data } = (error as any).response;
       
       // Auto-retry for specific error codes
       if (shouldRetry(status, originalRequest, error)) {
@@ -126,9 +126,9 @@ api.interceptors.response.use(
     }
     
     // Network error
-    if (error.request) {
+    if ((error as any).request) {
       // Check if this is a cancelled request first
-      if (axios.isCancel(error) || error.code === 'ERR_CANCELED' || error.message === 'canceled') {
+      if (axios.isCancel(error) || (error as any).code === 'ERR_CANCELED' || (error as any).message === 'canceled') {
         console.log('Network request was cancelled - this is normal during navigation or component unmounting');
         return Promise.reject({ 
           name: 'AbortError', 
@@ -138,7 +138,7 @@ api.interceptors.response.use(
         });
       }
       
-      console.error('Network error:', error.request);
+      console.error('Network error:', (error as any).request);
       
       // Report network errors
       await reportError({
@@ -156,7 +156,7 @@ api.interceptors.response.use(
     }
     
     // Request setup error
-    if (axios.isCancel(error) || error.code === 'ERR_CANCELED' || error.message === 'canceled') {
+    if (axios.isCancel(error) || (error as any).code === 'ERR_CANCELED' || (error as any).message === 'canceled') {
       console.log('Request setup was cancelled - this is normal during navigation or component unmounting');
       return Promise.reject({ 
         name: 'AbortError', 
@@ -166,9 +166,9 @@ api.interceptors.response.use(
       });
     }
     
-    console.error('Request error:', error.message);
+    console.error('Request error:', (error as any).message || 'Unknown error');
     return Promise.reject({
-      message: error.message,
+      message: (error as any).message || 'Unknown error',
       originalError: error,
       type: 'request'
     });
@@ -188,7 +188,7 @@ function shouldRetry(status: number, config?: RetryableRequest, error?: AxiosErr
   if (!config) return false;
   
   // Don't retry cancelled requests
-  if (error && (axios.isCancel(error) || error.code === 'ERR_CANCELED' || error.message === 'canceled')) {
+  if (error && (axios.isCancel(error) || (error as any).code === 'ERR_CANCELED' || (error as any).message === 'canceled')) {
     return false;
   }
   

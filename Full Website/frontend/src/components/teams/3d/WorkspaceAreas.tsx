@@ -2,7 +2,16 @@
 
 import React from 'react';
 
-const WorkspaceAreas = () => {
+interface WorkspaceAreasProps {
+  teamStats?: {
+    totalPoints: number;
+    level: number;
+    memberCount: number;
+  };
+}
+
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const WorkspaceAreas: React.FC<WorkspaceAreasProps> = ({ teamStats: _teamStats }) => {
   const workspaces = [
     {
       type: 'brainstorm',

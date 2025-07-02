@@ -1,7 +1,7 @@
 'use client';
 
 import { useRef, useEffect, useState } from 'react';
-import { Html, Text3D, Center, Float } from '@react-three/drei';
+import { Html, Float } from '@react-three/drei';
 import { useFrame, useThree } from '@react-three/fiber';
 import * as THREE from 'three';
 
@@ -49,7 +49,6 @@ export default function Professional3DChatBubble({
   // Dynamic sizing based on content
   const contentLength = message.content.length;
   const bubbleWidth = Math.min(Math.max(2, contentLength * 0.03), 4);
-  const bubbleHeight = Math.min(Math.max(0.8, Math.ceil(contentLength / 40) * 0.4), 2);
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -100,7 +99,6 @@ export default function Professional3DChatBubble({
   });
 
   const bubbleColor = message.sender === 'user' ? '#3B82F6' : '#FFFFFF';
-  const textColor = message.sender === 'user' ? '#ffffff' : '#1F2937';
   const emissiveColor = message.sender === 'user' ? '#1E40AF' : '#E5E7EB';
 
   return (

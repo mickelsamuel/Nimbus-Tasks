@@ -143,8 +143,8 @@ ChallengeSchema.methods.incrementViewCount = async function() {
 
 // Method to check if user can submit
 ChallengeSchema.methods.canUserSubmit = function(userId) {
-  if (this.status !== 'active') return false;
-  if (this.isExpired) return false;
+  if (this.status !== 'active') {return false;}
+  if (this.isExpired) {return false;}
   
   // Check if user is already a participant
   const isParticipant = this.participants.some(p => 

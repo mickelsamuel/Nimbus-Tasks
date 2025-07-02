@@ -7,7 +7,7 @@ const { logUserAction } = require('../utils/auditLogger');
 const { sendEmail } = require('../utils/emailService');
 const SupportChat = require('../models/SupportChat');
 const User = require('../models/User');
-const aiService = require('../utils/aiService');
+const aiService = require('../utils/enhancedAiService');
 
 const router = express.Router();
 
@@ -359,33 +359,13 @@ router.post('/sessions/:sessionId/messages', protect, upload.array('attachments'
           level: req.user.level || 'intermediate'
         };
         
-        // Check if message is financial/banking related
-        const isFinancialQuery = await isFinancialBankingQuestion(message.trim());
-        
-        let aiResponse;
-        if (isFinancialQuery) {
-          aiResponse = await aiService.answerQuestion(message.trim(), {
-            userRole: userProfile.role,
-            department: userProfile.department,
-            currentModule: 'Banking Advisory Chat'
-          });
-        } else {
-          // Polite redirect for non-financial questions
-          aiResponse = {
-            answer: `I'm Alexandra, your dedicated National Bank of Canada AI advisor. I specialize in banking, finance, investments, and National Bank services. 
-
-I'd be happy to help you with:
-• Investment strategies and portfolio management
-• Banking products and services
-• Risk management and compliance
-• National Bank policies and procedures
-• Financial planning and analysis
-• Market insights and economic trends
-
-Could you please rephrase your question to focus on banking or financial topics? I'm here to provide expert guidance in these areas.`,
-            answeredAt: new Date().toISOString()
-          };
-        }
+        // Use enhanced AI service with better domain filtering
+        const aiResponse = await aiService.answerQuestion(message.trim(), {
+          userProfile: userProfile,
+          userRole: userProfile.role,
+          department: userProfile.department,
+          currentModule: 'Banking Advisory Chat'
+        });
         
         // Add AI response to chat
         const aiMessage = {
@@ -396,10 +376,11 @@ Could you please rephrase your question to focus on banking or financial topics?
           attachments: [],
           isRead: false,
           metadata: {
-            confidence: 95,
-            isFinancialQuery,
-            model: 'Alexandra AI - National Bank Assistant',
-            generatedAt: aiResponse.answeredAt
+            confidence: aiResponse.confidence || 95,
+            isFinancialQuery: aiResponse.isFinancialQuery !== false,
+            model: 'Max AI - Enhanced National Bank Assistant',
+            generatedAt: aiResponse.answeredAt,
+            questionAnalysis: aiResponse.questionAnalysis
           }
         };
         
@@ -407,27 +388,30 @@ Could you please rephrase your question to focus on banking or financial topics?
       } catch (aiError) {
         console.error('AI response generation failed:', aiError);
         
-        // Fallback AI response
+        // Enhanced fallback AI response
         const fallbackMessage = {
           senderId: req.user._id,
           senderType: 'ai',
-          message: `Hello! I'm Alexandra, your AI banking advisor from National Bank of Canada. I'm here to help with your banking and financial questions. 
+          message: `Hello! I'm Max, your enhanced AI banking advisor from National Bank of Canada. I'm here to help with your banking and financial questions. 
 
-How can I assist you today with:
-• Banking services and products
-• Investment guidance
-• Financial planning
-• Risk management
-• National Bank policies
+🏦 How can I assist you today with:
+• Personal and business banking services
+• Investment strategies and portfolio management
+• Loans, mortgages, and credit solutions
+• Financial planning and retirement strategies
+• Risk management and insurance options
+• National Bank's digital banking tools
+• Market insights and economic trends
 
-Please feel free to ask me anything related to banking and finance!`,
+Please feel free to ask me anything related to banking and finance! I'm powered by advanced AI to provide you with accurate, personalized guidance.`,
           messageType: 'text',
           attachments: [],
           isRead: false,
           metadata: {
-            confidence: 90,
-            model: 'Alexandra AI - Fallback Response',
-            error: 'AI service temporarily unavailable'
+            confidence: 85,
+            model: 'Max AI - Enhanced Fallback Response',
+            error: 'AI service temporarily unavailable',
+            isFinancialQuery: true
           }
         };
         

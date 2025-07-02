@@ -183,7 +183,7 @@ export const withPerformanceTracking = <P extends object>(
   Component: React.ComponentType<P>,
   componentName: string
 ) => {
-  return React.memo((props: P) => {
+  const WrappedComponent = React.memo((props: P) => {
     useEffect(() => {
       const startTime = performance.now()
       
@@ -199,4 +199,7 @@ export const withPerformanceTracking = <P extends object>(
 
     return <Component {...props} />
   })
+  
+  WrappedComponent.displayName = `withPerformanceTracking(${componentName})`
+  return WrappedComponent
 }

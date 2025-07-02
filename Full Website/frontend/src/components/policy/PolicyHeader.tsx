@@ -3,7 +3,7 @@
 import React from 'react'
 import Link from 'next/link'
 import { motion } from 'framer-motion'
-import { ArrowLeft, Crown, Shield } from 'lucide-react'
+import { ArrowLeft, Shield } from 'lucide-react'
 
 interface PolicyHeaderProps {
   className?: string

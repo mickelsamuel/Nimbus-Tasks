@@ -1,7 +1,8 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { motion } from 'framer-motion'
+import Image from 'next/image'
 import {
   Target, Users, Award,
   BarChart3, Activity, Zap, Star,
@@ -93,11 +94,7 @@ export function TeamPerformanceDashboard({ teamId, teamName }: TeamPerformanceDa
   const [showDetails, setShowDetails] = useState<string | null>(null)
   const [refreshing, setRefreshing] = useState(false)
 
-  useEffect(() => {
-    fetchPerformanceData()
-  }, [teamId, timeRange, fetchPerformanceData])
-
-  const fetchPerformanceData = async () => {
+  const fetchPerformanceData = useCallback(async () => {
     try {
       setLoading(true)
       const response = await fetch(`/api/teams/${teamId}/performance?timeRange=${timeRange}`, {
@@ -115,7 +112,11 @@ export function TeamPerformanceDashboard({ teamId, teamName }: TeamPerformanceDa
     } finally {
       setLoading(false)
     }
-  }
+  }, [teamId, timeRange])
+
+  useEffect(() => {
+    fetchPerformanceData()
+  }, [teamId, timeRange, fetchPerformanceData])
 
   const refreshData = async () => {
     setRefreshing(true)
@@ -579,9 +580,11 @@ export function TeamPerformanceDashboard({ teamId, teamName }: TeamPerformanceDa
               className="p-4 border border-gray-200 dark:border-gray-700 rounded-lg hover:shadow-md transition-shadow"
             >
               <div className="flex items-center gap-3 mb-3">
-                <img
+                <Image
                   src={member.avatar || '/avatars/default.jpg'}
                   alt={member.name}
+                  width={40}
+                  height={40}
                   className="w-10 h-10 rounded-full"
                 />
                 <div className="flex-1 min-w-0">

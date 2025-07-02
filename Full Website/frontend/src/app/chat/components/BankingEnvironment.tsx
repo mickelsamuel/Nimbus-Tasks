@@ -2,7 +2,7 @@
 
 import { useRef, useMemo } from 'react';
 import { useFrame } from '@react-three/fiber';
-import { Float, Text3D, Center, Environment, ContactShadows, Sphere, Html } from '@react-three/drei';
+import { Float, Environment, ContactShadows, Sphere, Html } from '@react-three/drei';
 import * as THREE from 'three';
 
 export default function BankingEnvironment() {

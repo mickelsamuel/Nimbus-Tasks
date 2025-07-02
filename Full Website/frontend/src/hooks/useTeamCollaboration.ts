@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000/api';
@@ -86,7 +86,7 @@ export const useTeamCollaboration = (teamId: string) => {
   };
 
   // Fetch projects
-  const fetchProjects = async () => {
+  const fetchProjects = useCallback(async () => {
     if (!teamId || !isAuthenticated) return;
     
     try {
@@ -118,10 +118,10 @@ export const useTeamCollaboration = (teamId: string) => {
     } finally {
       setLoading(prev => ({ ...prev, projects: false }));
     }
-  };
+  }, [teamId, isAuthenticated]);
 
   // Fetch meetings
-  const fetchMeetings = async () => {
+  const fetchMeetings = useCallback(async () => {
     if (!teamId || !isAuthenticated) return;
     
     try {
@@ -157,10 +157,10 @@ export const useTeamCollaboration = (teamId: string) => {
     } finally {
       setLoading(prev => ({ ...prev, meetings: false }));
     }
-  };
+  }, [teamId, isAuthenticated]);
 
   // Fetch discussions
-  const fetchDiscussions = async () => {
+  const fetchDiscussions = useCallback(async () => {
     if (!teamId || !isAuthenticated) return;
     
     try {
@@ -192,10 +192,10 @@ export const useTeamCollaboration = (teamId: string) => {
     } finally {
       setLoading(prev => ({ ...prev, discussions: false }));
     }
-  };
+  }, [teamId, isAuthenticated]);
 
   // Fetch all data
-  const fetchAll = async () => {
+  const fetchAll = useCallback(async () => {
     if (!teamId || !isAuthenticated) return;
     
     await Promise.all([
@@ -203,7 +203,7 @@ export const useTeamCollaboration = (teamId: string) => {
       fetchMeetings(),
       fetchDiscussions()
     ]);
-  };
+  }, [teamId, isAuthenticated, fetchProjects, fetchMeetings, fetchDiscussions]);
 
   // Create project
   const createProject = async (projectData: {

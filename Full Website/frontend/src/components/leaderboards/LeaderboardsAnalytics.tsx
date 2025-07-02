@@ -316,7 +316,7 @@ export default function LeaderboardsAnalytics({
 
           <div className="space-y-4">
             <AnimatePresence>
-              {(Array.isArray(analyticsData?.recentActivities) ? analyticsData.recentActivities : []).map((activity, index: number) => (
+              {(Array.isArray((analyticsData as AnalyticsData)?.recentActivities) ? (analyticsData as AnalyticsData).recentActivities : []).map((activity, index: number) => (
                 <motion.div
                   key={activity.id as string}
                   className="group flex items-center gap-4 p-4 hover:bg-slate-50 dark:hover:bg-slate-700/30 rounded-2xl transition-colors cursor-pointer"

@@ -1,7 +1,6 @@
 'use client'
 
 import { useState } from 'react'
-import { useRouter } from 'next/navigation'
 import { 
   MessageSquare, Calendar, Video, FileText, 
   Clock, Users, Plus,
@@ -14,7 +13,6 @@ interface TeamCollaborationProps {
 }
 
 export function TeamCollaboration({ teamId }: TeamCollaborationProps) {
-  const router = useRouter()
   const [activeTab, setActiveTab] = useState<'projects' | 'meetings' | 'discussions'>('projects')
   const [showCreateProject, setShowCreateProject] = useState(false)
   const [showScheduleMeeting, setShowScheduleMeeting] = useState(false)
@@ -26,7 +24,6 @@ export function TeamCollaboration({ teamId }: TeamCollaborationProps) {
     projects,
     meetings,
     discussions,
-    loading,
     isLoading,
     error,
     hasError,
@@ -239,7 +236,6 @@ export function TeamCollaboration({ teamId }: TeamCollaborationProps) {
                   )}
                 </div>
                 <button 
-                  onClick={() => setSelectedProject(project)}
                   className="px-4 py-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 font-medium transition-colors"
                 >
                   View Details
@@ -323,7 +319,6 @@ export function TeamCollaboration({ teamId }: TeamCollaborationProps) {
                     </button>
                   )}
                   <button 
-                    onClick={() => setSelectedMeeting(meeting)}
                     className="px-4 py-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 font-medium transition-colors"
                   >
                     Edit

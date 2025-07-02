@@ -1,10 +1,9 @@
 'use client';
 
 import { useRef, useEffect, useState } from 'react';
-import { Text, RoundedBox, Html } from '@react-three/drei';
+import { RoundedBox, Html } from '@react-three/drei';
 import { useFrame, useThree } from '@react-three/fiber';
 import * as THREE from 'three';
-import { motion } from 'framer-motion';
 
 interface Chat3DBubbleProps {
   message: {
@@ -99,7 +98,6 @@ export default function Chat3DBubble({ message, index, onComplete, isLatest }: C
   const bubbleDepth = 0.3;
 
   const bubbleColor = message.sender === 'user' ? '#3B82F6' : '#FFFFFF';
-  const textColor = message.sender === 'user' ? '#ffffff' : '#1F2937';
 
   return (
     <group ref={meshRef} scale={scale}>

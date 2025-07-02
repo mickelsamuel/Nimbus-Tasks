@@ -1,10 +1,10 @@
 'use client'
 
-import { useState, useEffect, useRef, useMemo, useCallback, memo } from 'react'
+import { useState, useEffect, useRef, useMemo, useCallback } from 'react'
 import React from 'react'
 import dynamic from 'next/dynamic'
 import ProtectedLayout from '@/components/layout/ProtectedLayout'
-import { useScrollPerformance, useDebounce, useInViewport } from '@/hooks/usePerformance'
+import { useDebounce } from '@/hooks/usePerformance'
 import { 
   Building2, 
   Users, 
@@ -72,7 +72,6 @@ export default function SpacesPage() {
   const [dropdownPosition, setDropdownPosition] = useState({ top: 0, left: 0 })
 
   // Performance hooks
-  const { isScrolling } = useScrollPerformance()
   const debouncedSearchQuery = useDebounce(searchQuery, 300)
 
   const {
@@ -93,18 +92,6 @@ export default function SpacesPage() {
   const filteredSpaces = useSpaceFilters(spaces, debouncedSearchQuery, selectedCategory)
 
   // Memoized handlers
-  const handleSearchChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchQuery(e.target.value)
-  }, [])
-
-  const handleCategoryChange = useCallback((categoryId: string) => {
-    setSelectedCategory(categoryId)
-    setIsFilterOpen(false)
-  }, [])
-
-  const handleViewModeChange = useCallback((mode: 'explorer' | 'grid' | 'list') => {
-    setViewMode(mode)
-  }, [])
 
   const showNotificationMessage = useCallback((message: string) => {
     setNotificationMessage(message)

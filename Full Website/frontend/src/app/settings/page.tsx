@@ -84,7 +84,7 @@ function SettingsPageContent() {
       })
       
       if (response.ok) {
-        const updatedSettings = await response.json()
+        await response.json()
         // Settings context will handle the updated data
         setHasChanges(false)
       }

@@ -562,7 +562,7 @@ io.on('connection', (socket) => {
 });
 
 // Enhanced error handling middleware
-app.use((err, req, res, next) => {
+app.use((err, req, res) => {
   console.error('Server Error:', err.stack);
   
   // Log error for audit

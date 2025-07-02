@@ -1,7 +1,8 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
+import Image from 'next/image'
 import {
   Plus, MoreHorizontal, Calendar,
   CheckCircle, AlertCircle, Circle,
@@ -79,12 +80,7 @@ export function TeamProjectBoard({ teamId }: TeamProjectBoardProps) {
   const [filterAssignee, setFilterAssignee] = useState<string>('all')
   const [draggedTask, setDraggedTask] = useState<Task | null>(null)
 
-  useEffect(() => {
-    fetchProjects()
-    fetchTasks()
-  }, [teamId, fetchProjects, fetchTasks])
-
-  const fetchProjects = async () => {
+  const fetchProjects = useCallback(async () => {
     try {
       const response = await fetch(`/api/teams/${teamId}/projects`, {
         headers: {
@@ -102,9 +98,9 @@ export function TeamProjectBoard({ teamId }: TeamProjectBoardProps) {
     } catch (error) {
       console.error('Error fetching projects:', error)
     }
-  }
+  }, [teamId, selectedProject])
 
-  const fetchTasks = async () => {
+  const fetchTasks = useCallback(async () => {
     try {
       setLoading(true)
       const response = await fetch(`/api/teams/${teamId}/tasks?project=${selectedProject || ''}`, {
@@ -122,8 +118,12 @@ export function TeamProjectBoard({ teamId }: TeamProjectBoardProps) {
     } finally {
       setLoading(false)
     }
-  }
+  }, [teamId, selectedProject])
 
+  useEffect(() => {
+    fetchProjects()
+    fetchTasks()
+  }, [teamId, fetchProjects, fetchTasks])
 
   const updateTaskStatus = async (taskId: string, newStatus: Task['status']) => {
     try {
@@ -296,9 +296,11 @@ export function TeamProjectBoard({ teamId }: TeamProjectBoardProps) {
         </div>
 
         <div className="flex items-center justify-between">
-          <img
+          <Image
             src={task.assignee.avatar || '/avatars/default.jpg'}
             alt={task.assignee.name}
+            width={24}
+            height={24}
             className="w-6 h-6 rounded-full"
             title={task.assignee.name}
           />
@@ -560,9 +562,11 @@ export function TeamProjectBoard({ teamId }: TeamProjectBoardProps) {
                       </td>
                       <td className="px-6 py-4">
                         <div className="flex items-center gap-2">
-                          <img
+                          <Image
                             src={task.assignee.avatar || '/avatars/default.jpg'}
                             alt={task.assignee.name}
+                            width={24}
+                            height={24}
                             className="w-6 h-6 rounded-full"
                           />
                           <span className="text-sm text-gray-900 dark:text-white">

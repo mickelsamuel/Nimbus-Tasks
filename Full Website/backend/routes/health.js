@@ -2,7 +2,6 @@ const express = require('express');
 const mongoose = require('mongoose');
 const os = require('os');
 const fs = require('fs').promises;
-const path = require('path');
 const router = express.Router();
 
 // Health check endpoint
@@ -169,7 +168,7 @@ function checkMemory() {
 
 async function checkDisk() {
   try {
-    const stats = await fs.stat(process.cwd());
+    await fs.stat(process.cwd());
     
     return {
       status: 'healthy',

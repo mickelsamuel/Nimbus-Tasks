@@ -5,18 +5,13 @@ import { useParams, useRouter } from 'next/navigation'
 import { motion, AnimatePresence } from 'framer-motion'
 import { 
   ChevronLeft, 
-  ChevronRight, 
-  BookOpen, 
+  ChevronRight,
   CheckCircle, 
   Clock, 
-  Award,
   ArrowLeft,
-  Play,
-  Pause,
-  RotateCcw
+  Play
 } from 'lucide-react'
 import ProtectedLayout from '@/components/layout/ProtectedLayout'
-import { useAuth } from '@/contexts/AuthContext'
 import QuizComponent from '@/components/modules/QuizComponent'
 
 interface Chapter {
@@ -44,7 +39,6 @@ interface Module {
 export default function ModuleLessonsPage() {
   const params = useParams()
   const router = useRouter()
-  const { user } = useAuth()
   const moduleId = params?.id as string
 
   const [module, setModule] = useState<Module | null>(null)
@@ -52,7 +46,6 @@ export default function ModuleLessonsPage() {
   const [completedChapters, setCompletedChapters] = useState<number[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
-  const [isVideoPlaying, setIsVideoPlaying] = useState(false)
 
   // Fetch module data and user progress
   useEffect(() => {

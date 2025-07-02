@@ -10,7 +10,6 @@ import {
   Users,
   Calendar,
   Trophy,
-  GraduationCap,
   MapPin,
   Clock,
   User,

@@ -5,7 +5,6 @@ require('dotenv').config();
 const User = require('../models/User');
 const Module = require('../models/Module');
 const Team = require('../models/Team');
-const Achievement = require('../models/Achievement');
 const Notification = require('../models/Notification');
 
 async function analyzeQueryPerformance() {

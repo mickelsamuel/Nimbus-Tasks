@@ -315,7 +315,7 @@ export default function RegisterForm({ onSwitchToLogin }: RegisterFormProps) {
             />
           </div>
           <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">
-            Enter your manager's email if you know who your direct supervisor will be
+            Enter your manager&apos;s email if you know who your direct supervisor will be
           </p>
         </div>
 

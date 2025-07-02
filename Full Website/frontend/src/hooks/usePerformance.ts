@@ -161,8 +161,8 @@ export function useThrottle<T extends (...args: any[]) => any>(
   const lastRun = useRef(Date.now())
   const timeout = useRef<NodeJS.Timeout>()
 
-  return useCallback(
-    ((...args) => {
+  const throttledFunction = useCallback(
+    function(...args: any[]) {
       const now = Date.now()
       const timeSinceLastRun = now - lastRun.current
 
@@ -177,9 +177,11 @@ export function useThrottle<T extends (...args: any[]) => any>(
           callback(...args)
         }, delay - timeSinceLastRun)
       }
-    }) as T,
+    },
     [callback, delay]
   )
+
+  return throttledFunction as T
 }
 
 // Hook for managing animation performance

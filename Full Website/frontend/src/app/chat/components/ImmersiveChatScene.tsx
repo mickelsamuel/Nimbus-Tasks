@@ -1,10 +1,9 @@
 'use client';
 
-import { Suspense, useRef, useEffect, useState } from 'react';
+import { Suspense, useRef } from 'react';
 import { OrbitControls, Stars, Html, PerspectiveCamera } from '@react-three/drei';
 import { useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
-import { AnimatePresence } from 'framer-motion';
 import FinancialRobot from './FinancialRobot';
 import Chat3DBubble from './Chat3DBubble';
 import FloatingChatHistory from './FloatingChatHistory';
@@ -21,7 +20,6 @@ interface Message {
 
 interface ImmersiveChatSceneProps {
   messages: Message[];
-  currentMessage: string;
   isAISpeaking: boolean;
   currentViseme?: string;
   isLoading: boolean;
@@ -68,8 +66,6 @@ function BankingEnvironment() {
         <DataStream key={i} index={i} />
       ))}
       
-      {/* Background holographic panels */}
-      {/* <HolographicPanels /> */}
     </>
   );
 }
@@ -104,67 +100,7 @@ function DataStream({ index }: { index: number }) {
   );
 }
 
-// Holographic information panels
-function HolographicPanels() {
-  return (
-    <>
-      {/* Banking stats panel */}
-      <group position={[-8, 2, -5]}>
-        <mesh>
-          <planeGeometry args={[3, 2]} />
-          <meshStandardMaterial 
-            color="#1a1a2e" 
-            transparent 
-            opacity={0.7}
-            emissive="#3B82F6"
-            emissiveIntensity={0.1}
-          />
-        </mesh>
-        <Html
-          center
-          transform
-          position={[0, 0, 0.01]}
-          style={{ width: '200px', pointerEvents: 'none' }}
-        >
-          <div className="text-blue-300 text-xs text-center p-2">
-            <div className="font-bold mb-1">NATIONAL BANK</div>
-            <div>Est. 1859</div>
-            <div>160+ Years</div>
-            <div className="text-green-400">99.9% Uptime</div>
-          </div>
-        </Html>
-      </group>
-
-      {/* Services panel */}
-      <group position={[8, 2, -5]}>
-        <mesh>
-          <planeGeometry args={[3, 2]} />
-          <meshStandardMaterial 
-            color="#1a1a2e" 
-            transparent 
-            opacity={0.7}
-            emissive="#F59E0B"
-            emissiveIntensity={0.1}
-          />
-        </mesh>
-        <Html
-          center
-          transform
-          position={[0, 0, 0.01]}
-          style={{ width: '200px', pointerEvents: 'none' }}
-        >
-          <div className="text-orange-300 text-xs text-center p-2">
-            <div className="font-bold mb-1">SERVICES</div>
-            <div>• Banking</div>
-            <div>• Loans</div>
-            <div>• Investments</div>
-            <div>• Security</div>
-          </div>
-        </Html>
-      </group>
-    </>
-  );
-}
+// Removed HolographicPanels component - was causing parsing issues when commented
 
 // Loading indicator
 function LoadingIndicator() {
@@ -194,7 +130,6 @@ function LoadingIndicator() {
 
 export default function ImmersiveChatScene({
   messages,
-  currentMessage,
   isAISpeaking,
   currentViseme,
   isLoading,

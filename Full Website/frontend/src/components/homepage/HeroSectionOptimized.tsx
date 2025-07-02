@@ -1,8 +1,7 @@
 'use client'
 
-import React, { memo, useState, useEffect } from 'react'
+import React, { memo } from 'react'
 import Link from 'next/link'
-import Image from 'next/image'
 import { motion, Variants, useReducedMotion } from 'framer-motion'
 import { usePlatformStats } from '@/services/platformStats'
 import { useDashboardPreview } from '@/lib/api/public'

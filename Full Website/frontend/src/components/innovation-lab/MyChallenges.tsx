@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { motion } from 'framer-motion';
 import { 
   Trophy, 
@@ -52,11 +52,28 @@ export default function MyChallenges() {
   const [loading, setLoading] = useState(true);
   const [loadingSubmissions, setLoadingSubmissions] = useState(false);
 
-  useEffect(() => {
-    fetchMyChallenges();
-  }, [fetchMyChallenges]);
+  const fetchSubmissions = useCallback(async (challengeId: string) => {
+    try {
+      setLoadingSubmissions(true);
+      const token = localStorage.getItem('auth_token');
+      const response = await fetch(`/api/challenges/my-challenges/${challengeId}/submissions`, {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+      
+      if (!response.ok) throw new Error('Failed to fetch submissions');
+      
+      const data = await response.json();
+      setSubmissions(data);
+    } catch (error) {
+      console.error('Error fetching submissions:', error);
+    } finally {
+      setLoadingSubmissions(false);
+    }
+  }, []);
 
-  const fetchMyChallenges = async () => {
+  const fetchMyChallenges = useCallback(async () => {
     try {
       const token = localStorage.getItem('auth_token');
       const response = await fetch('/api/challenges/my-challenges', {
@@ -80,28 +97,11 @@ export default function MyChallenges() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [fetchSubmissions]);
 
-  const fetchSubmissions = async (challengeId: string) => {
-    try {
-      setLoadingSubmissions(true);
-      const token = localStorage.getItem('auth_token');
-      const response = await fetch(`/api/challenges/my-challenges/${challengeId}/submissions`, {
-        headers: {
-          'Authorization': `Bearer ${token}`
-        }
-      });
-      
-      if (!response.ok) throw new Error('Failed to fetch submissions');
-      
-      const data = await response.json();
-      setSubmissions(data);
-    } catch (error) {
-      console.error('Error fetching submissions:', error);
-    } finally {
-      setLoadingSubmissions(false);
-    }
-  };
+  useEffect(() => {
+    fetchMyChallenges();
+  }, [fetchMyChallenges]);
 
   const handleChallengeSelect = (challenge: Challenge) => {
     setSelectedChallenge(challenge);

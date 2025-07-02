@@ -166,7 +166,6 @@ class PerformanceMonitor {
 
   // Get metrics summary
   getMetricsSummary() {
-    const _now = Date.now();
     return {
       timestamp: new Date().toISOString(),
       requests: {

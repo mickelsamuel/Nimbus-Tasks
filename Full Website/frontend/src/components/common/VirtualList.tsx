@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useMemo, useRef, useEffect, useState, useCallback } from 'react'
+import React, { useMemo, useRef, useState, useCallback } from 'react'
 import { useVirtualList } from '@/hooks/usePerformance'
 
 interface VirtualListProps<T> {
@@ -26,10 +26,7 @@ export function VirtualList<T>({
   const [scrollTop, setScrollTop] = useState(0)
 
   const {
-    visibleItems,
-    totalHeight,
-    offsetY,
-    startIndex
+    totalHeight
   } = useVirtualList(items, itemHeight, containerHeight, overscan)
 
   const handleScroll = useCallback((e: React.UIEvent<HTMLElement>) => {
