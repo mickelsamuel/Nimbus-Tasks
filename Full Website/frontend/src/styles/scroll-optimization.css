@@ -1,0 +1,390 @@
+/* Scroll Optimization Styles */
+
+/* Ensure all animated elements are GPU accelerated and optimized for scroll */
+[data-animation],
+.motion-div,
+.framer-motion-div,
+motion\:div,
+motion\:section,
+motion\:button,
+.scroll-optimized {
+  will-change: transform, opacity;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  contain: layout style paint;
+}
+
+/* Prevent layout shifts during fast scroll */
+.scroll-container {
+  contain: layout style paint;
+  scroll-behavior: smooth;
+}
+
+/* Optimize content loading for fast scroll */
+.lazy-section {
+  contain-intrinsic-size: 500px; /* Reserve space to prevent layout shift */
+  content-visibility: auto; /* Only render when visible */
+}
+
+/* Intersection observer loading states */
+.section-loading {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.3s ease-out, transform 0.3s ease-out;
+}
+
+.section-loaded {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Scroll-aware animations that continue during scroll */
+@keyframes scroll-safe-pulse {
+  0%, 100% { 
+    opacity: 0.7; 
+    transform: translateZ(0) scale(1);
+  }
+  50% { 
+    opacity: 1; 
+    transform: translateZ(0) scale(1.05);
+  }
+}
+
+@keyframes scroll-safe-float {
+  0%, 100% { 
+    transform: translateZ(0) translateY(0px) rotate(0deg);
+  }
+  50% { 
+    transform: translateZ(0) translateY(-10px) rotate(180deg);
+  }
+}
+
+@keyframes scroll-safe-shimmer {
+  0% { 
+    transform: translateZ(0) translateX(-100%);
+  }
+  100% { 
+    transform: translateZ(0) translateX(100%);
+  }
+}
+
+/* Apply optimized animations */
+.animate-pulse-optimized {
+  animation: scroll-safe-pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+.animate-float-optimized {
+  animation: scroll-safe-float 6s ease-in-out infinite;
+}
+
+.animate-shimmer-optimized {
+  position: relative;
+  overflow: hidden;
+}
+
+.animate-shimmer-optimized::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+  animation: scroll-safe-shimmer 2s ease-in-out infinite;
+  pointer-events: none;
+}
+
+/* Optimized backdrop-filter elements */
+.backdrop-optimized {
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  will-change: backdrop-filter;
+  transform: translateZ(0);
+  contain: layout style paint;
+}
+
+/* Smart backdrop filter that adapts during scroll */
+.backdrop-smart {
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  will-change: backdrop-filter;
+  transform: translateZ(0);
+  contain: layout style paint;
+  transition: backdrop-filter 0.2s ease;
+}
+
+/* Lightweight backdrop for heavy-use cases */
+.backdrop-light {
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  will-change: backdrop-filter;
+  transform: translateZ(0);
+  contain: layout style paint;
+}
+
+/* Mobile optimizations */
+@media (max-width: 768px) {
+  .backdrop-optimized {
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+  }
+  
+  /* Reduce animation complexity on mobile */
+  .animate-pulse-optimized,
+  .animate-float-optimized {
+    animation-duration: 4s;
+  }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  [data-animation],
+  .motion-div,
+  .framer-motion-div,
+  .animate-pulse-optimized,
+  .animate-float-optimized,
+  .animate-shimmer-optimized {
+    animation: none !important;
+    transition: none !important;
+  }
+  
+  .animate-shimmer-optimized::before {
+    display: none;
+  }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .backdrop-optimized {
+    backdrop-filter: none;
+    background: rgba(0, 0, 0, 0.8);
+  }
+}
+
+/* Scroll performance utilities */
+.scroll-smooth {
+  scroll-behavior: smooth;
+  overflow-anchor: auto;
+}
+
+.scroll-auto {
+  scroll-behavior: auto;
+}
+
+/* Container queries for dynamic optimization */
+@container (max-width: 768px) {
+  .container-optimized {
+    contain: layout style paint;
+  }
+}
+
+/* Prevent scroll jank on iOS */
+.ios-scroll-fix {
+  -webkit-overflow-scrolling: touch;
+  transform: translate3d(0, 0, 0);
+}
+
+/* Virtual scrolling optimization */
+.virtual-scroll-item {
+  contain: strict;
+  content-visibility: auto;
+  contain-intrinsic-size: 0 200px;
+}
+
+/* Page transition optimizations */
+.page-transition-enter {
+  opacity: 0;
+  transform: translateY(10px);
+}
+
+.page-transition-enter-active {
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 0.3s ease-out, transform 0.3s ease-out;
+}
+
+.page-transition-exit {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.page-transition-exit-active {
+  opacity: 0;
+  transform: translateY(-10px);
+  transition: opacity 0.2s ease-in, transform 0.2s ease-in;
+}
+
+/* Intersection observer optimization */
+.observe-target {
+  /* Reserve space to prevent layout shift */
+  min-height: 100px;
+}
+
+.observe-target[data-loaded="true"] {
+  min-height: auto;
+}
+
+/* Fast scroll detection - AGGRESSIVE MODE */
+.fast-scroll-mode .animate-pulse-optimized,
+.fast-scroll-mode .animate-float-optimized,
+.fast-scroll-mode [data-animation],
+.fast-scroll-mode .motion-div,
+.fast-scroll-mode .framer-motion-div,
+.fast-scroll-mode [class*="motion-"],
+.fast-scroll-mode [class*="animate-"] {
+  animation: none !important;
+  transform: translateZ(0) !important;
+  will-change: auto !important;
+  transition: none !important;
+}
+
+/* Scroll paused state for elements */
+.scroll-paused,
+.scroll-frozen {
+  animation: none !important;
+  animation-play-state: paused !important;
+  transition: none !important;
+  will-change: auto !important;
+  transform: translateZ(0) !important;
+}
+
+/* AGGRESSIVE optimizations during scroll */
+.fast-scroll-mode .backdrop-optimized,
+.fast-scroll-mode .backdrop-smart,
+.fast-scroll-mode .backdrop-light,
+.fast-scroll-mode [class*="backdrop-blur"],
+.fast-scroll-mode [class*="blur-"] {
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  filter: none !important;
+  transition: none !important;
+}
+
+/* Smart backdrop that reduces blur during scroll */
+.fast-scroll-mode .backdrop-smart {
+  backdrop-filter: blur(3px) !important;
+  -webkit-backdrop-filter: blur(3px) !important;
+}
+
+/* Keep essential backdrop for navigation */
+.fast-scroll-mode .backdrop-essential {
+  backdrop-filter: blur(4px) !important;
+  -webkit-backdrop-filter: blur(4px) !important;
+}
+
+/* Completely disable heavy effects during scroll */
+.fast-scroll-mode [class*="gradient-"],
+.fast-scroll-mode .bg-gradient-to-r,
+.fast-scroll-mode .bg-gradient-to-l,
+.fast-scroll-mode .bg-gradient-to-t,
+.fast-scroll-mode .bg-gradient-to-b,
+.fast-scroll-mode .bg-gradient-to-br,
+.fast-scroll-mode .bg-gradient-to-bl,
+.fast-scroll-mode .bg-gradient-to-tr,
+.fast-scroll-mode .bg-gradient-to-tl {
+  background: transparent !important;
+}
+
+/* Hide complex visual effects during scroll */
+.fast-scroll-mode [class*="shadow-"],
+.fast-scroll-mode [class*="drop-shadow"] {
+  box-shadow: none !important;
+  filter: none !important;
+}
+
+/* Disable transforms during scroll */
+.fast-scroll-mode [style*="transform"] {
+  transform: translateZ(0) !important;
+}
+
+/* Force simplification of complex elements */
+.fast-scroll-mode .absolute:not([data-keep-position]) {
+  position: static !important;
+}
+
+/* Preserve sidebar and header fixed positioning */
+.fast-scroll-mode .fixed:not([data-keep-fixed]):not(.sidebar-container):not([data-sidebar]):not([data-header]) {
+  position: static !important;
+}
+
+/* Hide decorative elements during scroll */
+.fast-scroll-mode .absolute.w-72,
+.fast-scroll-mode .absolute.w-96,
+.fast-scroll-mode .absolute.w-80,
+.fast-scroll-mode .absolute.w-64 {
+  display: none !important;
+}
+
+/* Simplify text during fast scroll */
+.fast-scroll-mode [class*="bg-clip-text"] {
+  background: none !important;
+  color: inherit !important;
+}
+
+/* Component-specific optimizations */
+.hero-section {
+  contain: layout style;
+  will-change: transform;
+}
+
+.dashboard-hero {
+  contain: layout style paint;
+  transform: translateZ(0);
+}
+
+.spaces-grid {
+  contain: layout style;
+}
+
+.achievement-card {
+  contain: layout style paint;
+  will-change: transform;
+}
+
+.leaderboard-row {
+  contain: layout style;
+  will-change: transform;
+}
+
+/* Loading skeleton optimizations */
+.skeleton-loading {
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: skeleton-shimmer 1.5s infinite;
+  will-change: background-position;
+}
+
+@keyframes skeleton-shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+/* Dark mode skeleton */
+.dark .skeleton-loading {
+  background: linear-gradient(90deg, #374151 25%, #4b5563 50%, #374151 75%);
+  background-size: 200% 100%;
+}
+
+/* Scroll snap optimizations */
+.scroll-snap-container {
+  scroll-snap-type: y mandatory;
+  scroll-behavior: smooth;
+}
+
+.scroll-snap-item {
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
+}
+
+/* Performance debugging utilities */
+.debug-paint {
+  outline: 2px solid red;
+}
+
+.debug-layout {
+  outline: 2px solid blue;
+}
+
+.debug-composite {
+  outline: 2px solid green;
+}

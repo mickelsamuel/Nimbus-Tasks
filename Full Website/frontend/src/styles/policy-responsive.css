@@ -1,0 +1,272 @@
+/* Enhanced Responsive Design for Policy Page */
+
+/* Container Queries for Better Text Fitting */
+@container (max-width: 600px) {
+  .policy-card {
+    padding: 1rem;
+  }
+  
+  .policy-title {
+    font-size: 1.5rem;
+    line-height: 1.3;
+  }
+  
+  .policy-content {
+    font-size: 0.9rem;
+    line-height: 1.6;
+  }
+}
+
+/* Ensure text always fits within containers */
+.text-fit {
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  hyphens: auto;
+  max-width: 100%;
+}
+
+/* Mobile-first responsive typography */
+.responsive-text {
+  font-size: clamp(0.875rem, 2.5vw, 1.125rem);
+  line-height: clamp(1.4, 1.6, 1.7);
+}
+
+.responsive-title {
+  font-size: clamp(1.5rem, 4vw, 3rem);
+  line-height: clamp(1.2, 1.3, 1.4);
+}
+
+.responsive-subtitle {
+  font-size: clamp(1rem, 3vw, 1.5rem);
+  line-height: clamp(1.3, 1.4, 1.5);
+}
+
+/* Enhanced spacing for different screen sizes */
+@media (max-width: 640px) {
+  .policy-spacing {
+    padding: 1rem;
+    margin: 0.5rem 0;
+  }
+  
+  .policy-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+}
+
+@media (min-width: 641px) and (max-width: 1024px) {
+  .policy-spacing {
+    padding: 1.5rem;
+    margin: 1rem 0;
+  }
+  
+  .policy-grid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+}
+
+@media (min-width: 1025px) {
+  .policy-spacing {
+    padding: 2rem;
+    margin: 1.5rem 0;
+  }
+  
+  .policy-grid {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+}
+
+/* Flexible button sizing */
+.responsive-button {
+  font-size: clamp(0.875rem, 2vw, 1.125rem);
+  padding: clamp(0.75rem, 2vw, 1.25rem) clamp(1.5rem, 4vw, 3rem);
+  min-height: 44px; /* Minimum touch target size */
+}
+
+/* Ensure icons scale appropriately */
+.responsive-icon {
+  width: clamp(1rem, 2vw, 1.5rem);
+  height: clamp(1rem, 2vw, 1.5rem);
+}
+
+.responsive-icon-large {
+  width: clamp(2rem, 4vw, 4rem);
+  height: clamp(2rem, 4vw, 4rem);
+}
+
+/* Better mobile navigation */
+@media (max-width: 768px) {
+  .mobile-hidden {
+    display: none;
+  }
+  
+  .mobile-full-width {
+    width: 100%;
+  }
+  
+  .mobile-center {
+    text-align: center;
+  }
+  
+  .mobile-stack {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}
+
+/* Improved touch targets for mobile */
+@media (hover: none) and (pointer: coarse) {
+  .touch-target {
+    min-height: 44px;
+    min-width: 44px;
+    padding: 0.75rem;
+  }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .policy-card {
+    border: 2px solid;
+    background: solid;
+  }
+  
+  .text-muted {
+    opacity: 1;
+    font-weight: bold;
+  }
+}
+
+/* Reduced motion preferences */
+@media (prefers-reduced-motion: reduce) {
+  .policy-card {
+    transition: none;
+  }
+  
+  .animate-bounce,
+  .animate-pulse,
+  .animate-spin,
+  .animate-ping {
+    animation: none;
+  }
+}
+
+/* Print optimizations */
+@media print {
+  .policy-page {
+    background: white !important;
+    color: black !important;
+  }
+  
+  .policy-card {
+    break-inside: avoid;
+    border: 1px solid #000;
+    margin-bottom: 1rem;
+    background: white !important;
+  }
+  
+  .no-print {
+    display: none !important;
+  }
+  
+  .print-only {
+    display: block !important;
+  }
+}
+
+/* Landscape mobile optimization */
+@media screen and (max-height: 600px) and (orientation: landscape) {
+  .landscape-compact {
+    padding: 0.5rem;
+    margin: 0.25rem 0;
+  }
+  
+  .landscape-small-text {
+    font-size: 0.875rem;
+  }
+}
+
+/* Ultra-wide screen optimization */
+@media (min-width: 1920px) {
+  .ultra-wide-container {
+    max-width: 1600px;
+    margin: 0 auto;
+  }
+}
+
+/* Container for better text wrapping */
+.text-container {
+  max-width: 100%;
+  min-width: 0;
+  overflow-wrap: break-word;
+  word-break: break-word;
+}
+
+/* Flexible grid system */
+.policy-grid-responsive {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: clamp(1rem, 3vw, 2rem);
+  padding: clamp(1rem, 3vw, 2rem);
+}
+
+/* Enhanced focus states for accessibility */
+.focus-enhanced:focus {
+  outline: 3px solid #3b82f6;
+  outline-offset: 2px;
+  border-radius: 0.5rem;
+}
+
+/* Better line length for readability */
+.optimal-line-length {
+  max-width: 65ch;
+  margin: 0 auto;
+}
+
+/* Responsive margins and padding */
+.responsive-spacing {
+  margin: clamp(1rem, 3vw, 2rem);
+  padding: clamp(1rem, 3vw, 2rem);
+}
+
+/* Flexible aspect ratios */
+.aspect-ratio-container {
+  aspect-ratio: 16 / 9;
+  width: 100%;
+  max-width: 100%;
+}
+
+@media (max-width: 640px) {
+  .aspect-ratio-container {
+    aspect-ratio: 4 / 3;
+  }
+}
+
+/* Enhanced scrolling behavior */
+.smooth-scroll {
+  scroll-behavior: smooth;
+}
+
+/* Better form inputs on mobile */
+@media (max-width: 640px) {
+  input, textarea, select {
+    font-size: 16px; /* Prevents zoom on iOS */
+  }
+}
+
+/* Flexible navigation */
+.nav-responsive {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+}
+
+@media (max-width: 768px) {
+  .nav-responsive {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}

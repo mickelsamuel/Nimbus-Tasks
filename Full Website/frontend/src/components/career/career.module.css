@@ -1,0 +1,520 @@
+/* Modern Career Page - Light/Dark Mode Adaptive Design */
+
+/* Animations */
+@keyframes float {
+  0%, 100% { 
+    transform: translateY(0px) rotate(0deg); 
+  }
+  50% { 
+    transform: translateY(-20px) rotate(2deg); 
+  }
+}
+
+@keyframes pulse {
+  0%, 100% { 
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% { 
+    opacity: 0.8;
+    transform: scale(1.05);
+  }
+}
+
+@keyframes slideInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+@keyframes glow {
+  0%, 100% {
+    box-shadow: 0 0 20px rgba(59, 130, 246, 0.5);
+  }
+  50% {
+    box-shadow: 0 0 30px rgba(59, 130, 246, 0.8);
+  }
+}
+
+@keyframes rotate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Career page specific animations */
+.career-float {
+  animation: float 6s ease-in-out infinite;
+}
+
+.career-pulse {
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+.slide-in-up {
+  animation: slideInUp 0.8s ease-out;
+  animation-fill-mode: both;
+}
+
+.fade-in {
+  animation: fadeIn 0.6s ease-out;
+  animation-fill-mode: both;
+}
+
+/* Career Path Timeline Styles - Light/Dark Mode Adaptive */
+.career-timeline {
+  position: relative;
+  padding-left: 20px;
+}
+
+.career-timeline::before {
+  content: '';
+  position: absolute;
+  left: 30px;
+  top: 24px;
+  bottom: 24px;
+  width: 3px;
+  background: linear-gradient(to bottom, 
+    rgba(59, 130, 246, 0.6) 0%,
+    rgba(139, 92, 246, 0.7) 50%,
+    rgba(236, 72, 153, 0.6) 100%
+  );
+  border-radius: 2px;
+}
+
+/* Dark mode timeline */
+:global(.dark) .career-timeline::before {
+  background: linear-gradient(to bottom, 
+    rgba(59, 130, 246, 0.4) 0%,
+    rgba(139, 92, 246, 0.5) 50%,
+    rgba(236, 72, 153, 0.4) 100%
+  );
+}
+
+.career-milestone {
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+  margin-bottom: 32px;
+  padding-left: 70px;
+}
+
+.career-milestone:last-child {
+  margin-bottom: 0;
+}
+
+.career-milestone-icon {
+  position: absolute;
+  left: 10px;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+}
+
+/* Light mode milestone icons */
+.career-milestone-icon.completed {
+  background: linear-gradient(135deg, #10B981, #059669);
+  border: 4px solid rgba(16, 185, 129, 0.3);
+  box-shadow: 0 0 30px rgba(16, 185, 129, 0.5);
+}
+
+.career-milestone-icon.current {
+  background: linear-gradient(135deg, #3B82F6, #1D4ED8);
+  border: 4px solid rgba(59, 130, 246, 0.3);
+  box-shadow: 0 0 30px rgba(59, 130, 246, 0.5);
+  animation: pulse 2s infinite;
+}
+
+.career-milestone-icon.upcoming {
+  background: linear-gradient(135deg, #6B7280, #4B5563);
+  border: 4px solid rgba(107, 114, 128, 0.3);
+  opacity: 0.8;
+}
+
+/* Dark mode milestone icons */
+:global(.dark) .career-milestone-icon.completed {
+  border: 4px solid rgba(16, 185, 129, 0.2);
+  box-shadow: 0 0 30px rgba(16, 185, 129, 0.4);
+}
+
+:global(.dark) .career-milestone-icon.current {
+  border: 4px solid rgba(59, 130, 246, 0.2);
+  box-shadow: 0 0 30px rgba(59, 130, 246, 0.4);
+}
+
+:global(.dark) .career-milestone-icon.upcoming {
+  border: 4px solid rgba(156, 163, 175, 0.2);
+  opacity: 0.7;
+}
+
+/* Career Milestone Content - Light/Dark Mode Adaptive */
+.career-milestone-content {
+  flex: 1;
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(20px);
+  border-radius: 16px;
+  padding: 20px 24px;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+}
+
+.career-milestone-content:hover {
+  background: rgba(255, 255, 255, 0.95);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+  border-color: rgba(0, 0, 0, 0.15);
+}
+
+/* Dark mode milestone content */
+:global(.dark) .career-milestone-content {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+}
+
+:global(.dark) .career-milestone-content:hover {
+  background: rgba(255, 255, 255, 0.12);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+/* Skills Progress Bars - Light/Dark Mode Adaptive */
+.skill-progress {
+  position: relative;
+  height: 8px;
+  background: rgba(156, 163, 175, 0.3);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+:global(.dark) .skill-progress {
+  background: rgba(156, 163, 175, 0.2);
+}
+
+.skill-progress-fill {
+  height: 100%;
+  border-radius: 4px;
+  position: relative;
+  transition: width 1s ease-in-out;
+}
+
+.skill-progress-fill::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(90deg, 
+    transparent, 
+    rgba(255, 255, 255, 0.4), 
+    transparent
+  );
+  animation: shimmer 2s linear infinite;
+}
+
+:global(.dark) .skill-progress-fill::after {
+  background: linear-gradient(90deg, 
+    transparent, 
+    rgba(255, 255, 255, 0.3), 
+    transparent
+  );
+}
+
+/* Glassmorphism Utilities - Light/Dark Mode Adaptive */
+.glass-card {
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-radius: 20px;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+}
+
+.glass-card:hover {
+  background: rgba(255, 255, 255, 0.95);
+  border-color: rgba(0, 0, 0, 0.15);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+}
+
+/* Dark mode glass cards */
+:global(.dark) .glass-card {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+}
+
+:global(.dark) .glass-card:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.2);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.1);
+}
+
+.glass-button {
+  background: rgba(59, 130, 246, 0.9);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(59, 130, 246, 0.3);
+  border-radius: 12px;
+  padding: 12px 24px;
+  color: #ffffff;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  box-shadow: 0 4px 15px rgba(59, 130, 246, 0.2);
+}
+
+.glass-button:hover {
+  background: rgba(59, 130, 246, 1);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(59, 130, 246, 0.3);
+  border-color: rgba(59, 130, 246, 0.5);
+}
+
+/* Dark mode glass buttons */
+:global(.dark) .glass-button {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+:global(.dark) .glass-button:hover {
+  background: rgba(255, 255, 255, 0.15);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+/* Career Stats Grid */
+.career-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 24px;
+  margin: 32px 0;
+}
+
+@media (max-width: 768px) {
+  .career-stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  .career-stats-grid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+}
+
+/* Progress indicators - Better visibility */
+.progress-bar {
+  background: rgba(156, 163, 175, 0.3);
+  border-radius: 6px;
+  overflow: hidden;
+  height: 10px;
+}
+
+:global(.dark) .progress-bar {
+  background: rgba(156, 163, 175, 0.2);
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #3B82F6, #1D4ED8);
+  border-radius: 6px;
+  transition: width 0.8s ease-in-out;
+  position: relative;
+}
+
+.progress-fill::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(90deg, 
+    transparent, 
+    rgba(255, 255, 255, 0.3), 
+    transparent
+  );
+  animation: shimmer 2s linear infinite;
+}
+
+/* Text contrast improvements */
+.text-primary {
+  color: #1F2937;
+}
+
+:global(.dark) .text-primary {
+  color: #F9FAFB;
+}
+
+.text-secondary {
+  color: #6B7280;
+}
+
+:global(.dark) .text-secondary {
+  color: #9CA3AF;
+}
+
+.text-muted {
+  color: #9CA3AF;
+}
+
+:global(.dark) .text-muted {
+  color: #6B7280;
+}
+
+/* Interactive elements - Better visibility */
+.interactive-element {
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.interactive-element:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+:global(.dark) .interactive-element:hover {
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+}
+
+/* Status indicators with better contrast */
+.status-high {
+  background: linear-gradient(135deg, #10B981, #059669);
+  color: white;
+  border: 2px solid rgba(16, 185, 129, 0.3);
+}
+
+.status-medium {
+  background: linear-gradient(135deg, #F59E0B, #D97706);
+  color: white;
+  border: 2px solid rgba(245, 158, 11, 0.3);
+}
+
+.status-low {
+  background: linear-gradient(135deg, #EF4444, #DC2626);
+  color: white;
+  border: 2px solid rgba(239, 68, 68, 0.3);
+}
+
+/* Career path selection cards */
+.career-path-card {
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(20px);
+  border: 2px solid rgba(0, 0, 0, 0.1);
+  border-radius: 16px;
+  padding: 24px;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.career-path-card:hover {
+  background: rgba(255, 255, 255, 0.95);
+  border-color: rgba(59, 130, 246, 0.5);
+  transform: translateY(-4px);
+  box-shadow: 0 12px 40px rgba(59, 130, 246, 0.2);
+}
+
+.career-path-card.selected {
+  background: rgba(59, 130, 246, 0.1);
+  border-color: rgba(59, 130, 246, 0.5);
+  box-shadow: 0 8px 32px rgba(59, 130, 246, 0.2);
+}
+
+/* Dark mode career path cards */
+:global(.dark) .career-path-card {
+  background: rgba(255, 255, 255, 0.08);
+  border: 2px solid rgba(255, 255, 255, 0.15);
+}
+
+:global(.dark) .career-path-card:hover {
+  background: rgba(255, 255, 255, 0.12);
+  border-color: rgba(59, 130, 246, 0.4);
+  box-shadow: 0 12px 40px rgba(59, 130, 246, 0.15);
+}
+
+:global(.dark) .career-path-card.selected {
+  background: rgba(59, 130, 246, 0.08);
+  border-color: rgba(59, 130, 246, 0.4);
+  box-shadow: 0 8px 32px rgba(59, 130, 246, 0.15);
+}
+
+/* Timeline connections - Better visibility */
+.timeline-connector {
+  position: absolute;
+  width: 2px;
+  background: linear-gradient(to bottom, 
+    rgba(59, 130, 246, 0.6),
+    rgba(139, 92, 246, 0.6)
+  );
+  border-radius: 1px;
+}
+
+:global(.dark) .timeline-connector {
+  background: linear-gradient(to bottom, 
+    rgba(59, 130, 246, 0.4),
+    rgba(139, 92, 246, 0.4)
+  );
+}
+
+/* Accessibility improvements */
+@media (prefers-reduced-motion: reduce) {
+  .career-float,
+  .career-pulse,
+  .slide-in-up,
+  .fade-in {
+    animation: none;
+  }
+}
+
+@media (prefers-contrast: high) {
+  .glass-card,
+  .career-milestone-content,
+  .career-path-card {
+    border-width: 2px;
+    border-color: #000000;
+  }
+  
+  :global(.dark) .glass-card,
+  :global(.dark) .career-milestone-content,
+  :global(.dark) .career-path-card {
+    border-color: #ffffff;
+  }
+}

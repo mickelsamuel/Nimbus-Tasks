@@ -1,0 +1,111 @@
+<h1 class="email-title">Achievement Unlocked! 🏆</h1>
+
+<p class="email-text">
+    Congratulations <strong>{{firstName}}</strong>!
+</p>
+
+<p class="email-text">
+    You've unlocked a new achievement on the BNC Training Platform. Your dedication to learning and professional development is paying off!
+</p>
+
+<div style="background: linear-gradient(135deg, #FFF7ED 0%, #FEFCE8 100%); border: 2px solid #FFD700; border-radius: 12px; padding: 25px; margin: 25px 0; text-align: center;">
+    <div style="font-size: 48px; margin-bottom: 15px;">{{achievementIcon}}</div>
+    <h2 style="margin: 0 0 10px 0; color: #E01A1A; font-size: 24px;">{{achievementTitle}}</h2>
+    <p style="margin: 0 0 15px 0; font-size: 16px; color: #374151; line-height: 1.5;">
+        {{achievementDescription}}
+    </p>
+    <div style="display: inline-block; background-color: #FFD700; color: #1F2937; padding: 8px 16px; border-radius: 20px; font-size: 14px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px;">
+        {{achievementRarity}} Achievement
+    </div>
+</div>
+
+<div class="email-stats">
+    <div class="email-stats-item">
+        <span class="email-stats-number">+{{points}}</span>
+        <span class="email-stats-label">XP Earned</span>
+    </div>
+    <div class="email-stats-item">
+        <span class="email-stats-number">{{totalAchievements}}</span>
+        <span class="email-stats-label">Total Achievements</span>
+    </div>
+    <div class="email-stats-item">
+        <span class="email-stats-number">{{currentLevel}}</span>
+        <span class="email-stats-label">Current Level</span>
+    </div>
+</div>
+
+<div class="email-highlight">
+    <h3 style="margin: 0 0 10px 0; color: #E01A1A;">🚀 Progress Update</h3>
+    <p style="margin: 0; font-size: 14px; line-height: 1.5;">
+        You're now <strong>{{xpToNextLevel}} XP</strong> away from reaching <strong>Level {{nextLevel}}</strong>!
+        Keep up the excellent work to unlock even more rewards.
+    </p>
+</div>
+
+<h2 class="email-subtitle">What This Achievement Means</h2>
+
+<div class="email-card">
+    <p style="margin: 0 0 15px 0; font-size: 14px; line-height: 1.5;">
+        {{achievementMeaning}}
+    </p>
+    
+    {{#if unlockedRewards}}
+    <h4 style="margin: 15px 0 10px 0; color: #1F2937;">Rewards Unlocked:</h4>
+    <ul style="margin: 0; padding-left: 20px;">
+        {{#each unlockedRewards}}
+        <li style="margin: 5px 0; font-size: 14px;">{{this}}</li>
+        {{/each}}
+    </ul>
+    {{/if}}
+</div>
+
+<h2 class="email-subtitle">Continue Your Learning Journey</h2>
+
+<p class="email-text">
+    Don't stop here! Explore more training modules and challenges to continue growing your skills.
+</p>
+
+<ul class="email-list">
+    {{#each recommendedActions}}
+    <li class="email-list-item">
+        <div class="email-list-icon"></div>
+        <div>{{this}}</div>
+    </li>
+    {{/each}}
+</ul>
+
+<div style="text-align: center; margin: 30px 0;">
+    <a href="{{dashboardUrl}}" class="email-button">
+        View Your Profile
+    </a>
+    <br><br>
+    <a href="{{modulesUrl}}" class="email-button email-button-secondary">
+        Explore More Modules
+    </a>
+</div>
+
+{{#if nextAchievements}}
+<div style="background-color: #F0F9FF; border: 1px solid #0EA5E9; border-radius: 8px; padding: 16px; margin: 20px 0;">
+    <h3 style="margin: 0 0 10px 0; color: #0369A1;">🎣 Next Achievements to Unlock</h3>
+    <div style="margin: 0;">
+        {{#each nextAchievements}}
+        <div style="margin: 10px 0; padding: 10px; background-color: #ffffff; border-radius: 6px; border: 1px solid #E0F2FE;">
+            <strong style="color: #1F2937;">{{title}}</strong>
+            <p style="margin: 5px 0 0 0; font-size: 12px; color: #6B7280;">{{description}}</p>
+        </div>
+        {{/each}}
+    </div>
+</div>
+{{/if}}
+
+<hr class="email-divider">
+
+<p class="email-text-small">
+    Achievement unlocked on: <strong>{{unlockedDate}}</strong><br>
+    Share your success with colleagues and inspire others to achieve their learning goals!
+</p>
+
+<p class="email-text">
+    Keep learning, keep growing!<br>
+    <strong>The BNC Training Team</strong>
+</p>

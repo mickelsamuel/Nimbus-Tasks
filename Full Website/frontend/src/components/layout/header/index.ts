@@ -1,0 +1,13 @@
+// Header component exports
+export { default as Logo } from './Logo'
+export { default as StatusIndicators } from './StatusIndicators'
+export { default as SearchBar } from './SearchBar'
+export { default as SearchResults } from './SearchResults'
+export { default as CurrencyDisplay } from './CurrencyDisplay'
+export { default as LanguageToggle } from './LanguageToggle'
+export { default as ThemeToggle } from './ThemeToggle'
+export { default as NotificationsDropdown } from './NotificationsDropdown'
+export { default as UserProfileDropdown } from './UserProfileDropdown'
+export { default as CurrencyHistoryModal } from './CurrencyHistoryModal'
+export { default as QuickActionsBar } from './QuickActionsBar'
+export { default as ProgressBar } from './ProgressBar'

@@ -1,0 +1,402 @@
+/* Optimized Dashboard animations and styles */
+
+/* Optimized animations with transform3d for GPU acceleration */
+@keyframes slide-in-up {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 20px, 0);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes scale-in {
+  from {
+    opacity: 0;
+    transform: scale3d(0.95, 0.95, 1);
+  }
+  to {
+    opacity: 1;
+    transform: scale3d(1, 1, 1);
+  }
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translate3d(0, 0, 0);
+  }
+  50% {
+    transform: translate3d(0, -10px, 0);
+  }
+}
+
+@keyframes wave {
+  0%, 100% {
+    transform: rotate(0deg);
+  }
+  25% {
+    transform: rotate(20deg);
+  }
+  75% {
+    transform: rotate(-10deg);
+  }
+}
+
+/* Optimized animation classes with GPU acceleration - scroll-safe */
+.animate-slide-in-up {
+  animation: slide-in-up 0.6s ease-out forwards;
+  will-change: auto;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+}
+
+.animate-fade-in {
+  animation: fade-in 0.8s ease-out forwards;
+  will-change: auto;
+  transform: translateZ(0);
+}
+
+.animate-scale-in {
+  animation: scale-in 0.5s ease-out forwards;
+  will-change: auto;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+}
+
+.animate-float {
+  animation: float 4s ease-in-out infinite;
+  will-change: auto;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+}
+
+.animate-wave {
+  animation: wave 1.5s ease-in-out infinite;
+  transform-origin: 70% 70%;
+  display: inline-block;
+}
+
+/* Ensure animations continue during scroll */
+.animate-slide-in-up,
+.animate-fade-in,
+.animate-scale-in,
+.animate-float {
+  animation-play-state: running !important;
+}
+
+/* Animation delays */
+.animation-delay-100 {
+  animation-delay: 100ms;
+}
+
+.animation-delay-200 {
+  animation-delay: 200ms;
+}
+
+.animation-delay-300 {
+  animation-delay: 300ms;
+}
+
+.animation-delay-400 {
+  animation-delay: 400ms;
+}
+
+.animation-delay-500 {
+  animation-delay: 500ms;
+}
+
+.animation-delay-600 {
+  animation-delay: 600ms;
+}
+
+/* Optimized card styles with better performance */
+.dashboard-card-integrated {
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(229, 231, 235, 0.5);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  will-change: auto;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+}
+
+.dark .dashboard-card-integrated {
+  background: rgba(31, 41, 55, 0.8);
+  border: 1px solid rgba(75, 85, 99, 0.5);
+}
+
+.dashboard-card-integrated:hover {
+  transform: translate3d(0, -2px, 0);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+}
+
+/* Prevent animation pausing during scroll */
+.dashboard-card-integrated * {
+  animation-play-state: running !important;
+}
+
+/* Optimized scrolling with better performance */
+.scroll-smooth {
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+}
+
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+  overflow: -moz-scrollbars-none;
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+  width: 0;
+  height: 0;
+}
+
+/* Gradient text effect */
+.gradient-text {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Glass morphism effect */
+.glass-effect {
+  background: rgba(255, 255, 255, 0.25);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+}
+
+.dark .glass-effect {
+  background: rgba(0, 0, 0, 0.25);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Optimized hover lift effect */
+.hover-lift {
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  will-change: auto;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+}
+
+.hover-lift:hover {
+  transform: translate3d(0, -4px, 0);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+}
+
+/* Keep animations running during scroll */
+.hover-lift * {
+  animation-play-state: running !important;
+}
+
+/* Pulse animation for badges */
+@keyframes pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.7);
+  }
+  70% {
+    box-shadow: 0 0 0 10px rgba(59, 130, 246, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(59, 130, 246, 0);
+  }
+}
+
+.animate-pulse-ring {
+  animation: pulse 2s infinite;
+}
+
+/* Optimized shimmer effect with GPU acceleration */
+@keyframes shimmer {
+  0% {
+    transform: translate3d(-200%, 0, 0);
+  }
+  100% {
+    transform: translate3d(200%, 0, 0);
+  }
+}
+
+.shimmer {
+  position: relative;
+  overflow: hidden;
+}
+
+.shimmer::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+  animation: shimmer 2s infinite;
+  will-change: transform;
+}
+
+/* Optimized achievement rarity glow effects */
+.legendary-glow {
+  box-shadow: 0 0 20px rgba(251, 191, 36, 0.4);
+  will-change: auto;
+  transform: translateZ(0);
+  animation-play-state: running !important;
+}
+
+.epic-glow {
+  box-shadow: 0 0 20px rgba(168, 85, 247, 0.4);
+  will-change: auto;
+  transform: translateZ(0);
+  animation-play-state: running !important;
+}
+
+.rare-glow {
+  box-shadow: 0 0 20px rgba(59, 130, 246, 0.4);
+  will-change: auto;
+  transform: translateZ(0);
+  animation-play-state: running !important;
+}
+
+/* Responsive adjustments */
+/* Performance optimizations */
+.dashboard-container {
+  contain: layout style;
+}
+
+.dashboard-section {
+  contain: layout;
+}
+
+/* Scroll-safe animations */
+.scroll-safe-animations {
+  /* Prevent animation pause during scroll */
+  animation-play-state: running !important;
+}
+
+.scroll-safe-animations * {
+  animation-play-state: running !important;
+}
+
+/* Override any scroll-based animation pausing */
+body,
+body *,
+.dashboard-container,
+.dashboard-container * {
+  animation-play-state: running !important;
+}
+
+/* Smooth scroll container that preserves animations */
+.smooth-scroll-container {
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+  overflow-anchor: none;
+}
+
+.smooth-scroll-container * {
+  animation-play-state: running !important;
+}
+
+/* Optimized loading states */
+.loading-skeleton {
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: loading 1.5s infinite;
+}
+
+.dark .loading-skeleton {
+  background: linear-gradient(90deg, #374151 25%, #4b5563 50%, #374151 75%);
+  background-size: 200% 100%;
+}
+
+@keyframes loading {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+/* Content visibility optimization */
+.content-visibility-auto {
+  content-visibility: auto;
+  contain-intrinsic-size: 300px;
+}
+
+@media (max-width: 1024px) {
+  .dashboard-card-integrated {
+    padding: 1.5rem;
+  }
+  
+  /* Keep animations running but make them faster on mobile */
+  .animate-slide-in-up {
+    animation-duration: 0.4s;
+    animation-play-state: running !important;
+  }
+}
+
+@media (max-width: 768px) {
+  .dashboard-card-integrated {
+    padding: 1rem;
+  }
+  
+  /* Keep animations on mobile but make them faster */
+  .animate-slide-in-up {
+    animation-duration: 0.3s;
+    animation-play-state: running !important;
+  }
+  
+  .animate-float {
+    animation-duration: 2s; /* Faster but still running */
+    animation-play-state: running !important;
+  }
+}
+
+/* Reduce motion for users who prefer it */
+@media (prefers-reduced-motion: reduce) {
+  .animate-slide-in-up,
+  .animate-fade-in,
+  .animate-scale-in {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
+  
+  .animate-float {
+    animation: none;
+    transform: none;
+  }
+  
+  .hover-lift {
+    transition: none;
+  }
+  
+  .hover-lift:hover {
+    transform: none;
+  }
+}
+
+/* Force animations to continue during scroll events */
+@media (prefers-reduced-motion: no-preference) {
+  * {
+    animation-play-state: running !important;
+  }
+  
+  .animate-slide-in-up,
+  .animate-fade-in,
+  .animate-scale-in,
+  .animate-float {
+    animation-play-state: running !important;
+  }
+}

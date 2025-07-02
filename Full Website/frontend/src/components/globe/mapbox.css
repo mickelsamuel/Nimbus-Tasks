@@ -1,0 +1,124 @@
+/* Mapbox GL JS styles */
+@import 'mapbox-gl/dist/mapbox-gl.css';
+
+/* Ensure the mapbox container fits perfectly within the content area */
+.mapboxgl-map {
+  width: 100% !important;
+  height: 100% !important;
+}
+
+/* Globe content should fill the content area properly */
+.globe-page-content {
+  position: relative !important;
+  transition: all 0.3s ease !important;
+}
+
+/* Custom overrides for the globe */
+.mapboxgl-canvas-container {
+  cursor: grab;
+  transition: width 0.3s ease, height 0.3s ease;
+}
+
+.mapboxgl-canvas-container:active {
+  cursor: grabbing;
+}
+
+/* Hide Mapbox logo for cleaner look */
+.mapboxgl-ctrl-logo {
+  display: none !important;
+}
+
+/* Custom attribution styling */
+.mapboxgl-ctrl-attrib {
+  background: rgba(0, 0, 0, 0.5) !important;
+  color: white !important;
+  font-size: 10px !important;
+  padding: 2px 5px !important;
+  border-radius: 6px !important;
+}
+
+/* Navigation controls styling */
+.mapboxgl-ctrl-group {
+  background: rgba(0, 0, 0, 0.2) !important;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  border-radius: 8px !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2) !important;
+}
+
+.mapboxgl-ctrl-group button {
+  background: transparent !important;
+  color: white !important;
+  border: none !important;
+  transition: all 0.2s ease !important;
+}
+
+.mapboxgl-ctrl-group button:hover {
+  background: rgba(255, 255, 255, 0.1) !important;
+}
+
+.mapboxgl-ctrl-group button:focus {
+  outline: none !important;
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.5) !important;
+}
+
+/* Popup styling */
+.mapboxgl-popup {
+  max-width: 300px !important;
+}
+
+.mapboxgl-popup-content {
+  background: rgba(0, 0, 0, 0.8) !important;
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  border-radius: 12px !important;
+  color: white !important;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3) !important;
+}
+
+.mapboxgl-popup-close-button {
+  color: white !important;
+  font-size: 16px !important;
+  padding: 4px !important;
+}
+
+.mapboxgl-popup-tip {
+  border-top-color: rgba(0, 0, 0, 0.8) !important;
+}
+
+/* Custom marker styling */
+.custom-marker {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: #3b82f6;
+  border: 3px solid white;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.custom-marker:hover {
+  transform: scale(1.2);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+}
+
+/* Loading animation */
+.mapbox-loading {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1000;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .mapboxgl-ctrl-group {
+    margin: 10px !important;
+  }
+  
+  .mapboxgl-ctrl-attrib {
+    font-size: 8px !important;
+  }
+}

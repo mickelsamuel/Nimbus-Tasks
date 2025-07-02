@@ -1,0 +1,450 @@
+/* Optimized Effects System - Final Performance CSS */
+
+/* ===== PERFORMANCE BASE CLASSES ===== */
+
+/* Universal optimization for all animated elements */
+.performance-optimized {
+  will-change: transform, opacity;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  contain: layout style paint;
+}
+
+/* GPU-accelerated base */
+.gpu-accelerated {
+  transform: translate3d(0, 0, 0);
+  backface-visibility: hidden;
+  perspective: 1000px;
+}
+
+/* Content visibility optimization */
+.lazy-content {
+  content-visibility: auto;
+  contain-intrinsic-size: 500px;
+}
+
+/* ===== BACKDROP FILTERS - PERFORMANCE LEVELS ===== */
+
+/* Ultra-light backdrop for maximum performance */
+.backdrop-ultra-light {
+  backdrop-filter: blur(2px) saturate(150%);
+  -webkit-backdrop-filter: blur(2px) saturate(150%);
+  background: rgba(255, 255, 255, 0.1);
+  will-change: backdrop-filter;
+  transform: translateZ(0);
+}
+
+/* Light backdrop for good performance */
+.backdrop-light {
+  backdrop-filter: blur(4px) saturate(150%);
+  -webkit-backdrop-filter: blur(4px) saturate(150%);
+  background: rgba(255, 255, 255, 0.1);
+  will-change: backdrop-filter;
+  transform: translateZ(0);
+}
+
+/* Standard backdrop for balanced performance */
+.backdrop-standard {
+  backdrop-filter: blur(8px) saturate(150%);
+  -webkit-backdrop-filter: blur(8px) saturate(150%);
+  background: rgba(255, 255, 255, 0.1);
+  will-change: backdrop-filter;
+  transform: translateZ(0);
+}
+
+/* Heavy backdrop - use sparingly */
+.backdrop-heavy {
+  backdrop-filter: blur(12px) saturate(150%) brightness(110%);
+  -webkit-backdrop-filter: blur(12px) saturate(150%) brightness(110%);
+  background: rgba(255, 255, 255, 0.1);
+  will-change: backdrop-filter;
+  transform: translateZ(0);
+}
+
+/* Dynamic backdrop that adapts to scroll */
+.backdrop-adaptive {
+  backdrop-filter: blur(8px) saturate(150%);
+  -webkit-backdrop-filter: blur(8px) saturate(150%);
+  background: rgba(255, 255, 255, 0.1);
+  will-change: backdrop-filter;
+  transform: translateZ(0);
+  transition: backdrop-filter 0.2s ease-out;
+}
+
+/* ===== GRADIENT OPTIMIZATIONS ===== */
+
+/* Lightweight gradients */
+.gradient-light {
+  background: linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(219, 39, 119, 0.1));
+  will-change: background;
+}
+
+.gradient-medium {
+  background: linear-gradient(135deg, rgba(99, 102, 241, 0.2), rgba(219, 39, 119, 0.2));
+  will-change: background;
+}
+
+.gradient-heavy {
+  background: linear-gradient(135deg, 
+    rgba(99, 102, 241, 0.3), 
+    rgba(168, 85, 247, 0.3), 
+    rgba(219, 39, 119, 0.3));
+  will-change: background;
+}
+
+/* Animated gradients - performance optimized */
+.gradient-animated {
+  background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
+  background-size: 400% 400%;
+  animation: gradient-flow 15s ease infinite;
+  will-change: background-position;
+}
+
+@keyframes gradient-flow {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* ===== SHADOW OPTIMIZATIONS ===== */
+
+/* Lightweight shadows */
+.shadow-light {
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+}
+
+.shadow-medium {
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 2px 4px rgba(0, 0, 0, 0.06);
+}
+
+.shadow-heavy {
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15), 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Animated shadows */
+.shadow-animated {
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: box-shadow 0.3s ease;
+}
+
+.shadow-animated:hover {
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+}
+
+/* ===== PARTICLE SYSTEM OPTIMIZATIONS ===== */
+
+/* Base particle container */
+.particle-container {
+  position: relative;
+  overflow: hidden;
+  will-change: transform;
+  contain: layout style paint;
+}
+
+/* Individual particles */
+.particle {
+  position: absolute;
+  border-radius: 50%;
+  pointer-events: none;
+  will-change: transform, opacity;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+}
+
+/* Particle animations - performance levels */
+.particle-light {
+  animation: particle-float-light 8s ease-in-out infinite;
+}
+
+.particle-medium {
+  animation: particle-float-medium 6s ease-in-out infinite;
+}
+
+.particle-heavy {
+  animation: particle-float-heavy 4s ease-in-out infinite;
+}
+
+@keyframes particle-float-light {
+  0%, 100% { 
+    transform: translateZ(0) translateY(0px) rotate(0deg);
+    opacity: 0.3;
+  }
+  50% { 
+    transform: translateZ(0) translateY(-20px) rotate(180deg);
+    opacity: 0.6;
+  }
+}
+
+@keyframes particle-float-medium {
+  0%, 100% { 
+    transform: translateZ(0) translateY(0px) translateX(0px) rotate(0deg);
+    opacity: 0.4;
+  }
+  25% {
+    transform: translateZ(0) translateY(-15px) translateX(15px) rotate(90deg);
+    opacity: 0.7;
+  }
+  75% {
+    transform: translateZ(0) translateY(-15px) translateX(-15px) rotate(270deg);
+    opacity: 0.7;
+  }
+}
+
+@keyframes particle-float-heavy {
+  0%, 100% { 
+    transform: translateZ(0) translateY(0px) translateX(0px) scale(1) rotate(0deg);
+    opacity: 0.5;
+  }
+  33% {
+    transform: translateZ(0) translateY(-20px) translateX(20px) scale(1.2) rotate(120deg);
+    opacity: 0.8;
+  }
+  66% {
+    transform: translateZ(0) translateY(-10px) translateX(-20px) scale(0.8) rotate(240deg);
+    opacity: 0.8;
+  }
+}
+
+/* ===== 3D OPTIMIZATIONS ===== */
+
+/* 3D container base */
+.scene-3d {
+  perspective: 1000px;
+  perspective-origin: 50% 50%;
+  transform-style: preserve-3d;
+  will-change: transform;
+  contain: layout style paint;
+}
+
+/* 3D elements */
+.element-3d {
+  transform-style: preserve-3d;
+  backface-visibility: hidden;
+  will-change: transform;
+}
+
+/* 3D performance levels */
+.scene-3d-light {
+  perspective: 800px;
+}
+
+.scene-3d-medium {
+  perspective: 1200px;
+}
+
+.scene-3d-heavy {
+  perspective: 1500px;
+}
+
+/* ===== SCROLL-RESPONSIVE OPTIMIZATIONS ===== */
+
+/* During fast scroll - disable heavy effects */
+.fast-scroll-mode .backdrop-heavy,
+.fast-scroll-mode .backdrop-standard {
+  backdrop-filter: blur(3px) !important;
+  -webkit-backdrop-filter: blur(3px) !important;
+}
+
+.fast-scroll-mode .gradient-animated {
+  animation-play-state: paused !important;
+}
+
+.fast-scroll-mode .particle-medium,
+.fast-scroll-mode .particle-heavy {
+  animation-play-state: paused !important;
+  opacity: 0.3 !important;
+}
+
+.fast-scroll-mode .shadow-heavy {
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1) !important;
+}
+
+/* ===== ACCESSIBILITY OPTIMIZATIONS ===== */
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  .gradient-animated,
+  .particle-light,
+  .particle-medium,
+  .particle-heavy,
+  .shadow-animated {
+    animation: none !important;
+    transition: none !important;
+  }
+  
+  .backdrop-adaptive {
+    transition: none !important;
+  }
+  
+  /* Provide static alternatives */
+  .gradient-animated {
+    background: linear-gradient(135deg, #23a6d5, #23d5ab);
+    background-size: 100% 100%;
+  }
+  
+  .particle {
+    display: none;
+  }
+}
+
+/* High contrast mode */
+@media (prefers-contrast: high) {
+  .backdrop-ultra-light,
+  .backdrop-light,
+  .backdrop-standard,
+  .backdrop-heavy,
+  .backdrop-adaptive {
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    background: rgba(0, 0, 0, 0.8) !important;
+  }
+  
+  .gradient-light,
+  .gradient-medium,
+  .gradient-heavy,
+  .gradient-animated {
+    background: #000 !important;
+    color: #fff !important;
+  }
+}
+
+/* ===== RESPONSIVE PERFORMANCE ===== */
+
+/* Mobile optimizations */
+@media (max-width: 768px) {
+  .backdrop-heavy,
+  .backdrop-standard {
+    backdrop-filter: blur(4px) !important;
+    -webkit-backdrop-filter: blur(4px) !important;
+  }
+  
+  .particle-heavy,
+  .particle-medium {
+    animation-duration: 8s !important;
+  }
+  
+  .gradient-animated {
+    animation-duration: 20s !important;
+  }
+  
+  .scene-3d-heavy,
+  .scene-3d-medium {
+    perspective: 800px !important;
+  }
+}
+
+/* Low-end device optimizations */
+@media (max-width: 480px) {
+  .backdrop-heavy,
+  .backdrop-standard,
+  .backdrop-light {
+    backdrop-filter: blur(2px) !important;
+    -webkit-backdrop-filter: blur(2px) !important;
+  }
+  
+  .gradient-animated {
+    animation: none !important;
+    background: linear-gradient(135deg, #23a6d5, #23d5ab);
+  }
+  
+  .particle-heavy,
+  .particle-medium,
+  .particle-light {
+    display: none !important;
+  }
+  
+  .shadow-heavy,
+  .shadow-medium {
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12) !important;
+  }
+  
+  .scene-3d,
+  .element-3d {
+    transform-style: flat !important;
+    perspective: none !important;
+  }
+}
+
+/* ===== UTILITY CLASSES ===== */
+
+/* Force hardware acceleration */
+.force-gpu {
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  perspective: 1000px;
+  will-change: transform;
+}
+
+/* Disable effects completely */
+.no-effects {
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  animation: none !important;
+  transition: none !important;
+  transform: none !important;
+  filter: none !important;
+  box-shadow: none !important;
+}
+
+/* Critical animations that should never be disabled */
+.critical-animation {
+  animation-play-state: running !important;
+}
+
+/* Performance debugging */
+.debug-performance {
+  outline: 2px solid red !important;
+  background: rgba(255, 0, 0, 0.1) !important;
+}
+
+/* ===== LOADING STATES ===== */
+
+/* Optimized loading skeleton */
+.skeleton-optimized {
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: skeleton-shimmer-optimized 1.5s infinite;
+  will-change: background-position;
+  border-radius: 4px;
+}
+
+@keyframes skeleton-shimmer-optimized {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+.dark .skeleton-optimized {
+  background: linear-gradient(90deg, #374151 25%, #4b5563 50%, #374151 75%);
+  background-size: 200% 100%;
+}
+
+/* ===== CONTAINER QUERIES FOR DYNAMIC OPTIMIZATION ===== */
+
+@container (max-width: 400px) {
+  .container-responsive .backdrop-heavy,
+  .container-responsive .backdrop-standard {
+    backdrop-filter: blur(2px) !important;
+    -webkit-backdrop-filter: blur(2px) !important;
+  }
+}
+
+@container (max-height: 300px) {
+  .container-responsive .particle {
+    display: none !important;
+  }
+}
+
+/* ===== PRINT OPTIMIZATIONS ===== */
+
+@media print {
+  .backdrop-ultra-light,
+  .backdrop-light,
+  .backdrop-standard,
+  .backdrop-heavy,
+  .backdrop-adaptive,
+  .gradient-animated,
+  .particle,
+  .shadow-animated {
+    display: none !important;
+  }
+}

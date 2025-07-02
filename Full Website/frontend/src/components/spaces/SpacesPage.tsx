@@ -1,16 +1,16 @@
 'use client'
 
-import { useState, useEffect, useRef } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
+import { useState, useEffect, useRef, useMemo, useCallback, memo } from 'react'
+import React from 'react'
+import dynamic from 'next/dynamic'
 import ProtectedLayout from '@/components/layout/ProtectedLayout'
-import { ScrollOptimizedDiv, ScrollOptimizedContainer, ScrollOptimizedItem } from '@/components/common/ScrollOptimizedMotion'
+import { useScrollPerformance, useDebounce, useInViewport } from '@/hooks/usePerformance'
 import { 
   Building2, 
   Users, 
   Heart, 
   Brain,
   Briefcase,
-  BookOpen,
   Coffee,
   Search,
   Filter,
@@ -20,11 +20,44 @@ import {
   Clock
 } from 'lucide-react'
 import { useSpaces } from '@/hooks/useSpaces'
-import SpaceJoinModal from './SpaceJoinModal'
-import SpaceExplorerView from './SpaceExplorerView'
 import { VirtualSpace } from '@/types'
+import { transformSpaceData } from '@/utils/iconMapping'
+
+// Lazy load heavy components
+const SpaceJoinModal = dynamic(() => import('./SpaceJoinModal'), {
+  loading: () => null
+})
+
+const SpaceExplorerView = dynamic(() => import('./SpaceExplorerView'), {
+  loading: () => <div className="h-96 bg-gray-100 dark:bg-gray-800 rounded-2xl animate-pulse" />
+})
 
 // Virtual Spaces will be fetched from API
+
+// Memoized space filter hook
+const useSpaceFilters = (spaces: VirtualSpace[], searchQuery: string, selectedCategory: string) => {
+  return useMemo(() => {
+    const query = searchQuery.toLowerCase().trim()
+    
+    return spaces.filter(space => {
+      const matchesSearch = !query || 
+        space.name.toLowerCase().includes(query) ||
+        space.description.toLowerCase().includes(query)
+      const matchesCategory = selectedCategory === 'all' || space.category === selectedCategory
+      return matchesSearch && matchesCategory
+    })
+  }, [spaces, searchQuery, selectedCategory])
+}
+
+// Memoized categories
+const spaceCategories = [
+  { id: 'all', name: 'All Spaces', icon: Building2 },
+  { id: 'meeting', name: 'Meeting Rooms', icon: Users },
+  { id: 'work', name: 'Workspaces', icon: Briefcase },
+  { id: 'social', name: 'Social Areas', icon: Coffee },
+  { id: 'training', name: 'Training', icon: Brain },
+  { id: 'wellness', name: 'Wellness', icon: Heart }
+]
 
 export default function SpacesPage() {
   const [viewMode, setViewMode] = useState<'explorer' | 'grid' | 'list'>('explorer')
@@ -33,53 +66,66 @@ export default function SpacesPage() {
   const [isFilterOpen, setIsFilterOpen] = useState(false)
   const [showNotification, setShowNotification] = useState<boolean>(false)
   const [notificationMessage, setNotificationMessage] = useState<string>('')
-  const [selectedSpace, setSelectedSpace] = useState<VirtualSpace>(mockSpaces[0])
+  const [selectedSpace, setSelectedSpace] = useState<VirtualSpace | null>(null)
   const [isTransitioning, setIsTransitioning] = useState(false)
   const dropdownRef = useRef<HTMLDivElement>(null)
   const [dropdownPosition, setDropdownPosition] = useState({ top: 0, left: 0 })
+
+  // Performance hooks
+  const { isScrolling } = useScrollPerformance()
+  const debouncedSearchQuery = useDebounce(searchQuery, 300)
 
   const {
     spaces: apiSpaces,
     showJoinModal,
     loading,
     error,
-    setShowJoinModal
+    setShowJoinModal,
+    joinSpace
   } = useSpaces()
 
-  // Use spaces from API hook
-  const spaces = apiSpaces || []
+  // Transform API spaces to frontend format - memoized
+  const spaces = useMemo(() => {
+    return apiSpaces ? apiSpaces.map(transformSpaceData) : []
+  }, [apiSpaces])
 
-  // Space categories
-  const categories = [
-    { id: 'all', name: 'All Spaces', icon: Building2 },
-    { id: 'meeting', name: 'Meeting Rooms', icon: Users },
-    { id: 'work', name: 'Workspaces', icon: Briefcase },
-    { id: 'social', name: 'Social Areas', icon: Coffee },
-    { id: 'training', name: 'Training', icon: Brain },
-    { id: 'wellness', name: 'Wellness', icon: Heart }
-  ]
+  // Use memoized filter
+  const filteredSpaces = useSpaceFilters(spaces, debouncedSearchQuery, selectedCategory)
 
-  // Filter spaces based on search and category
-  const filteredSpaces = spaces.filter(space => {
-    const matchesSearch = space.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                         space.description.toLowerCase().includes(searchQuery.toLowerCase())
-    const matchesCategory = selectedCategory === 'all' || space.category === selectedCategory
-    return matchesSearch && matchesCategory
-  })
+  // Memoized handlers
+  const handleSearchChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchQuery(e.target.value)
+  }, [])
 
-  const showNotificationMessage = (message: string) => {
+  const handleCategoryChange = useCallback((categoryId: string) => {
+    setSelectedCategory(categoryId)
+    setIsFilterOpen(false)
+  }, [])
+
+  const handleViewModeChange = useCallback((mode: 'explorer' | 'grid' | 'list') => {
+    setViewMode(mode)
+  }, [])
+
+  const showNotificationMessage = useCallback((message: string) => {
     setNotificationMessage(message)
     setShowNotification(true)
     setTimeout(() => setShowNotification(false), 3000)
-  }
+  }, [])
 
-  const handleJoinSpace = async () => {
+  const handleJoinSpace = useCallback(async () => {
     if (selectedSpace) {
-      showNotificationMessage(`Joined ${selectedSpace.name}!`)
+      try {
+        await joinSpace(selectedSpace.id)
+        showNotificationMessage(`Successfully joined ${selectedSpace.name}!`)
+        setShowJoinModal(false)
+      } catch (error) {
+        showNotificationMessage('Failed to join space. Please try again.')
+        console.error('Error joining space:', error)
+      }
     }
-  }
+  }, [selectedSpace, joinSpace, showNotificationMessage, setShowJoinModal])
 
-  const handleSpaceSelect = (space: VirtualSpace) => {
+  const handleSpaceSelect = useCallback((space: VirtualSpace) => {
     if (space.id === selectedSpace?.id) return
     
     setIsTransitioning(true)
@@ -87,7 +133,7 @@ export default function SpacesPage() {
       setSelectedSpace(space)
       setIsTransitioning(false)
     }, 300)
-  }
+  }, [selectedSpace?.id])
 
   // Click outside to close dropdown
   useEffect(() => {
@@ -118,11 +164,7 @@ export default function SpacesPage() {
       <ProtectedLayout>
         <div className="min-h-screen flex items-center justify-center">
           <div className="text-center">
-            <motion.div 
-              className="w-16 h-16 border-4 border-primary-600/30 border-t-primary-600 rounded-full mx-auto mb-4"
-              animate={{ rotate: 360 }}
-              transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
-            />
+            <div className="w-16 h-16 border-4 border-primary-600/30 border-t-primary-600 rounded-full mx-auto mb-4 animate-spin" />
             <div className="text-xl font-semibold text-gray-900 dark:text-white">Loading Virtual Spaces...</div>
           </div>
         </div>
@@ -156,27 +198,17 @@ export default function SpacesPage() {
           
           <div className="relative z-10 px-6 py-8">
             {/* Page Header */}
-            <ScrollOptimizedDiv
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, type: "tween" }}
-              className="text-center mb-8"
-            >
+            <div className="text-center mb-8">
               <h1 className="text-4xl font-bold text-gray-900 dark:text-white mb-2">
                 Virtual Spaces
               </h1>
               <p className="text-lg text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
                 Explore and connect in immersive virtual environments designed for modern workplace collaboration
               </p>
-            </ScrollOptimizedDiv>
+            </div>
 
             {/* Controls Bar */}
-            <ScrollOptimizedDiv
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.1, type: "tween" }}
-              className="backdrop-blur-xl bg-white/90 dark:bg-slate-800/90 rounded-2xl border border-gray-200/50 dark:border-slate-700/50 p-6 shadow-xl"
-            >
+            <div className="bg-white/90 dark:bg-slate-800/90 rounded-2xl border border-gray-200/50 dark:border-slate-700/50 p-6 shadow-xl">
               <div className="flex flex-col lg:flex-row gap-6 items-center justify-between">
                 {/* Search and Filter */}
                 <div className="flex flex-col sm:flex-row gap-4 flex-1 w-full lg:w-auto">
@@ -210,7 +242,7 @@ export default function SpacesPage() {
                       >
                         <Filter className="h-4 w-4" />
                         <span>
-                          {categories.find(c => c.id === selectedCategory)?.name || 'All Spaces'}
+                          {spaceCategories.find(c => c.id === selectedCategory)?.name || 'All Spaces'}
                         </span>
                       </button>
                     </div>
@@ -251,13 +283,13 @@ export default function SpacesPage() {
                   </div>
                 </div>
               </div>
-            </ScrollOptimizedDiv>
+            </div>
           </div>
         </div>
 
         {/* Main Content */}
         <div className="px-6 pb-8">
-          {viewMode === 'explorer' && (
+          {viewMode === 'explorer' && selectedSpace && (
             <SpaceExplorerView 
               spaces={filteredSpaces}
               selectedSpace={selectedSpace}
@@ -265,6 +297,33 @@ export default function SpacesPage() {
               onJoinSpace={handleJoinSpace}
               isTransitioning={isTransitioning}
             />
+          )}
+          
+          {viewMode === 'explorer' && !selectedSpace && filteredSpaces.length > 0 && (
+            <div className="text-center py-12">
+              <div className="text-gray-600 dark:text-gray-400 mb-4">Select a space to explore</div>
+              <button
+                onClick={() => setSelectedSpace(filteredSpaces[0])}
+                className="px-6 py-3 bg-primary-500 hover:bg-primary-600 text-white rounded-xl font-medium transition-colors"
+              >
+                Explore First Space
+              </button>
+            </div>
+          )}
+          
+          {filteredSpaces.length === 0 && !loading && (
+            <div className="text-center py-24">
+              <div className="text-gray-600 dark:text-gray-400 mb-4">No spaces match your criteria</div>
+              <button
+                onClick={() => {
+                  setSearchQuery('')
+                  setSelectedCategory('all')
+                }}
+                className="px-6 py-3 bg-primary-500 hover:bg-primary-600 text-white rounded-xl font-medium transition-colors"
+              >
+                Clear Filters
+              </button>
+            </div>
           )}
           
           {viewMode === 'grid' && (
@@ -283,60 +342,57 @@ export default function SpacesPage() {
         </div>
 
       {/* Category Filter Dropdown - Positioned below button */}
-      <AnimatePresence>
-        {isFilterOpen && (
-          <motion.div
-            initial={{ opacity: 0, y: -10 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -10 }}
-            className="fixed w-64 bg-white dark:bg-slate-800 rounded-xl border-2 border-gray-400 dark:border-slate-500 shadow-2xl z-[99999] p-2"
-            style={{ 
-              zIndex: 99999,
-              top: `${dropdownPosition.top}px`,
-              left: `${dropdownPosition.left}px`
-            }}
-          >
-            <div className="text-center mb-2 p-2 border-b border-gray-200 dark:border-slate-600">
-              <span className="font-bold text-gray-900 dark:text-white">Filter by Category</span>
-            </div>
-            {categories.map((category) => {
-              const Icon = category.icon
-              return (
-                <button
-                  key={category.id}
-                  onClick={() => {
-                    console.log('Selected category:', category.name)
-                    setSelectedCategory(category.id)
-                    setIsFilterOpen(false)
-                  }}
-                  className={`w-full flex items-center gap-3 px-4 py-3 text-left transition-all rounded-lg font-medium text-sm mb-1 ${
-                    selectedCategory === category.id 
-                      ? 'bg-primary-500 text-white hover:bg-primary-600 shadow-sm' 
-                      : 'bg-gray-50 dark:bg-slate-700 text-gray-900 dark:text-white hover:bg-gray-200 dark:hover:bg-slate-600 border border-gray-200 dark:border-slate-600'
-                  }`}
-                >
-                  <Icon className="h-4 w-4" />
-                  <span className="font-medium">{category.name}</span>
-                </button>
-              )
-            })}
-          </motion.div>
-        )}
-      </AnimatePresence>
+      {isFilterOpen && (
+        <div
+          className="fixed w-64 bg-white dark:bg-slate-800 rounded-xl border-2 border-gray-400 dark:border-slate-500 shadow-2xl z-[99999] p-2"
+          style={{ 
+            zIndex: 99999,
+            top: `${dropdownPosition.top}px`,
+            left: `${dropdownPosition.left}px`
+          }}
+        >
+          <div className="text-center mb-2 p-2 border-b border-gray-200 dark:border-slate-600">
+            <span className="font-bold text-gray-900 dark:text-white">Filter by Category</span>
+          </div>
+          {spaceCategories.map((category) => {
+            const Icon = category.icon
+            return (
+              <button
+                key={category.id}
+                onClick={() => {
+                  setSelectedCategory(category.id)
+                  setIsFilterOpen(false)
+                }}
+                className={`w-full flex items-center gap-3 px-4 py-3 text-left transition-all rounded-lg font-medium text-sm mb-1 ${
+                  selectedCategory === category.id 
+                    ? 'bg-primary-500 text-white hover:bg-primary-600 shadow-sm' 
+                    : 'bg-gray-50 dark:bg-slate-700 text-gray-900 dark:text-white hover:bg-gray-200 dark:hover:bg-slate-600 border border-gray-200 dark:border-slate-600'
+                }`}
+              >
+                <Icon className="h-4 w-4" />
+                <span className="font-medium">{category.name}</span>
+              </button>
+            )
+          })}
+        </div>
+      )}
 
       {/* Notification Toast */}
-      <AnimatePresence>
-        {showNotification && (
-          <motion.div
-            initial={{ opacity: 0, y: -50 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -50 }}
-            className="fixed top-4 right-4 bg-green-500 text-white px-6 py-3 rounded-xl shadow-lg z-50 backdrop-blur-sm"
-          >
-            {notificationMessage}
-          </motion.div>
-        )}
-      </AnimatePresence>
+      {showNotification && (
+        <div className="fixed top-4 right-4 bg-green-500 text-white px-6 py-3 rounded-xl shadow-lg z-50">
+          {notificationMessage}
+        </div>
+      )}
+
+      {/* Error Toast */}
+      {error && (
+        <div className="fixed top-4 right-4 bg-red-500 text-white px-6 py-3 rounded-xl shadow-lg z-50">
+          <div className="flex items-center gap-2">
+            <span>⚠</span>
+            <span>{error}</span>
+          </div>
+        </div>
+      )}
 
       {/* Space Join Modal */}
       <SpaceJoinModal
@@ -357,21 +413,11 @@ function SpacesGridView({ spaces, onJoinSpace }: {
   onJoinSpace: () => void
 }) {
   return (
-    <ScrollOptimizedContainer
-      staggerChildren={0.1}
-      delayChildren={0}
-      className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"
-    >
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
       {spaces.map((space) => (
-        <ScrollOptimizedItem
+        <div
           key={space.id}
-          whileHover={{ y: -5 }}
-          transition={{ type: "tween", duration: 0.2 }}
-          className="group cursor-pointer"
-          style={{
-            willChange: 'transform',
-            contain: 'layout style paint'
-          }}
+          className="group cursor-pointer hover:-translate-y-1 transition-transform duration-200"
         >
           <div className="backdrop-blur-xl bg-white/95 dark:bg-slate-800/95 rounded-2xl border border-gray-300/70 dark:border-slate-700/70 shadow-xl hover:shadow-2xl transition-all duration-300 overflow-hidden">
             {/* Space Image */}
@@ -452,9 +498,9 @@ function SpacesGridView({ spaces, onJoinSpace }: {
               </button>
             </div>
           </div>
-        </ScrollOptimizedItem>
+        </div>
       ))}
-    </ScrollOptimizedContainer>
+    </div>
   )
 }
 
@@ -464,19 +510,11 @@ function SpacesListView({ spaces, onJoinSpace }: {
   onJoinSpace: () => void
 }) {
   return (
-    <ScrollOptimizedContainer
-      staggerChildren={0.05}
-      delayChildren={0}
-      className="space-y-4"
-    >
+    <div className="space-y-4">
       {spaces.map((space) => (
-        <ScrollOptimizedItem
+        <div
           key={space.id}
           className="group cursor-pointer"
-          style={{
-            willChange: 'transform',
-            contain: 'layout style paint'
-          }}
         >
           <div className="backdrop-blur-xl bg-white/95 dark:bg-slate-800/95 rounded-2xl border border-gray-300/70 dark:border-slate-700/70 shadow-xl hover:shadow-2xl transition-all duration-300 p-6">
             <div className="flex items-center gap-6">
@@ -545,8 +583,8 @@ function SpacesListView({ spaces, onJoinSpace }: {
               </div>
             </div>
           </div>
-        </ScrollOptimizedItem>
+        </div>
       ))}
-    </ScrollOptimizedContainer>
+    </div>
   )
 }

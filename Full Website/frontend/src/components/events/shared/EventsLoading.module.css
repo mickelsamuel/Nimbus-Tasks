@@ -1,0 +1,91 @@
+.skeleton {
+  background: rgba(255, 255, 255, 0.05);
+  border: 2px solid rgba(255, 255, 255, 0.1);
+  border-radius: 1rem;
+  overflow: hidden;
+  animation: shimmer 2s infinite;
+}
+
+@keyframes shimmer {
+  0% {
+    opacity: 0.5;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0.5;
+  }
+}
+
+.skeletonImage {
+  height: 12rem;
+  background: linear-gradient(90deg, 
+    rgba(255, 255, 255, 0.05) 25%, 
+    rgba(255, 255, 255, 0.1) 50%, 
+    rgba(255, 255, 255, 0.05) 75%
+  );
+  background-size: 400% 100%;
+  animation: loading 1.5s ease-in-out infinite;
+}
+
+.skeletonContent {
+  padding: 1.5rem;
+}
+
+.skeletonTitle {
+  height: 1.5rem;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 0.25rem;
+  margin-bottom: 1rem;
+  width: 70%;
+}
+
+.skeletonText {
+  height: 0.875rem;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 0.25rem;
+  margin-bottom: 0.5rem;
+}
+
+.skeletonStats {
+  display: flex;
+  gap: 1rem;
+  margin: 1.5rem 0;
+}
+
+.skeletonStat {
+  height: 2rem;
+  width: 6rem;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 1rem;
+}
+
+.skeletonButtons {
+  display: flex;
+  gap: 0.75rem;
+  margin-top: 1.5rem;
+}
+
+.skeletonButton {
+  height: 3rem;
+  flex: 1;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 0.5rem;
+}
+
+.skeletonButtonSmall {
+  height: 3rem;
+  width: 3rem;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 0.5rem;
+}
+
+@keyframes loading {
+  0% {
+    background-position: -100% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}

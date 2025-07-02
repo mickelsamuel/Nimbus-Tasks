@@ -1,0 +1,111 @@
+<h1 class="email-title">New Training Module Assigned 📚</h1>
+
+<p class="email-text">
+    Hello <strong>{{firstName}}</strong>,
+</p>
+
+<p class="email-text">
+    You have been assigned a new training module by <strong>{{assignedBy}}</strong>. Please review the details below and complete the training by the specified due date.
+</p>
+
+<div class="email-card">
+    <h2 style="margin: 0 0 15px 0; color: #E01A1A; font-size: 20px;">{{moduleTitle}}</h2>
+    <p style="margin: 0 0 10px 0; font-size: 14px; color: #6B7280;">
+        <strong>Category:</strong> {{moduleCategory}} | <strong>Difficulty:</strong> {{moduleDifficulty}}
+    </p>
+    <p style="margin: 0 0 15px 0; font-size: 14px; line-height: 1.5;">
+        {{moduleDescription}}
+    </p>
+    
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 15px; padding-top: 15px; border-top: 1px solid #E5E7EB;">
+        <div>
+            <span style="font-size: 12px; color: #6B7280; text-transform: uppercase; letter-spacing: 0.5px;">Duration</span>
+            <div style="font-size: 16px; font-weight: 600; color: #1F2937;">{{moduleDuration}}</div>
+        </div>
+        <div>
+            <span style="font-size: 12px; color: #6B7280; text-transform: uppercase; letter-spacing: 0.5px;">Points</span>
+            <div style="font-size: 16px; font-weight: 600; color: #E01A1A;">{{modulePoints}} XP</div>
+        </div>
+        <div>
+            <span style="font-size: 12px; color: #6B7280; text-transform: uppercase; letter-spacing: 0.5px;">Due Date</span>
+            <div style="font-size: 16px; font-weight: 600; color: #DC2626;">{{dueDate}}</div>
+        </div>
+    </div>
+</div>
+
+<div class="email-highlight">
+    <h3 style="margin: 0 0 10px 0; color: #E01A1A;">🎣 Assignment Details</h3>
+    <p style="margin: 0 0 10px 0; font-size: 14px; line-height: 1.5;">
+        <strong>Priority:</strong> {{priority}}<br>
+        <strong>Assigned by:</strong> {{assignedBy}}<br>
+        <strong>Assignment date:</strong> {{assignmentDate}}
+    </p>
+    {{#if notes}}
+    <p style="margin: 10px 0 0 0; font-size: 14px; line-height: 1.5; font-style: italic;">
+        <strong>Notes:</strong> {{notes}}
+    </p>
+    {{/if}}
+</div>
+
+<div style="text-align: center; margin: 30px 0;">
+    <a href="{{moduleUrl}}" class="email-button">
+        Start Training Module
+    </a>
+</div>
+
+<h2 class="email-subtitle">Learning Objectives</h2>
+<p class="email-text">Upon completion of this module, you will be able to:</p>
+
+<ul class="email-list">
+    {{#each learningObjectives}}
+    <li class="email-list-item">
+        <div class="email-list-icon"></div>
+        <div>{{this}}</div>
+    </li>
+    {{/each}}
+</ul>
+
+{{#if prerequisites}}
+<div style="background-color: #FEF3C7; border: 1px solid #F59E0B; border-radius: 8px; padding: 16px; margin: 20px 0;">
+    <h3 style="margin: 0 0 10px 0; color: #92400E;">📋 Prerequisites</h3>
+    <p style="margin: 0; font-size: 14px; line-height: 1.5; color: #92400E;">
+        Please ensure you have completed these modules before starting:
+    </p>
+    <ul style="margin: 10px 0 0 20px; padding: 0;">
+        {{#each prerequisites}}
+        <li style="margin: 5px 0; color: #92400E;">{{this}}</li>
+        {{/each}}
+    </ul>
+</div>
+{{/if}}
+
+<div class="email-stats">
+    <div class="email-stats-item">
+        <span class="email-stats-number">{{daysRemaining}}</span>
+        <span class="email-stats-label">Days Remaining</span>
+    </div>
+    <div class="email-stats-item">
+        <span class="email-stats-number">{{modulePoints}}</span>
+        <span class="email-stats-label">XP Reward</span>
+    </div>
+    <div class="email-stats-item">
+        <span class="email-stats-number">{{estimatedHours}}</span>
+        <span class="email-stats-label">Est. Hours</span>
+    </div>
+</div>
+
+<hr class="email-divider">
+
+<p class="email-text-small">
+    This training assignment is part of your professional development at National Bank of Canada. 
+    Completion is tracked and may be required for compliance or career advancement.
+</p>
+
+<p class="email-text">
+    Questions about this assignment? Contact <a href="mailto:{{assignedByEmail}}" style="color: #E01A1A;">{{assignedBy}}</a> or visit our <a href="{{platformUrl}}/help" style="color: #E01A1A;">Help Center</a>.
+</p>
+
+<p class="email-text">
+    Best regards,<br>
+    <strong>The BNC Training Team</strong>
+</p>

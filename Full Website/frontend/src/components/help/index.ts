@@ -1,0 +1,11 @@
+export { default as HelpPageHeader } from './HelpPageHeader'
+export { default as HelpTabNavigation } from './HelpTabNavigation'
+export { default as QuickActionsTab } from './QuickActionsTab'
+export { default as FAQTab } from './FAQTab'
+export { default as TicketTab } from './TicketTab'
+export { default as ResourcesTab } from './ResourcesTab'
+export { default as ChatModal } from './ChatModal'
+export { default as HelpPageFooter } from './HelpPageFooter'
+export { default as ResponsiveContainer } from './ResponsiveContainer'
+
+export type { FAQItem, FAQCategory } from './FAQTab'

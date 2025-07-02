@@ -1,0 +1,97 @@
+/* Force animations to continue during scroll - OPTIMIZED APPROACH */
+
+/* Target specific animated elements only for better performance */
+.animate-spin,
+.animate-pulse,
+.animate-bounce,
+.animate-ping {
+  animation-play-state: running !important;
+  will-change: auto !important;
+}
+
+/* Prevent scroll-based optimizations */
+html {
+  scroll-behavior: smooth !important;
+}
+
+body {
+  animation-play-state: running !important;
+}
+
+/* Force specific animation classes */
+.animate-spin {
+  animation: force-spin 1s linear infinite !important;
+  animation-play-state: running !important;
+}
+
+.animate-pulse {
+  animation: force-pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite !important;
+  animation-play-state: running !important;
+}
+
+.animate-bounce {
+  animation: force-bounce 1s infinite !important;
+  animation-play-state: running !important;
+}
+
+.animate-ping {
+  animation: force-ping 1s cubic-bezier(0, 0, 0.2, 1) infinite !important;
+  animation-play-state: running !important;
+}
+
+/* Custom keyframes that can't be overridden */
+@keyframes force-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes force-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+@keyframes force-bounce {
+  0%, 100% {
+    transform: translateY(-25%);
+    animation-timing-function: cubic-bezier(0.8, 0, 1, 1);
+  }
+  50% {
+    transform: translateY(0);
+    animation-timing-function: cubic-bezier(0, 0, 0.2, 1);
+  }
+}
+
+@keyframes force-ping {
+  75%, 100% {
+    transform: scale(2);
+    opacity: 0;
+  }
+}
+
+/* Override any browser optimizations - target specific elements only */
+@media (prefers-reduced-motion: no-preference) {
+  .animate-spin,
+  .animate-pulse,
+  .animate-bounce,
+  .animate-ping,
+  .scroll-safe-animations {
+    animation-play-state: running !important;
+  }
+}
+
+/* Force Framer Motion animations */
+[data-framer-motion] {
+  animation-play-state: running !important;
+}
+
+/* Dashboard specific overrides - optimized */
+.scroll-safe-animations {
+  animation-play-state: running !important;
+}
+
+/* Essential animations only */
+.animate-slide-in-up,
+.animate-fade-in,
+.animate-scale-in {
+  animation-play-state: running !important;
+}
