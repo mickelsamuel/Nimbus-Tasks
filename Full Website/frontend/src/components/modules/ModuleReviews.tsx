@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Star, MessageCircle, ThumbsUp, User, Calendar, Filter, ChevronDown } from 'lucide-react'
+import { Star, MessageCircle, ThumbsUp, Filter } from 'lucide-react'
 import { useAuth } from '@/contexts/AuthContext'
 
 interface Review {
@@ -43,7 +43,7 @@ export function ModuleReviews({
 
   useEffect(() => {
     fetchReviews()
-  }, [moduleId, filter])
+  }, [moduleId, filter, fetchReviews])
 
   const fetchReviews = async () => {
     try {

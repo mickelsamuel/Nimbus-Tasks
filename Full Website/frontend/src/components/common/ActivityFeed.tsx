@@ -4,9 +4,9 @@ import { useState, useEffect, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { 
   Bell, Users, Award, BookOpen, MessageSquare, 
-  TrendingUp, Target, Clock, User, ChevronDown,
-  Filter, Zap, Star, Trophy, Heart, Share2,
-  MoreHorizontal, Eye, RefreshCw
+  TrendingUp, Target, ChevronDown,
+  Zap, Star, Trophy, Heart, Share2,
+  RefreshCw
 } from 'lucide-react'
 import { useAuth } from '@/contexts/AuthContext'
 
@@ -101,7 +101,7 @@ export function ActivityFeed({
         }
       }
     }
-  }, [feedType, teamId, userId, department, filter, timeRange])
+  }, [feedType, teamId, userId, department, filter, timeRange, enableRealtime, fetchActivities])
 
   const fetchActivities = async (isRefresh = false) => {
     try {

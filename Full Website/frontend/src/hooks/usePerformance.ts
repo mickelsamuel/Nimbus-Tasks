@@ -94,7 +94,7 @@ export function useInViewport(
     return () => {
       observer.disconnect()
     }
-  }, [once, hasBeenInView, options.threshold, options.rootMargin])
+  }, [once, hasBeenInView, options])
 
   return { ref: elementRef, isInView, hasBeenInView }
 }

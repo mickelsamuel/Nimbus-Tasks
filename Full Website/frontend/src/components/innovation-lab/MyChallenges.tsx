@@ -7,9 +7,6 @@ import {
   Users, 
   Eye, 
   Calendar, 
-  CheckCircle, 
-  Clock, 
-  AlertCircle,
   FileText,
   Download,
   MessageSquare,
@@ -57,7 +54,7 @@ export default function MyChallenges() {
 
   useEffect(() => {
     fetchMyChallenges();
-  }, []);
+  }, [fetchMyChallenges]);
 
   const fetchMyChallenges = async () => {
     try {

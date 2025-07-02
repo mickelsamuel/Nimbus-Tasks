@@ -325,7 +325,7 @@ export const useTeamCollaboration = (teamId: string) => {
       setLoading({ projects: false, meetings: false, discussions: false });
       setError({});
     }
-  }, [teamId, isAuthenticated]);
+  }, [teamId, isAuthenticated, fetchAll]);
 
   const isLoading = loading.projects || loading.meetings || loading.discussions;
   const hasError = !!(error.projects || error.meetings || error.discussions || error.general);

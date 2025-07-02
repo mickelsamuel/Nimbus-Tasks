@@ -47,7 +47,7 @@ interface TeamChatProps {
 }
 
 export function TeamChat({ teamId, teamName }: TeamChatProps) {
-  const { user } = useAuth()
+  useAuth()
   const [channels, setChannels] = useState<Channel[]>([])
   const [activeChannel, setActiveChannel] = useState<Channel | null>(null)
   const [messages, setMessages] = useState<Message[]>([])
@@ -63,7 +63,7 @@ export function TeamChat({ teamId, teamName }: TeamChatProps) {
 
   useEffect(() => {
     fetchChannels()
-  }, [teamId])
+  }, [teamId, fetchChannels])
 
   useEffect(() => {
     if (activeChannel) {
@@ -74,7 +74,7 @@ export function TeamChat({ teamId, teamName }: TeamChatProps) {
       }, 3000)
       return () => clearInterval(interval)
     }
-  }, [activeChannel])
+  }, [activeChannel, fetchMessages])
 
   useEffect(() => {
     scrollToBottom()

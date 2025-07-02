@@ -58,7 +58,7 @@ export function NotificationToast({
         return () => clearTimeout(timer)
       }
     })
-  }, [notifications])
+  }, [notifications, handleDismiss, visible])
 
   const handleDismiss = (id: string) => {
     setVisible(prev => prev.filter(vid => vid !== id))

@@ -1,12 +1,12 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
+import { motion } from 'framer-motion'
 import {
-  TrendingUp, TrendingDown, Target, Users, Award, Clock,
-  Calendar, BarChart3, PieChart, Activity, Zap, Star,
-  ChevronDown, Filter, Download, RefreshCw, ArrowUp,
-  ArrowDown, BookOpen, Trophy, MessageSquare, FileText
+  Target, Users, Award,
+  BarChart3, Activity, Zap, Star,
+  ChevronDown, Download, RefreshCw, ArrowUp,
+  ArrowDown, BookOpen, Trophy, MessageSquare
 } from 'lucide-react'
 
 interface TeamMember {
@@ -95,7 +95,7 @@ export function TeamPerformanceDashboard({ teamId, teamName }: TeamPerformanceDa
 
   useEffect(() => {
     fetchPerformanceData()
-  }, [teamId, timeRange])
+  }, [teamId, timeRange, fetchPerformanceData])
 
   const fetchPerformanceData = async () => {
     try {

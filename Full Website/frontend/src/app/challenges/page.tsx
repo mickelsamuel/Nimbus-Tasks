@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Link from 'next/link';
 import { 
@@ -8,10 +8,8 @@ import {
   Clock, 
   Users, 
   Search, 
-  Calendar,
   DollarSign,
   Target,
-  TrendingUp,
   Sparkles,
   Rocket,
   Star,
@@ -69,11 +67,7 @@ export default function PublicChallengesPage() {
 
   const difficulties = ['all', 'Beginner', 'Intermediate', 'Advanced', 'Expert'];
 
-  useEffect(() => {
-    fetchChallenges();
-  }, [selectedCategory, selectedDifficulty, sortBy, currentPage, searchQuery]);
-
-  const fetchChallenges = async () => {
+  const fetchChallenges = useCallback(async () => {
     try {
       setLoading(true);
       const params = new URLSearchParams({
@@ -97,7 +91,11 @@ export default function PublicChallengesPage() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [selectedCategory, selectedDifficulty, sortBy, currentPage, searchQuery]);
+
+  useEffect(() => {
+    fetchChallenges();
+  }, [fetchChallenges]);
 
   const getDifficultyColor = (difficulty: string) => {
     switch (difficulty) {
@@ -220,7 +218,7 @@ export default function PublicChallengesPage() {
               className="text-xl md:text-2xl text-slate-300 mb-12 max-w-4xl mx-auto leading-relaxed"
             >
               Transform groundbreaking ideas into reality. Join thousands of innovators competing for 
-              <span className="text-transparent bg-gradient-to-r from-yellow-400 to-orange-400 bg-clip-text font-semibold"> life-changing rewards</span> while solving tomorrow's biggest challenges.
+              <span className="text-transparent bg-gradient-to-r from-yellow-400 to-orange-400 bg-clip-text font-semibold"> life-changing rewards</span> while solving tomorrow&apos;s biggest challenges.
             </motion.p>
 
             {/* Stats Grid */}

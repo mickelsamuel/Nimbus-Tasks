@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
 import Link from 'next/link';
@@ -22,8 +22,6 @@ import {
   MessageSquare,
   ThumbsUp,
   Share2,
-  Award,
-  DollarSign,
   Briefcase,
   Send
 } from 'lucide-react';
@@ -96,11 +94,7 @@ export default function ChallengeDetailPage() {
   });
   const [files, setFiles] = useState<File[]>([]);
 
-  useEffect(() => {
-    fetchChallenge();
-  }, [params.id]);
-
-  const fetchChallenge = async () => {
+  const fetchChallenge = useCallback(async () => {
     try {
       setLoading(true);
       const response = await fetch(`/api/challenges/public/${params.id}`);
@@ -113,7 +107,11 @@ export default function ChallengeDetailPage() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [params.id, router]);
+
+  useEffect(() => {
+    fetchChallenge();
+  }, [fetchChallenge]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setFormData({
@@ -158,7 +156,7 @@ export default function ChallengeDetailPage() {
 
       if (!response.ok) throw new Error('Failed to submit');
 
-      const result = await response.json();
+      await response.json();
       
       // Show success message
       alert('Your submission has been received successfully!');

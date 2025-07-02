@@ -24,8 +24,6 @@ export default function ChatModal({ showChatModal, setShowChatModal }: ChatModal
   const [messages, setMessages] = useState<Array<{id: string; type: 'bot' | 'user' | 'agent'; content: string; timestamp: Date}>>([])
   const [isTyping, setIsTyping] = useState(false)
   const [sessionId, setSessionId] = useState<string | null>(null)
-  const [error, setError] = useState<string | null>(null)
-  const [isConnecting, setIsConnecting] = useState(false)
   const messagesEndRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
@@ -49,12 +47,10 @@ export default function ChatModal({ showChatModal, setShowChatModal }: ChatModal
     if (showChatModal && !sessionId) {
       initializeChatSession()
     }
-  }, [showChatModal])
+  }, [showChatModal, sessionId])
 
   const initializeChatSession = async () => {
     try {
-      setIsConnecting(true)
-      setError(null)
       
       const token = localStorage.getItem('auth_token')
       const response = await fetch('/api/support/chat/start', {
@@ -85,7 +81,6 @@ export default function ChatModal({ showChatModal, setShowChatModal }: ChatModal
       }
     } catch (error) {
       console.error('Error starting chat session:', error)
-      setError('Unable to connect to support. Please try again.')
       // Fallback to basic message
       setMessages([{
         id: '1',
@@ -93,8 +88,6 @@ export default function ChatModal({ showChatModal, setShowChatModal }: ChatModal
         content: "I'm currently unable to connect to our support system. Please try refreshing the page or contact support directly.",
         timestamp: new Date()
       }])
-    } finally {
-      setIsConnecting(false)
     }
   }
 
@@ -112,7 +105,6 @@ export default function ChatModal({ showChatModal, setShowChatModal }: ChatModal
     const currentMessage = message
     setMessage('')
     setIsTyping(true)
-    setError(null)
     
     try {
       const token = localStorage.getItem('auth_token')
@@ -146,7 +138,6 @@ export default function ChatModal({ showChatModal, setShowChatModal }: ChatModal
       }
     } catch (error) {
       console.error('Error sending message:', error)
-      setError('Failed to send message. Please try again.')
       
       // Add error fallback message
       const errorMessage = {

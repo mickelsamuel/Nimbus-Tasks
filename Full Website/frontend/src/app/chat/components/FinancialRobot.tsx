@@ -1,18 +1,16 @@
 'use client';
 
-import { useRef, useMemo, useEffect } from 'react';
-import { useFrame, useLoader } from '@react-three/fiber';
-import { Float, Text, RoundedBox, Sphere, Box, Cylinder } from '@react-three/drei';
+import { useRef, useEffect, useMemo } from 'react';
+import { useFrame } from '@react-three/fiber';
+import { Float, RoundedBox, Sphere, Box, Cylinder } from '@react-three/drei';
 import * as THREE from 'three';
-import { TextureLoader } from 'three';
 
 interface FinancialRobotProps {
   isAISpeaking: boolean;
   currentViseme?: string;
-  emotion?: 'happy' | 'thinking' | 'neutral' | 'excited';
 }
 
-export default function FinancialRobot({ isAISpeaking, currentViseme = 'sil', emotion = 'neutral' }: FinancialRobotProps) {
+export default function FinancialRobot({ isAISpeaking, currentViseme = 'sil' }: FinancialRobotProps) {
   const groupRef = useRef<THREE.Group>(null);
   const headGroupRef = useRef<THREE.Group>(null);
   const bodyRef = useRef<THREE.Mesh>(null);
@@ -34,7 +32,7 @@ export default function FinancialRobot({ isAISpeaking, currentViseme = 'sil', em
   });
 
   // Define viseme to mouth shapes mapping
-  const visemeShapes: Record<string, number> = {
+  const visemeShapes = useMemo(() => ({
     'sil': 0,      // Silence - closed
     'PP': 0.2,     // P, B - pressed lips
     'FF': 0.3,     // F, V - bottom lip under top teeth
@@ -48,7 +46,7 @@ export default function FinancialRobot({ isAISpeaking, currentViseme = 'sil', em
     'I': 0.3,      // I - mouth slightly open
     'O': 0.6,      // O - rounded lips
     'U': 0.4,      // U - rounded lips, smaller
-  };
+  }), []);
 
   // Colors for the robot
   const colors = {
@@ -62,7 +60,7 @@ export default function FinancialRobot({ isAISpeaking, currentViseme = 'sil', em
   // Update mouth shape based on viseme
   useEffect(() => {
     animationState.current.mouthOpen = visemeShapes[currentViseme] || 0;
-  }, [currentViseme]);
+  }, [currentViseme, visemeShapes]);
 
   useFrame((state) => {
     if (!groupRef.current) return;

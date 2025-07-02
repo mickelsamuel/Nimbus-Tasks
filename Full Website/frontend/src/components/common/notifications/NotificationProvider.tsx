@@ -155,7 +155,7 @@ export function NotificationProvider({
         socket.disconnect()
       }
     }
-  }, [enableRealtime, userId])
+  }, [enableRealtime, userId, showToast, socket])
 
   // Initial fetch
   useEffect(() => {
@@ -187,7 +187,7 @@ export function NotificationProvider({
         dismissToast(toastId)
       }, notification.duration || 5000)
     }
-  }, [maxToasts])
+  }, [maxToasts, dismissToast])
 
   const dismissToast = useCallback((id: string) => {
     setToastNotifications(prev => prev.filter(toast => toast.id !== id))

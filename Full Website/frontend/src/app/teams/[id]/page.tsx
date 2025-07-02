@@ -2,18 +2,15 @@
 
 import React, { useState, useEffect } from 'react'
 import { useParams, useRouter } from 'next/navigation'
-import { motion } from 'framer-motion'
 import { 
   ArrowLeft, 
   Users, 
   Settings, 
   MessageCircle, 
-  Calendar,
   Target,
   Award,
   BarChart3,
-  Plus,
-  Edit3
+  Plus
 } from 'lucide-react'
 import ProtectedLayout from '@/components/layout/ProtectedLayout'
 import { useTeams } from '@/hooks/useTeams'
@@ -48,7 +45,7 @@ export default function TeamDetailPage() {
     if (teamId) {
       fetchTeam()
     }
-  }, [teamId])
+  }, [teamId, getTeamById])
 
   const handleJoinTeam = async () => {
     try {

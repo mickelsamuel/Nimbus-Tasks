@@ -38,7 +38,7 @@ export default function TrainingTab({ teamMembers }: TrainingTabProps) {
 
   useEffect(() => {
     fetchModulesAndProgress()
-  }, [teamMembers])
+  }, [teamMembers, fetchModulesAndProgress])
 
   const fetchModulesAndProgress = async () => {
     try {
@@ -303,7 +303,7 @@ export default function TrainingTab({ teamMembers }: TrainingTabProps) {
             ) : progressData.length === 0 ? (
               <div className="empty-state">No active training progress to display</div>
             ) : (
-              progressData.map((progress, index) => (
+              progressData.map((progress) => (
                 <div key={`${progress.userId}-${progress.moduleId}`} className="progress-item">
                   <div className="progress-member">
                     <div className="member-avatar-tiny">

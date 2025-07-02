@@ -3,10 +3,10 @@
 import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import {
-  Plus, MoreHorizontal, Calendar, User, Flag, Clock,
-  CheckCircle, AlertCircle, Circle, Archive, Filter,
-  Search, Users, FileText, MessageSquare, Paperclip,
-  Star, Trash2, Edit3, Eye, Tag, Target, Activity
+  Plus, MoreHorizontal, Calendar,
+  CheckCircle, AlertCircle, Circle,
+  Search, FileText, MessageSquare, Paperclip,
+  Eye, Target
 } from 'lucide-react'
 import { useAuth } from '@/contexts/AuthContext'
 
@@ -67,15 +67,13 @@ interface TeamProjectBoardProps {
   teamName: string
 }
 
-export function TeamProjectBoard({ teamId, teamName }: TeamProjectBoardProps) {
+export function TeamProjectBoard({ teamId }: TeamProjectBoardProps) {
   const { user } = useAuth()
   const [projects, setProjects] = useState<Project[]>([])
   const [tasks, setTasks] = useState<Task[]>([])
   const [selectedProject, setSelectedProject] = useState<string | null>(null)
   const [viewMode, setViewMode] = useState<'board' | 'list' | 'calendar'>('board')
   const [loading, setLoading] = useState(true)
-  const [showCreateTask, setShowCreateTask] = useState(false)
-  const [showCreateProject, setShowCreateProject] = useState(false)
   const [searchQuery, setSearchQuery] = useState('')
   const [filterStatus, setFilterStatus] = useState<string>('all')
   const [filterAssignee, setFilterAssignee] = useState<string>('all')
@@ -84,7 +82,7 @@ export function TeamProjectBoard({ teamId, teamName }: TeamProjectBoardProps) {
   useEffect(() => {
     fetchProjects()
     fetchTasks()
-  }, [teamId])
+  }, [teamId, fetchProjects, fetchTasks])
 
   const fetchProjects = async () => {
     try {
@@ -126,28 +124,6 @@ export function TeamProjectBoard({ teamId, teamName }: TeamProjectBoardProps) {
     }
   }
 
-  const createTask = async (taskData: Partial<Task>) => {
-    try {
-      const response = await fetch(`/api/teams/${teamId}/tasks`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${localStorage.getItem('auth_token')}`
-        },
-        body: JSON.stringify({
-          ...taskData,
-          project: selectedProject
-        })
-      })
-
-      if (response.ok) {
-        fetchTasks()
-        setShowCreateTask(false)
-      }
-    } catch (error) {
-      console.error('Error creating task:', error)
-    }
-  }
 
   const updateTaskStatus = async (taskId: string, newStatus: Task['status']) => {
     try {
@@ -353,10 +329,7 @@ export function TeamProjectBoard({ teamId, teamName }: TeamProjectBoardProps) {
               {tasks.length}
             </span>
           </div>
-          <button
-            onClick={() => setShowCreateTask(true)}
-            className="p-1 hover:bg-gray-200 dark:hover:bg-gray-700 rounded transition-colors"
-          >
+          <button className="p-1 hover:bg-gray-200 dark:hover:bg-gray-700 rounded transition-colors">
             <Plus className="h-4 w-4 text-gray-500" />
           </button>
         </div>
@@ -429,10 +402,7 @@ export function TeamProjectBoard({ teamId, teamName }: TeamProjectBoardProps) {
             ))}
           </div>
           
-          <button
-            onClick={() => setShowCreateProject(true)}
-            className="flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors"
-          >
+          <button className="flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors">
             <Plus className="h-4 w-4" />
             New Project
           </button>
@@ -649,10 +619,7 @@ export function TeamProjectBoard({ teamId, teamName }: TeamProjectBoardProps) {
               ? 'No tasks match your current filters. Try adjusting your search criteria.'
               : 'Get started by creating your first task or project.'}
           </p>
-          <button
-            onClick={() => setShowCreateTask(true)}
-            className="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors"
-          >
+          <button className="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors">
             <Plus className="h-4 w-4" />
             Create Task
           </button>

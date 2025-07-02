@@ -3,8 +3,7 @@
 import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import {
-  X, Calendar, User, Flag, Clock, Tag, FileText,
-  Users, Target, Upload, Plus, Minus
+  X, Plus, Minus
 } from 'lucide-react'
 import { useAuth } from '@/contexts/AuthContext'
 
@@ -48,14 +47,14 @@ export function CreateTaskModal({ isOpen, onClose, onSubmit, teamId, projectId }
         title: '',
         description: '',
         priority: 'medium',
-        assignee: user?.id || '',
+        assignee: user?.id?.toString() || '',
         dueDate: '',
         estimatedHours: 0,
         labels: [],
         subtasks: []
       })
     }
-  }, [isOpen, user?.id])
+  }, [isOpen, user?.id, fetchTeamMembers])
 
   const fetchTeamMembers = async () => {
     try {

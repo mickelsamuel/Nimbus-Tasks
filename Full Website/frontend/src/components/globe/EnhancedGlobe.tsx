@@ -714,7 +714,7 @@ export default function EnhancedGlobe() {
       map.current?.remove()
       map.current = null
     }
-  }, [])
+  }, [applyLighting, cinematicFlyTo, lightingMode])
   
   // Ultra-smooth view transitions with optimized performance
   const toggleView = () => {

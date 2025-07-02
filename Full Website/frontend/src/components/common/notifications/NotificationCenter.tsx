@@ -3,10 +3,9 @@
 import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import {
-  Bell, Filter, Search, CheckCircle, Archive, Star,
-  Zap, Clock, Users, BookOpen, Trophy, Shield,
-  Settings, Download, RefreshCw, SortAsc, SortDesc,
-  Eye, EyeOff, Trash2, MoreHorizontal, X
+  Bell, Filter, Search, CheckCircle, Star,
+  Zap, Download, RefreshCw,
+  Eye, EyeOff, Trash2, X
 } from 'lucide-react'
 import { RichNotificationCard } from './RichNotificationCard'
 
@@ -52,7 +51,7 @@ export function NotificationCenter({ userId, className = '' }: NotificationCente
   useEffect(() => {
     fetchNotifications()
     fetchStats()
-  }, [userId, filters, sortBy, sortOrder])
+  }, [userId, filters, sortBy, sortOrder, fetchNotifications])
 
   const fetchNotifications = async () => {
     try {
@@ -305,22 +304,7 @@ export function NotificationCenter({ userId, className = '' }: NotificationCente
     return true
   })
 
-  const typeIcons = {
-    achievement: Trophy,
-    module: BookOpen,
-    team: Users,
-    system: Bell,
-    reminder: Clock,
-    social: Star,
-    security: Shield
-  }
-
-  const priorityColors = {
-    low: 'text-green-600',
-    medium: 'text-blue-600',
-    high: 'text-orange-600',
-    urgent: 'text-red-600'
-  }
+  // Icon and color mappings moved inline to components where used
 
   return (
     <div className={`space-y-6 ${className}`}>
@@ -410,7 +394,7 @@ export function NotificationCenter({ userId, className = '' }: NotificationCente
             </div>
             <div>
               <p className="text-2xl font-bold text-gray-900 dark:text-white">
-                {Object.values(stats.byPriority).reduce((a, b) => (a as number) + (b as number), 0)}
+                {String(Object.values(stats.byPriority).reduce((a: number, b: unknown) => a + Number(b), 0))}
               </p>
               <p className="text-sm text-gray-600 dark:text-gray-400">Priority</p>
             </div>
