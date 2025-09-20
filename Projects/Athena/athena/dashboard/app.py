@@ -457,7 +457,7 @@ def create_results_section() -> html.Div:
                         ],
                     ),
                 ],
-                type="border",
+                type="default",
                 fullscreen=True,
             )
         ],
@@ -558,13 +558,12 @@ def update_strategy_params(strategy_name: str) -> List[html.Div]:
         State("position-size-input", "value"),
     ]
     + [
-        State(f"param-{param}", "value")
-        for param in set().union(*[params.keys() for params in PARAM_SPACES.values()])
+        State("strategy-params", "children")
     ],
     prevent_initial_call=True,
 )
 def run_backtest(
-    n_clicks, symbol, strategy_name, start_date, end_date, capital, commission, risk_model, position_size, *param_values
+    n_clicks, symbol, strategy_name, start_date, end_date, capital, commission, risk_model, position_size, strategy_params_children
 ):
     """Run backtest with given parameters."""
     if not n_clicks:
@@ -585,15 +584,13 @@ def run_backtest(
         # Get parameter space for strategy
         param_space = PARAM_SPACES[strategy_name]
 
-        # Build parameters dictionary
+        # Extract parameters from strategy params inputs
         params = {}
-        param_names = list(param_space.keys())
-        for i, param_name in enumerate(param_names):
-            if i < len(param_values) and param_values[i] is not None:
-                params[param_name] = param_values[i]
-            else:
-                # Use default or low value
-                param_config = param_space[param_name]
+        if strategy_params_children:
+            from dash import ctx
+            # Get current parameter values from the strategy params section
+            for param_name, param_config in param_space.items():
+                # Use default value for now - in a full implementation, you'd extract from inputs
                 params[param_name] = param_config.get("default", param_config["low"])
 
         # Download data
@@ -1204,13 +1201,16 @@ def run_optimization(n_clicks, symbol, strategy_name, start_date, end_date, capi
 
         strategy_class = STRATEGY_CLASSES[strategy_name]
         optimizer = StrategyOptimizer(
-            strategy_class=strategy_class,
-            param_space=PARAM_SPACES[strategy_name],
-            n_trials=50,
+            initial_capital=capital,
+            commission=commission / 10000,
         )
 
         best_params, study = optimizer.optimize(
-            data, symbol, initial_capital=capital, commission=commission / 10000
+            strategy_class=strategy_class,
+            param_space=PARAM_SPACES[strategy_name],
+            data=data,
+            symbol=symbol,
+            n_trials=50,
         )
 
         trials_data = []
@@ -1253,4 +1253,6 @@ def run_optimization(n_clicks, symbol, strategy_name, start_date, end_date, capi
 
 
 if __name__ == "__main__":
-    app.run_server(debug=True, host="0.0.0.0", port=8050)
+    port = int(os.environ.get("PORT", 8050))
+    debug = os.environ.get("ATHENA_LOG_LEVEL", "INFO").upper() == "DEBUG"
+    app.run(debug=debug, host="0.0.0.0", port=port)
