@@ -7,6 +7,7 @@
   "env": {
     "SKIP_ENV_VALIDATION": "1",
     "NEXTAUTH_SECRET": "tp/1UT4rMNZ5Nbna88jRviFq6ipJgwcV5NH3fczTXZU=",
+    "NEXTAUTH_URL": "https://nimbus.mickelsamuel.com",
     "DATABASE_URL": "postgresql://placeholder:placeholder@placeholder:5432/placeholder",
     "AWS_ACCESS_KEY_ID": "placeholder",
     "AWS_SECRET_ACCESS_KEY": "placeholder",
