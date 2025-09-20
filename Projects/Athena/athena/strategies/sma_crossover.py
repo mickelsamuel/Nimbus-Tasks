@@ -148,7 +148,7 @@ class SMACrossoverStrategy(BaseStrategy):
         slow_range: Tuple[int, int] = (40, 100),
         metric: str = "sharpe",
     ) -> Dict:
-        """Optimize strategy parameters (placeholder for Optuna integration).
+        """Optimize strategy parameters using grid search with Optuna integration.
 
         Args:
             data: Historical data for optimization
@@ -159,10 +159,82 @@ class SMACrossoverStrategy(BaseStrategy):
         Returns:
             Optimal parameters
         """
-        # This is a placeholder - actual implementation would use Optuna
-        logger.info(
-            f"Parameter optimization placeholder - "
-            f"would optimize {metric} over fast {fast_range}, slow {slow_range}"
-        )
+        try:
+            import optuna
 
-        return {"fast_period": self.fast_period, "slow_period": self.slow_period}
+            def objective(trial):
+                """Optuna objective function."""
+                fast = trial.suggest_int('fast_period', fast_range[0], fast_range[1])
+                slow = trial.suggest_int('slow_period', slow_range[0], slow_range[1])
+
+                if fast >= slow:
+                    return -999999  # Invalid parameter combination
+
+                # Create temporary strategy with trial parameters
+                temp_strategy = SMACrossoverStrategy(fast_period=fast, slow_period=slow)
+
+                # Generate signals for the trial
+                signals = temp_strategy.generate_signals(data)
+
+                # Calculate the metric for optimization
+                if metric == "sharpe_ratio":
+                    returns = data['Close'].pct_change().fillna(0)
+                    strategy_returns = (signals['position'].shift(1) * returns).fillna(0)
+                    if strategy_returns.std() == 0:
+                        return -999999
+                    result = strategy_returns.mean() / strategy_returns.std() * np.sqrt(252)
+                elif metric == "total_return":
+                    returns = data['Close'].pct_change().fillna(0)
+                    strategy_returns = (signals['position'].shift(1) * returns).fillna(0)
+                    result = (1 + strategy_returns).prod() - 1
+                else:
+                    # Default to Sharpe ratio
+                    returns = data['Close'].pct_change().fillna(0)
+                    strategy_returns = (signals['position'].shift(1) * returns).fillna(0)
+                    if strategy_returns.std() == 0:
+                        return -999999
+                    result = strategy_returns.mean() / strategy_returns.std() * np.sqrt(252)
+
+                return result if not np.isnan(result) else -999999
+
+            # Run optimization
+            study = optuna.create_study(direction='maximize')
+            study.optimize(objective, n_trials=50, show_progress_bar=False)
+
+            best_params = study.best_params
+            logger.info(f"Optimization complete. Best {metric}: {study.best_value:.4f}")
+            logger.info(f"Best parameters: fast={best_params['fast_period']}, slow={best_params['slow_period']}")
+
+            return best_params
+
+        except ImportError:
+            logger.warning("Optuna not available. Using grid search fallback.")
+
+            # Fallback to simple grid search
+            best_score = -999999
+            best_params = {"fast_period": self.fast_period, "slow_period": self.slow_period}
+
+            for fast in range(fast_range[0], fast_range[1] + 1, 2):
+                for slow in range(slow_range[0], slow_range[1] + 1, 5):
+                    if fast >= slow:
+                        continue
+
+                    temp_strategy = SMACrossoverStrategy(fast_period=fast, slow_period=slow)
+                    signals = temp_strategy.generate_signals(data)
+
+                    returns = data['Close'].pct_change().fillna(0)
+                    strategy_returns = (signals['position'].shift(1) * returns).fillna(0)
+
+                    if strategy_returns.std() == 0:
+                        continue
+
+                    score = strategy_returns.mean() / strategy_returns.std() * np.sqrt(252)
+
+                    if score > best_score:
+                        best_score = score
+                        best_params = {"fast_period": fast, "slow_period": slow}
+
+            logger.info(f"Grid search complete. Best {metric}: {best_score:.4f}")
+            logger.info(f"Best parameters: {best_params}")
+
+            return best_params

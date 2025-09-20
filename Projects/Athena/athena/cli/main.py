@@ -351,9 +351,16 @@ def dashboard(
     debug: bool = typer.Option(False, help="Debug mode"),
 ):
     """Launch the web dashboard."""
-    console.print(f"[bold blue]🌐 Launching dashboard at http://{host}:{port}[/bold blue]")
-    console.print("[yellow]Dashboard coming soon with Dash/Plotly integration![/yellow]")
-    # Placeholder for dashboard integration
+    console.print(f"[bold blue]🌐 Launching Athena Professional Dashboard at http://{host}:{port}[/bold blue]")
+    console.print("[green]✓ Loading advanced quantitative trading platform...[/green]")
+
+    try:
+        from athena.dashboard.professional_app import app
+        app.run_server(host=host, port=port, debug=debug)
+    except ImportError:
+        console.print("[red]❌ Dashboard dependencies not installed. Run: pip install dash plotly[/red]")
+    except Exception as e:
+        console.print(f"[red]❌ Dashboard failed to start: {e}[/red]")
 
 
 @app.command()

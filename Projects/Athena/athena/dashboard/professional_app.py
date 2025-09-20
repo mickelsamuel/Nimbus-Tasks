@@ -467,6 +467,96 @@ def optimize_portfolio_markowitz(returns: pd.DataFrame, risk_free_rate: float = 
     }
 
 
+def optimize_portfolio_black_litterman(returns: pd.DataFrame, risk_free_rate: float = 0.02) -> Dict:
+    """Black-Litterman Portfolio Optimization."""
+    mean_returns = returns.mean() * 252
+    cov_matrix = returns.cov() * 252
+    num_assets = len(mean_returns)
+
+    # Market capitalization weights (using equal weights as proxy)
+    market_caps = np.ones(num_assets) / num_assets
+
+    # Risk aversion parameter
+    delta = 3.0
+
+    # Implied equilibrium returns
+    pi = delta * np.dot(cov_matrix, market_caps)
+
+    # Confidence in views (using no specific views, so returns to market equilibrium)
+    tau = 0.025
+    omega = tau * cov_matrix
+
+    # Black-Litterman expected returns
+    M1 = np.linalg.inv(tau * cov_matrix)
+    M2 = np.dot(M1, pi)
+    M3 = np.linalg.inv(M1)
+
+    bl_returns = np.dot(M3, M2)
+    bl_cov = M3
+
+    # Optimize using Black-Litterman inputs
+    def portfolio_stats(weights):
+        portfolio_return = np.sum(bl_returns * weights)
+        portfolio_std = np.sqrt(np.dot(weights.T, np.dot(bl_cov, weights)))
+        sharpe = (portfolio_return - risk_free_rate) / portfolio_std
+        return -sharpe
+
+    constraints = {'type': 'eq', 'fun': lambda x: np.sum(x) - 1}
+    bounds = tuple((0, 1) for _ in range(num_assets))
+    initial = market_caps
+
+    result = minimize(portfolio_stats, initial, method='SLSQP', bounds=bounds, constraints=constraints)
+
+    optimal_weights = result.x
+    return {
+        'weights': optimal_weights,
+        'expected_return': np.sum(bl_returns * optimal_weights),
+        'expected_volatility': np.sqrt(np.dot(optimal_weights.T, np.dot(bl_cov, optimal_weights))),
+        'sharpe_ratio': -result.fun
+    }
+
+
+def optimize_portfolio_risk_parity(returns: pd.DataFrame, risk_free_rate: float = 0.02) -> Dict:
+    """Risk Parity Portfolio Optimization."""
+    cov_matrix = returns.cov() * 252
+    num_assets = len(returns.columns)
+
+    def risk_budget_objective(weights):
+        """Minimize the sum of squared differences between risk contributions and equal risk budget."""
+        weights = np.array(weights)
+        portfolio_vol = np.sqrt(np.dot(weights.T, np.dot(cov_matrix, weights)))
+
+        # Marginal risk contributions
+        marginal_contrib = np.dot(cov_matrix, weights) / portfolio_vol
+
+        # Risk contributions
+        risk_contrib = weights * marginal_contrib / portfolio_vol
+
+        # Target risk budget (equal risk)
+        target_risk = np.ones(num_assets) / num_assets
+
+        # Minimize squared differences
+        return np.sum((risk_contrib - target_risk) ** 2)
+
+    constraints = {'type': 'eq', 'fun': lambda x: np.sum(x) - 1}
+    bounds = tuple((0.001, 1) for _ in range(num_assets))  # Small minimum to avoid division by zero
+    initial = np.ones(num_assets) / num_assets
+
+    result = minimize(risk_budget_objective, initial, method='SLSQP', bounds=bounds, constraints=constraints)
+
+    optimal_weights = result.x
+    mean_returns = returns.mean() * 252
+    portfolio_return = np.sum(mean_returns * optimal_weights)
+    portfolio_vol = np.sqrt(np.dot(optimal_weights.T, np.dot(cov_matrix, optimal_weights)))
+
+    return {
+        'weights': optimal_weights,
+        'expected_return': portfolio_return,
+        'expected_volatility': portfolio_vol,
+        'sharpe_ratio': (portfolio_return - risk_free_rate) / portfolio_vol
+    }
+
+
 def monte_carlo_simulation(price: float, days: int, iterations: int = 1000,
                           volatility: float = 0.2, drift: float = 0.05) -> pd.DataFrame:
     """Run Monte Carlo simulation for price paths."""
