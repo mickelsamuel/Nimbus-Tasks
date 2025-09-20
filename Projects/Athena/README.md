@@ -2,7 +2,7 @@
 
 > Production-grade algorithmic trading platform with backtesting, optimization, and live trading capabilities
 
-[![CI/CD Pipeline](https://github.com/your-username/athena/workflows/CI/CD%20Pipeline/badge.svg)](https://github.com/your-username/athena/actions)
+[![CI/CD Pipeline](https://github.com/mickelsamuel/Athena/workflows/CI/CD%20Pipeline/badge.svg)](https://github.com/mickelsamuel/Athena/actions)
 [![Python 3.11+](https://img.shields.io/badge/python-3.11+-blue.svg)](https://www.python.org/downloads/)
 [![Poetry](https://img.shields.io/badge/dependency%20management-poetry-blueviolet)](https://python-poetry.org/)
 [![Code style: Ruff](https://img.shields.io/badge/code%20style-ruff-000000.svg)](https://github.com/astral-sh/ruff)
@@ -238,6 +238,12 @@ docker compose down
 ```
 
 Visit `http://localhost:8050` for the dashboard.
+
+## 🚀 Live Deployment
+
+The Athena dashboard is live at: **https://athena.mickelsamuel.com**
+
+Deployed on Railway with automatic updates from the main branch.
 
 ### Docker Services
 
@@ -728,7 +734,7 @@ We welcome contributions! Please see our [Contributing Guide](CONTRIBUTING.md) f
 
 1. **Fork and Clone**
    ```bash
-   git clone https://github.com/your-username/athena.git
+   git clone https://github.com/mickelsamuel/Athena.git
    cd athena
    ```
 
