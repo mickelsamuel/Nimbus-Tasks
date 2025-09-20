@@ -494,7 +494,15 @@ app.layout = dbc.Container(
                 dbc.Button("📊 Load Demo Data", id="demo-data-btn", color="success", size="sm", className="me-2"),
                 dbc.Button("🎯 Quick Backtest AAPL", id="quick-demo-btn", color="primary", size="sm")
             ], className="mt-2")
-        ], color="info", className="mt-4")
+        ], color="info", className="mt-4"),
+        # Add visible status indicator
+        dbc.Alert(
+            id="live-status",
+            children="💡 Dashboard Ready - Click any button to start",
+            color="secondary",
+            is_open=True,
+            className="mt-3"
+        )
     ],
     fluid=True,
 )
@@ -1382,6 +1390,39 @@ def load_demo_data(demo_clicks, quick_clicks):
 
     return fig, status_msg, status_color
 
+
+# Add immediate visual feedback for button clicks
+@callback(
+    [Output("live-status", "children"),
+     Output("live-status", "color")],
+    [Input("run-backtest-btn", "n_clicks"),
+     Input("optimize-btn", "n_clicks"),
+     Input("walk-forward-btn", "n_clicks"),
+     Input("demo-data-btn", "n_clicks"),
+     Input("quick-demo-btn", "n_clicks")],
+    prevent_initial_call=False
+)
+def update_live_status(backtest_clicks, optimize_clicks, walk_clicks, demo_clicks, quick_clicks):
+    """Update status indicator when any button is clicked."""
+    from dash import ctx
+
+    if not ctx.triggered:
+        return "💡 Dashboard Ready - Click any button to start", "secondary"
+
+    button_id = ctx.triggered[0]["prop_id"].split(".")[0]
+
+    if button_id == "run-backtest-btn":
+        return "🔄 Running Backtest... Please wait (this may take 10-30 seconds)", "primary"
+    elif button_id == "optimize-btn":
+        return "⚡ Optimizing Strategy... Please wait (this may take 1-2 minutes)", "warning"
+    elif button_id == "walk-forward-btn":
+        return "📊 Running Walk Forward Validation... Please wait", "info"
+    elif button_id == "demo-data-btn":
+        return "📈 Loading Demo Data...", "success"
+    elif button_id == "quick-demo-btn":
+        return "🎯 Running Quick Demo Backtest...", "success"
+
+    return "✅ Ready for next operation", "secondary"
 
 # Add JavaScript debugging for button clicks
 app.clientside_callback(
