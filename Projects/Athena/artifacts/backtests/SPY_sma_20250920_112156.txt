@@ -1,0 +1,28 @@
+
+╔══════════════════════════════════════════╗
+║         BACKTEST RESULTS SUMMARY         ║
+╚══════════════════════════════════════════╝
+
+📊 RETURNS
+├─ Total Return:            24.56%
+├─ Annual Return:            8.29%
+├─ Initial Capital:     $100,000.00
+└─ Final Capital:       $124,560.11
+
+📈 RISK METRICS
+├─ Sharpe Ratio:              0.59
+├─ Sortino Ratio:             0.80
+└─ Max Drawdown:           -30.30%
+
+💹 TRADE STATISTICS
+├─ Total Trades:                 9
+├─ Win Rate:                44.44%
+├─ Profit Factor:             1.65
+├─ Winning Trades:               4
+└─ Losing Trades:                5
+
+💰 TRADE PERFORMANCE
+├─ Average Win:         $ 15,610.29
+├─ Average Loss:        $ -7,576.21
+├─ Best Trade:          $ 32,316.10
+└─ Worst Trade:         $-12,485.46

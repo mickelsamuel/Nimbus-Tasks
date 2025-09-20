@@ -1,0 +1,55 @@
+version: '3.8'
+
+services:
+  # Athena Dashboard
+  dashboard:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.dashboard
+    ports:
+      - "8050:8050"
+    volumes:
+      - ./data_cache:/app/data_cache
+      - ./artifacts:/app/artifacts
+      - ./dashboard_cache:/app/dashboard_cache
+      - ./logs:/app/logs
+      - ./.env:/app/.env:ro
+    environment:
+      - ATHENA_LOG_LEVEL=INFO
+      - ATHENA_DATA_DIR=/app/data_cache
+      - ATHENA_ARTIFACTS_DIR=/app/artifacts
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8050/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  # Athena CLI (for batch operations)
+  cli:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.app
+    volumes:
+      - ./data_cache:/app/data_cache
+      - ./artifacts:/app/artifacts
+      - ./logs:/app/logs
+      - ./.env:/app/.env:ro
+    environment:
+      - ATHENA_LOG_LEVEL=INFO
+      - ATHENA_DATA_DIR=/app/data_cache
+      - ATHENA_ARTIFACTS_DIR=/app/artifacts
+    profiles:
+      - cli
+    # Use 'docker compose run cli <command>' to execute CLI commands
+
+volumes:
+  data_cache:
+  artifacts:
+  dashboard_cache:
+  logs:
+
+networks:
+  default:
+    name: athena_network
