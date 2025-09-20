@@ -1,1 +1,1 @@
-web: python -m athena.dashboard.app
+web: python simple_app.py
