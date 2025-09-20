@@ -168,7 +168,7 @@ cleanup-apply:  ## Apply cleanup plan (after review)
 		[shutil.move(item['path'], item['destination']) if item['action']=='move' and os.path.exists(item['path']) else None \
 		 for item in plan['cleanup_plan'] if item['action']=='move']"
 	@git add .
-	@git commit -m "🧹 Repository cleanup: Remove temp files, reorganize docs\n\n🤖 Generated with automated cleanup tool\n\nCo-Authored-By: Claude <noreply@anthropic.com>"
+	@git commit -m "🧹 Repository cleanup: Remove temp files, reorganize docs"
 	@echo "✅ Cleanup applied and committed"
 
 cleanup-verify:  ## Verify repository after cleanup
