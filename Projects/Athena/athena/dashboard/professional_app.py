@@ -243,69 +243,111 @@ app.index_string = '''
             }
         </style>
         <script>
+            let currentTour = null;
+
             // Tour functionality
             function startTour() {
-                var intro = introJs();
-                intro.setOptions({
-                    steps: [
-                        {
-                            intro: "Welcome to Athena Quant Platform! This professional-grade trading system offers advanced quantitative analysis tools. Let me show you around."
-                        },
-                        {
-                            element: '#portfolio-section',
-                            intro: "Portfolio Overview shows your current positions, P&L, and real-time performance metrics.",
-                            position: 'bottom'
-                        },
-                        {
-                            element: '#strategy-tabs',
-                            intro: "Navigate between different analysis modules: Strategies, Risk Analytics, Portfolio Optimization, and ML Predictions.",
-                            position: 'bottom'
-                        },
-                        {
-                            element: '#data-controls',
-                            intro: "Load real market data for any stock or build a portfolio of multiple assets.",
-                            position: 'top'
-                        },
-                        {
-                            element: '#backtest-section',
-                            intro: "Run sophisticated backtests with multiple strategies including Mean Reversion, Momentum, and Pairs Trading.",
-                            position: 'top'
-                        },
-                        {
-                            element: '#risk-analytics',
-                            intro: "Advanced risk metrics including VaR, CVaR, Maximum Drawdown, and stress testing.",
-                            position: 'top'
-                        },
-                        {
-                            element: '#optimization-section',
-                            intro: "Portfolio optimization using Markowitz Mean-Variance, Black-Litterman, and Risk Parity models.",
-                            position: 'top'
-                        },
-                        {
-                            element: '#ml-predictions',
-                            intro: "Machine Learning predictions using Random Forest, LSTM networks, and factor models.",
-                            position: 'top'
-                        },
-                        {
-                            intro: "Ready to start trading! Click any button to begin your quantitative analysis journey."
+                // Destroy any existing tour
+                if (currentTour) {
+                    currentTour.exit();
+                }
+
+                // Wait for page to fully load
+                setTimeout(function() {
+                    currentTour = introJs();
+                    currentTour.setOptions({
+                        steps: [
+                            {
+                                intro: "<h4>🚀 Welcome to Athena Quant Platform!</h4><p>This professional-grade trading system offers advanced quantitative analysis tools. Let me show you around.</p>"
+                            },
+                            {
+                                element: '#portfolio-section',
+                                intro: "<h5>📊 Portfolio Overview</h5><p>Shows your current positions, P&L, and real-time performance metrics including Sharpe ratio and VaR.</p>",
+                                position: 'bottom'
+                            },
+                            {
+                                element: '#strategy-tabs',
+                                intro: "<h5>🎯 Analysis Modules</h5><p>Navigate between different modules:<br/>• Trading Strategies<br/>• Risk Analytics<br/>• Portfolio Optimization<br/>• ML Predictions</p>",
+                                position: 'bottom'
+                            },
+                            {
+                                element: '#data-controls',
+                                intro: "<h5>💾 Data Controls</h5><p>Load real market data for any stock or build a portfolio of multiple assets. Try the Quick Demo for instant results!</p>",
+                                position: 'top'
+                            },
+                            {
+                                intro: "<h4>🎯 Key Features Tour</h4><p>Now I'll show you the main analysis tools. Click 'Trading Strategies' tab first to see the backtesting engine.</p>"
+                            },
+                            {
+                                intro: "<h5>📈 Trading Strategies</h5><p>Run sophisticated backtests with:<br/>• Mean Reversion<br/>• Momentum<br/>• Pairs Trading<br/>• Market Making<br/>• Statistical Arbitrage</p>"
+                            },
+                            {
+                                intro: "<h5>⚡ Risk Analytics</h5><p>Advanced risk metrics including:<br/>• Value at Risk (VaR)<br/>• Conditional VaR<br/>• Maximum Drawdown<br/>• Stress Testing</p>"
+                            },
+                            {
+                                intro: "<h5>🧠 Portfolio Optimization</h5><p>Professional optimization models:<br/>• Markowitz Mean-Variance<br/>• Black-Litterman<br/>• Risk Parity<br/>• Maximum Sharpe</p>"
+                            },
+                            {
+                                intro: "<h5>🤖 Machine Learning</h5><p>ML predictions using:<br/>• Random Forest<br/>• XGBoost<br/>• LSTM Neural Networks<br/>• Ensemble Models</p>"
+                            },
+                            {
+                                intro: "<h4>🎉 Tour Complete!</h4><p>You're ready to start trading! Click 'Load Data' or 'Quick Demo' to begin your quantitative analysis journey.</p><p><small>💡 You can restart this tour anytime by clicking the ? button.</small></p>"
+                            }
+                        ],
+                        showProgress: true,
+                        showBullets: true,
+                        exitOnOverlayClick: false,
+                        disableInteraction: true,
+                        scrollToElement: true,
+                        scrollPadding: 50,
+                        tooltipPosition: 'auto',
+                        positionPrecedence: ['bottom', 'top', 'right', 'left'],
+                        doneLabel: 'Start Trading!',
+                        nextLabel: 'Next →',
+                        prevLabel: '← Previous',
+                        skipLabel: 'Skip Tour'
+                    });
+
+                    // Add event listeners for better error handling
+                    currentTour.oncomplete(function() {
+                        localStorage.setItem('tourCompleted', 'true');
+                        console.log('Tour completed successfully');
+                    });
+
+                    currentTour.onexit(function() {
+                        console.log('Tour exited');
+                        currentTour = null;
+                    });
+
+                    currentTour.onchange(function(targetElement) {
+                        console.log('Tour step changed to:', targetElement);
+                        // Ensure element is visible
+                        if (targetElement) {
+                            targetElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
                         }
-                    ],
-                    showProgress: true,
-                    showBullets: true,
-                    exitOnOverlayClick: false
-                });
-                intro.start();
+                    });
+
+                    // Start the tour
+                    currentTour.start();
+
+                }, 500); // Wait 500ms for everything to load
             }
 
-            // Start tour on page load for first-time visitors
-            window.addEventListener('DOMContentLoaded', function() {
-                if (!localStorage.getItem('tourCompleted')) {
-                    setTimeout(function() {
+            // Initialize when DOM is ready
+            document.addEventListener('DOMContentLoaded', function() {
+                console.log('DOM loaded, setting up tour...');
+
+                // Auto-start tour for first-time visitors (optional)
+                setTimeout(function() {
+                    if (!localStorage.getItem('tourCompleted')) {
+                        console.log('Starting auto tour...');
                         startTour();
-                        localStorage.setItem('tourCompleted', 'true');
-                    }, 1000);
-                }
+                    }
+                }, 2000); // Wait 2 seconds for everything to fully load
             });
+
+            // Make startTour globally available
+            window.startTour = startTour;
         </script>
     </head>
     <body>
@@ -1330,10 +1372,22 @@ def handle_tour_click(n_clicks):
 app.clientside_callback(
     """
     function(n_clicks) {
+        console.log('Tour button clicked:', n_clicks);
         if (n_clicks > 0) {
-            startTour();
+            // Clear the completed flag so tour can be restarted
+            localStorage.removeItem('tourCompleted');
+
+            // Wait a bit then start the tour
+            setTimeout(function() {
+                if (window.startTour) {
+                    console.log('Starting tour from button click');
+                    window.startTour();
+                } else {
+                    console.error('startTour function not available');
+                }
+            }, 100);
         }
-        return n_clicks;
+        return Date.now();
     }
     """,
     Output("tour-btn", "n_clicks_timestamp"),
