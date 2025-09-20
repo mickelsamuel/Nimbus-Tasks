@@ -3,5 +3,4 @@ builder = "NIXPACKS"
 
 [deploy]
 startCommand = "poetry run python -m athena.dashboard.app"
-healthcheckPath = "/"
 healthcheckTimeout = 300
