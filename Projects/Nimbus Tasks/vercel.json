@@ -1,0 +1,15 @@
+{
+  "buildCommand": "SKIP_ENV_VALIDATION=1 pnpm turbo build --filter=@nimbus/web",
+  "outputDirectory": "apps/web/.next",
+  "installCommand": "pnpm install",
+  "devCommand": "pnpm turbo dev --filter=@nimbus/web",
+  "ignoreCommand": "git diff --quiet HEAD^ HEAD apps/web/",
+  "env": {
+    "SKIP_ENV_VALIDATION": "1",
+    "NEXTAUTH_SECRET": "tp/1UT4rMNZ5Nbna88jRviFq6ipJgwcV5NH3fczTXZU=",
+    "DATABASE_URL": "postgresql://placeholder:placeholder@placeholder:5432/placeholder",
+    "AWS_ACCESS_KEY_ID": "placeholder",
+    "AWS_SECRET_ACCESS_KEY": "placeholder",
+    "S3_BUCKET_NAME": "nimbus-uploads"
+  }
+}
