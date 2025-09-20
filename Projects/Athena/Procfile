@@ -1,1 +1,1 @@
-web: python -m athena.dashboard.modern_app
+web: python -m athena.dashboard.stable_app
