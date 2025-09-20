@@ -1,6 +1,0 @@
-[build]
-builder = "NIXPACKS"
-
-[deploy]
-startCommand = "poetry run gunicorn --bind 0.0.0.0:$PORT wsgi:application"
-healthcheckTimeout = 300
