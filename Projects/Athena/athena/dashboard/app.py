@@ -580,12 +580,18 @@ def run_backtest(
     n_clicks, symbol, strategy_name, start_date, end_date, capital, commission, risk_model, position_size, strategy_params_children
 ):
     """Run backtest with given parameters."""
+    logger.info(f"Backtest callback triggered: n_clicks={n_clicks}, symbol={symbol}")
+
     if not n_clicks:
         return None, "", "info", False, {"display": "none"}, True
 
     try:
+        # Add immediate feedback
+        logger.info(f"Starting backtest with symbol={symbol}, strategy={strategy_name}")
+
         # Validate inputs
         if not all([symbol, strategy_name, start_date, end_date]):
+            logger.warning("Missing required inputs for backtest")
             return (
                 None,
                 "Please fill in all required fields.",
@@ -1376,6 +1382,36 @@ def load_demo_data(demo_clicks, quick_clicks):
 
     return fig, status_msg, status_color
 
+
+# Add JavaScript debugging for button clicks
+app.clientside_callback(
+    """
+    function(n_clicks) {
+        if (n_clicks) {
+            console.log('Run Backtest button clicked:', n_clicks);
+        }
+        return window.dash_clientside.no_update;
+    }
+    """,
+    Output("run-backtest-btn", "style"),
+    Input("run-backtest-btn", "n_clicks"),
+    prevent_initial_call=True
+)
+
+# Add JavaScript debugging for optimize button
+app.clientside_callback(
+    """
+    function(n_clicks) {
+        if (n_clicks) {
+            console.log('Optimize button clicked:', n_clicks);
+        }
+        return window.dash_clientside.no_update;
+    }
+    """,
+    Output("optimize-btn", "style"),
+    Input("optimize-btn", "n_clicks"),
+    prevent_initial_call=True
+)
 
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 8050))
