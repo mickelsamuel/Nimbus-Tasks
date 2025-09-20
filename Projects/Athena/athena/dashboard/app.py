@@ -484,6 +484,17 @@ app.layout = dbc.Container(
         create_header(),
         create_controls(),
         create_results_section(),
+        # Demo banner with sample data
+        dbc.Alert([
+            html.H5("🚀 Live Trading Dashboard", className="alert-heading"),
+            html.P("Click 'Run Backtest' to test strategies with real market data. Try different symbols like AAPL, TSLA, MSFT!"),
+            html.Hr(),
+            html.P("Pro tip: Use the Optimize button to find the best strategy parameters automatically.", className="mb-0 small"),
+            html.Div([
+                dbc.Button("📊 Load Demo Data", id="demo-data-btn", color="success", size="sm", className="me-2"),
+                dbc.Button("🎯 Quick Backtest AAPL", id="quick-demo-btn", color="primary", size="sm")
+            ], className="mt-2")
+        ], color="info", className="mt-4")
     ],
     fluid=True,
 )
@@ -1253,6 +1264,117 @@ def run_optimization(n_clicks, symbol, strategy_name, start_date, end_date, capi
     except Exception as e:
         logger.error(f"Optimization error: {e}")
         return None, f"Optimization failed: {str(e)}", "danger", True
+
+
+# Demo data callback
+@callback(
+    [
+        Output("price-chart", "figure"),
+        Output("backtest-status", "children"),
+        Output("backtest-status", "color"),
+    ],
+    [
+        Input("demo-data-btn", "n_clicks"),
+        Input("quick-demo-btn", "n_clicks"),
+    ],
+    prevent_initial_call=True,
+)
+def load_demo_data(demo_clicks, quick_clicks):
+    """Load demo data for immediate visualization."""
+    from dash import ctx
+
+    if not ctx.triggered:
+        return go.Figure(), "Ready for trading operations", "info"
+
+    button_id = ctx.triggered[0]["prop_id"].split(".")[0]
+
+    # Generate sample stock price data
+    dates = pd.date_range(start='2024-01-01', end='2024-09-20', freq='D')
+    np.random.seed(42)  # For consistent demo data
+
+    # Create realistic stock price movement
+    initial_price = 150
+    returns = np.random.normal(0.001, 0.02, len(dates))
+    prices = [initial_price]
+
+    for return_rate in returns[1:]:
+        prices.append(prices[-1] * (1 + return_rate))
+
+    # Create moving averages for strategy visualization
+    df = pd.DataFrame({
+        'Date': dates,
+        'Close': prices,
+        'SMA_20': pd.Series(prices).rolling(20).mean(),
+        'SMA_50': pd.Series(prices).rolling(50).mean()
+    })
+
+    # Create comprehensive chart
+    fig = make_subplots(
+        rows=2, cols=1,
+        subplot_titles=('AAPL Stock Price with SMA Strategy', 'Volume'),
+        vertical_spacing=0.1,
+        row_heights=[0.7, 0.3]
+    )
+
+    # Price chart
+    fig.add_trace(
+        go.Scatter(
+            x=df['Date'], y=df['Close'],
+            name='AAPL Price',
+            line=dict(color='#1f77b4', width=2)
+        ),
+        row=1, col=1
+    )
+
+    # Moving averages
+    fig.add_trace(
+        go.Scatter(
+            x=df['Date'], y=df['SMA_20'],
+            name='SMA 20',
+            line=dict(color='orange', width=1)
+        ),
+        row=1, col=1
+    )
+
+    fig.add_trace(
+        go.Scatter(
+            x=df['Date'], y=df['SMA_50'],
+            name='SMA 50',
+            line=dict(color='red', width=1)
+        ),
+        row=1, col=1
+    )
+
+    # Volume bars
+    volume = np.random.randint(50000, 200000, len(dates))
+    fig.add_trace(
+        go.Bar(
+            x=df['Date'], y=volume,
+            name='Volume',
+            marker_color='lightblue'
+        ),
+        row=2, col=1
+    )
+
+    fig.update_layout(
+        title='Demo: AAPL SMA Crossover Strategy Analysis',
+        height=600,
+        showlegend=True,
+        template='plotly_white'
+    )
+
+    fig.update_xaxes(title_text="Date", row=2, col=1)
+    fig.update_yaxes(title_text="Price ($)", row=1, col=1)
+    fig.update_yaxes(title_text="Volume", row=2, col=1)
+
+    if button_id == "quick-demo-btn":
+        status_msg = "🎯 Quick demo completed! This shows AAPL with SMA Crossover strategy. Click 'Run Backtest' for real analysis."
+        status_color = "success"
+    else:
+        status_msg = "📊 Demo data loaded! This is sample market data. Use the controls above to run real backtests."
+        status_color = "info"
+
+    return fig, status_msg, status_color
 
 
 if __name__ == "__main__":
