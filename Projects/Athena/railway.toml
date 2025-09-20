@@ -2,5 +2,5 @@
 builder = "NIXPACKS"
 
 [deploy]
-startCommand = "poetry run python -m athena.dashboard.app"
+startCommand = "poetry run gunicorn --bind 0.0.0.0:$PORT athena.dashboard.app:server"
 healthcheckTimeout = 300

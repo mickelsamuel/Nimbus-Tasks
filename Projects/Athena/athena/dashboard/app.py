@@ -38,6 +38,9 @@ app = dash.Dash(
     suppress_callback_exceptions=True,
 )
 
+# Expose server for WSGI
+server = app.server
+
 # Strategy mapping
 STRATEGY_CLASSES = {
     "SMA Crossover": SMACrossoverStrategy,
