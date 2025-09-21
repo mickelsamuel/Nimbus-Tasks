@@ -1,9 +1,9 @@
 {
   "framework": "nextjs",
-  "buildCommand": "cd apps/web && npm run build",
+  "buildCommand": "pnpm build --filter=@nimbus/web",
   "outputDirectory": "apps/web/.next",
-  "installCommand": "npm install",
-  "devCommand": "cd apps/web && npm run dev",
+  "installCommand": "pnpm install",
+  "devCommand": "pnpm dev --filter=@nimbus/web",
   "ignoreCommand": "git diff --quiet HEAD^ HEAD apps/web/",
   "env": {
     "SKIP_ENV_VALIDATION": "1",
