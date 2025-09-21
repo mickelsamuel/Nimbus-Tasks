@@ -1,0 +1,1808 @@
+{
+  "config": {
+    "configFile": "/Users/mickelsamuel/Projects/Nimbus Tasks/apps/web/playwright.config.ts",
+    "rootDir": "/Users/mickelsamuel/Projects/Nimbus Tasks/apps/web/src/e2e",
+    "forbidOnly": false,
+    "fullyParallel": true,
+    "globalSetup": "/Users/mickelsamuel/Projects/Nimbus Tasks/apps/web/src/e2e/global-setup.ts",
+    "globalTeardown": "/Users/mickelsamuel/Projects/Nimbus Tasks/apps/web/src/e2e/global-teardown.ts",
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 6
+    },
+    "preserveOutput": "always",
+    "reporter": [
+      [
+        "html",
+        {
+          "outputFolder": "playwright-report"
+        }
+      ],
+      [
+        "json",
+        {
+          "outputFile": "test-results.json"
+        }
+      ],
+      [
+        "list",
+        null
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "quiet": false,
+    "projects": [
+      {
+        "outputDir": "/Users/mickelsamuel/Projects/Nimbus Tasks/apps/web/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 6
+        },
+        "id": "chromium",
+        "name": "chromium",
+        "testDir": "/Users/mickelsamuel/Projects/Nimbus Tasks/apps/web/src/e2e",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 30000
+      },
+      {
+        "outputDir": "/Users/mickelsamuel/Projects/Nimbus Tasks/apps/web/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 6
+        },
+        "id": "firefox",
+        "name": "firefox",
+        "testDir": "/Users/mickelsamuel/Projects/Nimbus Tasks/apps/web/src/e2e",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 30000
+      },
+      {
+        "outputDir": "/Users/mickelsamuel/Projects/Nimbus Tasks/apps/web/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 6
+        },
+        "id": "webkit",
+        "name": "webkit",
+        "testDir": "/Users/mickelsamuel/Projects/Nimbus Tasks/apps/web/src/e2e",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 30000
+      }
+    ],
+    "shard": null,
+    "updateSnapshots": "missing",
+    "updateSourceMethod": "patch",
+    "version": "1.55.0",
+    "workers": 6,
+    "webServer": {
+      "command": "pnpm dev",
+      "url": "http://localhost:3000",
+      "reuseExistingServer": true,
+      "timeout": 120000
+    }
+  },
+  "suites": [
+    {
+      "title": "auth.spec.ts",
+      "file": "auth.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "Authentication Flow",
+          "file": "auth.spec.ts",
+          "line": 3,
+          "column": 6,
+          "specs": [
+            {
+              "title": "should display login page for unauthenticated users",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "failed",
+                      "duration": 5973,
+                      "error": {
+                        "message": "Error: expect.toBeVisible: Error: strict mode violation: locator('text=Sign in') resolved to 4 elements:\n    1) <h3 class=\"font-semibold tracking-tight text-2xl\">Sign in</h3> aka getByRole('heading', { name: 'Sign in' })\n    2) <p class=\"text-sm text-muted-foreground\">Enter your email below to sign in to your account</p> aka getByText('Enter your email below to')\n    3) <button class=\"inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2 w-full\">…</button> aka getByRole('button', { name: 'Sign in with Google' })\n    4) <button type=\"submit\" class=\"inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2 w-full\">Sign In</button> aka getByRole('button', { name: 'Sign In', exact: true })\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for locator('text=Sign in')\u001b[22m\n",
+                        "stack": "Error: expect.toBeVisible: Error: strict mode violation: locator('text=Sign in') resolved to 4 elements:\n    1) <h3 class=\"font-semibold tracking-tight text-2xl\">Sign in</h3> aka getByRole('heading', { name: 'Sign in' })\n    2) <p class=\"text-sm text-muted-foreground\">Enter your email below to sign in to your account</p> aka getByText('Enter your email below to')\n    3) <button class=\"inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2 w-full\">…</button> aka getByRole('button', { name: 'Sign in with Google' })\n    4) <button type=\"submit\" class=\"inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2 w-full\">Sign In</button> aka getByRole('button', { name: 'Sign In', exact: true })\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for locator('text=Sign in')\u001b[22m\n\n    at /Users/mickelsamuel/Projects/Nimbus Tasks/apps/web/src/e2e/auth.spec.ts:13:48",
+                        "location": {
+                          "file": "/Users/mickelsamuel/Projects/Nimbus Tasks/apps/web/src/e2e/auth.spec.ts",
+                          "column": 48,
+                          "line": 13
+                        },
+                        "snippet": "  11 |\n  12 |     // Should redirect to login or show login UI\n> 13 |     await expect(page.locator('text=Sign in')).toBeVisible({ timeout: 10000 })\n     |                                                ^\n  14 |   })\n  15 |\n  16 |   test('should navigate to sign up page', async ({ page }) => {"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "/Users/mickelsamuel/Projects/Nimbus Tasks/apps/web/src/e2e/auth.spec.ts",
+                            "column": 48,
+                            "line": 13
+                          },
+                          "message": "Error: expect.toBeVisible: Error: strict mode violation: locator('text=Sign in') resolved to 4 elements:\n    1) <h3 class=\"font-semibold tracking-tight text-2xl\">Sign in</h3> aka getByRole('heading', { name: 'Sign in' })\n    2) <p class=\"text-sm text-muted-foreground\">Enter your email below to sign in to your account</p> aka getByText('Enter your email below to')\n    3) <button class=\"inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2 w-full\">…</button> aka getByRole('button', { name: 'Sign in with Google' })\n    4) <button type=\"submit\" class=\"inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2 w-full\">Sign In</button> aka getByRole('button', { name: 'Sign In', exact: true })\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for locator('text=Sign in')\u001b[22m\n\n\n  11 |\n  12 |     // Should redirect to login or show login UI\n> 13 |     await expect(page.locator('text=Sign in')).toBeVisible({ timeout: 10000 })\n     |                                                ^\n  14 |   })\n  15 |\n  16 |   test('should navigate to sign up page', async ({ page }) => {\n    at /Users/mickelsamuel/Projects/Nimbus Tasks/apps/web/src/e2e/auth.spec.ts:13:48"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-09-20T15:57:14.916Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/Users/mickelsamuel/Projects/Nimbus Tasks/apps/web/test-results/auth-Authentication-Flow-s-2b75c-e-for-unauthenticated-users-chromium/test-failed-1.png"
+                        },
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "/Users/mickelsamuel/Projects/Nimbus Tasks/apps/web/test-results/auth-Authentication-Flow-s-2b75c-e-for-unauthenticated-users-chromium/video.webm"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "/Users/mickelsamuel/Projects/Nimbus Tasks/apps/web/test-results/auth-Authentication-Flow-s-2b75c-e-for-unauthenticated-users-chromium/error-context.md"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "/Users/mickelsamuel/Projects/Nimbus Tasks/apps/web/src/e2e/auth.spec.ts",
+                        "column": 48,
+                        "line": 13
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "d748ac400d08b85935ef-e2e848a096acc0e262bd",
+              "file": "auth.spec.ts",
+              "line": 9,
+              "column": 7
+            },
+            {
+              "title": "should navigate to sign up page",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 1,
+                      "status": "passed",
+                      "duration": 10721,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-09-20T15:57:14.973Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d748ac400d08b85935ef-65ff9e84f60c34ec8642",
+              "file": "auth.spec.ts",
+              "line": 16,
+              "column": 7
+            },
+            {
+              "title": "should show validation errors for invalid login",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 2,
+                      "parallelIndex": 2,
+                      "status": "failed",
+                      "duration": 5553,
+                      "error": {
+                        "message": "Error: locator.click: Error: strict mode violation: locator('button:has-text(\"Sign in\")').or(locator('button[type=\"submit\"]')) resolved to 2 elements:\n    1) <button class=\"inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2 w-full\">…</button> aka getByRole('button', { name: 'Sign in with Google' })\n    2) <button type=\"submit\" class=\"inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2 w-full\">Sign In</button> aka getByRole('button', { name: 'Sign In', exact: true })\n\nCall log:\n\u001b[2m  - waiting for locator('button:has-text(\"Sign in\")').or(locator('button[type=\"submit\"]'))\u001b[22m\n",
+                        "stack": "Error: locator.click: Error: strict mode violation: locator('button:has-text(\"Sign in\")').or(locator('button[type=\"submit\"]')) resolved to 2 elements:\n    1) <button class=\"inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2 w-full\">…</button> aka getByRole('button', { name: 'Sign in with Google' })\n    2) <button type=\"submit\" class=\"inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2 w-full\">Sign In</button> aka getByRole('button', { name: 'Sign In', exact: true })\n\nCall log:\n\u001b[2m  - waiting for locator('button:has-text(\"Sign in\")').or(locator('button[type=\"submit\"]'))\u001b[22m\n\n    at /Users/mickelsamuel/Projects/Nimbus Tasks/apps/web/src/e2e/auth.spec.ts:39:26",
+                        "location": {
+                          "file": "/Users/mickelsamuel/Projects/Nimbus Tasks/apps/web/src/e2e/auth.spec.ts",
+                          "column": 26,
+                          "line": 39
+                        },
+                        "snippet": "  37 |       await emailInput.fill('invalid@example.com')\n  38 |       await passwordInput.fill('wrongpassword')\n> 39 |       await signInButton.click()\n     |                          ^\n  40 |\n  41 |       // Should show error message\n  42 |       await expect(page.locator('text=Invalid')).toBeVisible({ timeout: 5000 })"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "/Users/mickelsamuel/Projects/Nimbus Tasks/apps/web/src/e2e/auth.spec.ts",
+                            "column": 26,
+                            "line": 39
+                          },
+                          "message": "Error: locator.click: Error: strict mode violation: locator('button:has-text(\"Sign in\")').or(locator('button[type=\"submit\"]')) resolved to 2 elements:\n    1) <button class=\"inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2 w-full\">…</button> aka getByRole('button', { name: 'Sign in with Google' })\n    2) <button type=\"submit\" class=\"inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2 w-full\">Sign In</button> aka getByRole('button', { name: 'Sign In', exact: true })\n\nCall log:\n\u001b[2m  - waiting for locator('button:has-text(\"Sign in\")').or(locator('button[type=\"submit\"]'))\u001b[22m\n\n\n  37 |       await emailInput.fill('invalid@example.com')\n  38 |       await passwordInput.fill('wrongpassword')\n> 39 |       await signInButton.click()\n     |                          ^\n  40 |\n  41 |       // Should show error message\n  42 |       await expect(page.locator('text=Invalid')).toBeVisible({ timeout: 5000 })\n    at /Users/mickelsamuel/Projects/Nimbus Tasks/apps/web/src/e2e/auth.spec.ts:39:26"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-09-20T15:57:15.221Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/Users/mickelsamuel/Projects/Nimbus Tasks/apps/web/test-results/auth-Authentication-Flow-s-72909-on-errors-for-invalid-login-chromium/test-failed-1.png"
+                        },
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "/Users/mickelsamuel/Projects/Nimbus Tasks/apps/web/test-results/auth-Authentication-Flow-s-72909-on-errors-for-invalid-login-chromium/video.webm"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "/Users/mickelsamuel/Projects/Nimbus Tasks/apps/web/test-results/auth-Authentication-Flow-s-72909-on-errors-for-invalid-login-chromium/error-context.md"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "/Users/mickelsamuel/Projects/Nimbus Tasks/apps/web/src/e2e/auth.spec.ts",
+                        "column": 26,
+                        "line": 39
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "d748ac400d08b85935ef-54d25acbe02b974d1f87",
+              "file": "auth.spec.ts",
+              "line": 29,
+              "column": 7
+            },
+            {
+              "title": "should handle OAuth provider buttons",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 3,
+                      "parallelIndex": 3,
+                      "status": "passed",
+                      "duration": 5969,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-09-20T15:57:14.973Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d748ac400d08b85935ef-e565248b49c2ae2d4ec8",
+              "file": "auth.spec.ts",
+              "line": 48,
+              "column": 7
+            },
+            {
+              "title": "should display forgot password link",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [
+                    {
+                      "type": "skip",
+                      "location": {
+                        "file": "/Users/mickelsamuel/Projects/Nimbus Tasks/apps/web/src/e2e/auth.spec.ts",
+                        "line": 74,
+                        "column": 12
+                      }
+                    }
+                  ],
+                  "expectedStatus": "skipped",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 4,
+                      "parallelIndex": 4,
+                      "status": "skipped",
+                      "duration": 5873,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-09-20T15:57:14.954Z",
+                      "annotations": [
+                        {
+                          "type": "skip",
+                          "location": {
+                            "file": "/Users/mickelsamuel/Projects/Nimbus Tasks/apps/web/src/e2e/auth.spec.ts",
+                            "line": 74,
+                            "column": 12
+                          }
+                        }
+                      ],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "skipped"
+                }
+              ],
+              "id": "d748ac400d08b85935ef-5d3130bccd6563ea1cfe",
+              "file": "auth.spec.ts",
+              "line": 65,
+              "column": 7
+            },
+            {
+              "title": "should show loading state during authentication",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 5,
+                      "parallelIndex": 5,
+                      "status": "failed",
+                      "duration": 5428,
+                      "error": {
+                        "message": "Error: locator.click: Error: strict mode violation: locator('button:has-text(\"Sign in\")').or(locator('button[type=\"submit\"]')) resolved to 2 elements:\n    1) <button class=\"inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2 w-full\">…</button> aka getByRole('button', { name: 'Sign in with Google' })\n    2) <button type=\"submit\" class=\"inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2 w-full\">Sign In</button> aka getByRole('button', { name: 'Sign In', exact: true })\n\nCall log:\n\u001b[2m  - waiting for locator('button:has-text(\"Sign in\")').or(locator('button[type=\"submit\"]'))\u001b[22m\n",
+                        "stack": "Error: locator.click: Error: strict mode violation: locator('button:has-text(\"Sign in\")').or(locator('button[type=\"submit\"]')) resolved to 2 elements:\n    1) <button class=\"inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2 w-full\">…</button> aka getByRole('button', { name: 'Sign in with Google' })\n    2) <button type=\"submit\" class=\"inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2 w-full\">Sign In</button> aka getByRole('button', { name: 'Sign In', exact: true })\n\nCall log:\n\u001b[2m  - waiting for locator('button:has-text(\"Sign in\")').or(locator('button[type=\"submit\"]'))\u001b[22m\n\n    at /Users/mickelsamuel/Projects/Nimbus Tasks/apps/web/src/e2e/auth.spec.ts:88:26",
+                        "location": {
+                          "file": "/Users/mickelsamuel/Projects/Nimbus Tasks/apps/web/src/e2e/auth.spec.ts",
+                          "column": 26,
+                          "line": 88
+                        },
+                        "snippet": "  86 |\n  87 |       // Look for loading indicator after clicking\n> 88 |       await signInButton.click()\n     |                          ^\n  89 |\n  90 |       // Check for loading spinner or disabled button\n  91 |       const loadingIndicator = page.locator('.animate-spin').or("
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "/Users/mickelsamuel/Projects/Nimbus Tasks/apps/web/src/e2e/auth.spec.ts",
+                            "column": 26,
+                            "line": 88
+                          },
+                          "message": "Error: locator.click: Error: strict mode violation: locator('button:has-text(\"Sign in\")').or(locator('button[type=\"submit\"]')) resolved to 2 elements:\n    1) <button class=\"inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2 w-full\">…</button> aka getByRole('button', { name: 'Sign in with Google' })\n    2) <button type=\"submit\" class=\"inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2 w-full\">Sign In</button> aka getByRole('button', { name: 'Sign In', exact: true })\n\nCall log:\n\u001b[2m  - waiting for locator('button:has-text(\"Sign in\")').or(locator('button[type=\"submit\"]'))\u001b[22m\n\n\n  86 |\n  87 |       // Look for loading indicator after clicking\n> 88 |       await signInButton.click()\n     |                          ^\n  89 |\n  90 |       // Check for loading spinner or disabled button\n  91 |       const loadingIndicator = page.locator('.animate-spin').or(\n    at /Users/mickelsamuel/Projects/Nimbus Tasks/apps/web/src/e2e/auth.spec.ts:88:26"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-09-20T15:57:15.157Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/Users/mickelsamuel/Projects/Nimbus Tasks/apps/web/test-results/auth-Authentication-Flow-s-a5a72-state-during-authentication-chromium/test-failed-1.png"
+                        },
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "/Users/mickelsamuel/Projects/Nimbus Tasks/apps/web/test-results/auth-Authentication-Flow-s-a5a72-state-during-authentication-chromium/video.webm"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "/Users/mickelsamuel/Projects/Nimbus Tasks/apps/web/test-results/auth-Authentication-Flow-s-a5a72-state-during-authentication-chromium/error-context.md"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "/Users/mickelsamuel/Projects/Nimbus Tasks/apps/web/src/e2e/auth.spec.ts",
+                        "column": 26,
+                        "line": 88
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "d748ac400d08b85935ef-4a4902ab2abbe612db58",
+              "file": "auth.spec.ts",
+              "line": 78,
+              "column": 7
+            },
+            {
+              "title": "should redirect to dashboard after successful authentication",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [
+                    {
+                      "type": "skip",
+                      "location": {
+                        "file": "/Users/mickelsamuel/Projects/Nimbus Tasks/apps/web/src/e2e/auth.spec.ts",
+                        "line": 117,
+                        "column": 10
+                      }
+                    }
+                  ],
+                  "expectedStatus": "skipped",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 6,
+                      "parallelIndex": 5,
+                      "status": "skipped",
+                      "duration": 3660,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-09-20T15:57:23.243Z",
+                      "annotations": [
+                        {
+                          "type": "skip",
+                          "location": {
+                            "file": "/Users/mickelsamuel/Projects/Nimbus Tasks/apps/web/src/e2e/auth.spec.ts",
+                            "line": 117,
+                            "column": 10
+                          }
+                        }
+                      ],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "skipped"
+                }
+              ],
+              "id": "d748ac400d08b85935ef-36497d98fe9646a66eec",
+              "file": "auth.spec.ts",
+              "line": 107,
+              "column": 7
+            },
+            {
+              "title": "should preserve redirect URL after login",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 7,
+                      "parallelIndex": 2,
+                      "status": "failed",
+                      "duration": 5742,
+                      "error": {
+                        "message": "Error: expect.toBeVisible: Error: strict mode violation: locator('text=Sign in') resolved to 4 elements:\n    1) <h3 class=\"font-semibold tracking-tight text-2xl\">Sign in</h3> aka getByRole('heading', { name: 'Sign in' })\n    2) <p class=\"text-sm text-muted-foreground\">Enter your email below to sign in to your account</p> aka getByText('Enter your email below to')\n    3) <button class=\"inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2 w-full\">…</button> aka getByRole('button', { name: 'Sign in with Google' })\n    4) <button type=\"submit\" class=\"inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2 w-full\">Sign In</button> aka getByRole('button', { name: 'Sign In', exact: true })\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('text=Sign in')\u001b[22m\n",
+                        "stack": "Error: expect.toBeVisible: Error: strict mode violation: locator('text=Sign in') resolved to 4 elements:\n    1) <h3 class=\"font-semibold tracking-tight text-2xl\">Sign in</h3> aka getByRole('heading', { name: 'Sign in' })\n    2) <p class=\"text-sm text-muted-foreground\">Enter your email below to sign in to your account</p> aka getByText('Enter your email below to')\n    3) <button class=\"inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2 w-full\">…</button> aka getByRole('button', { name: 'Sign in with Google' })\n    4) <button type=\"submit\" class=\"inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2 w-full\">Sign In</button> aka getByRole('button', { name: 'Sign In', exact: true })\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('text=Sign in')\u001b[22m\n\n    at /Users/mickelsamuel/Projects/Nimbus Tasks/apps/web/src/e2e/auth.spec.ts:125:48",
+                        "location": {
+                          "file": "/Users/mickelsamuel/Projects/Nimbus Tasks/apps/web/src/e2e/auth.spec.ts",
+                          "column": 48,
+                          "line": 125
+                        },
+                        "snippet": "  123 |\n  124 |     // Should redirect to login with return URL\n> 125 |     await expect(page.locator('text=Sign in')).toBeVisible()\n      |                                                ^\n  126 |\n  127 |     // Check if URL contains redirect parameter\n  128 |     const url = page.url()"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "/Users/mickelsamuel/Projects/Nimbus Tasks/apps/web/src/e2e/auth.spec.ts",
+                            "column": 48,
+                            "line": 125
+                          },
+                          "message": "Error: expect.toBeVisible: Error: strict mode violation: locator('text=Sign in') resolved to 4 elements:\n    1) <h3 class=\"font-semibold tracking-tight text-2xl\">Sign in</h3> aka getByRole('heading', { name: 'Sign in' })\n    2) <p class=\"text-sm text-muted-foreground\">Enter your email below to sign in to your account</p> aka getByText('Enter your email below to')\n    3) <button class=\"inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2 w-full\">…</button> aka getByRole('button', { name: 'Sign in with Google' })\n    4) <button type=\"submit\" class=\"inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2 w-full\">Sign In</button> aka getByRole('button', { name: 'Sign In', exact: true })\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('text=Sign in')\u001b[22m\n\n\n  123 |\n  124 |     // Should redirect to login with return URL\n> 125 |     await expect(page.locator('text=Sign in')).toBeVisible()\n      |                                                ^\n  126 |\n  127 |     // Check if URL contains redirect parameter\n  128 |     const url = page.url()\n    at /Users/mickelsamuel/Projects/Nimbus Tasks/apps/web/src/e2e/auth.spec.ts:125:48"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-09-20T15:57:23.245Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/Users/mickelsamuel/Projects/Nimbus Tasks/apps/web/test-results/auth-Authentication-Flow-s-84c75-ve-redirect-URL-after-login-chromium/test-failed-1.png"
+                        },
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "/Users/mickelsamuel/Projects/Nimbus Tasks/apps/web/test-results/auth-Authentication-Flow-s-84c75-ve-redirect-URL-after-login-chromium/video.webm"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "/Users/mickelsamuel/Projects/Nimbus Tasks/apps/web/test-results/auth-Authentication-Flow-s-84c75-ve-redirect-URL-after-login-chromium/error-context.md"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "/Users/mickelsamuel/Projects/Nimbus Tasks/apps/web/src/e2e/auth.spec.ts",
+                        "column": 48,
+                        "line": 125
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "d748ac400d08b85935ef-2535d451d43c370d797b",
+              "file": "auth.spec.ts",
+              "line": 120,
+              "column": 7
+            },
+            {
+              "title": "should logout and redirect to homepage",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [
+                    {
+                      "type": "skip",
+                      "location": {
+                        "file": "/Users/mickelsamuel/Projects/Nimbus Tasks/apps/web/src/e2e/auth.spec.ts",
+                        "line": 138,
+                        "column": 10
+                      }
+                    }
+                  ],
+                  "expectedStatus": "skipped",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 4,
+                      "parallelIndex": 4,
+                      "status": "skipped",
+                      "duration": 5444,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-09-20T15:57:21.504Z",
+                      "annotations": [
+                        {
+                          "type": "skip",
+                          "location": {
+                            "file": "/Users/mickelsamuel/Projects/Nimbus Tasks/apps/web/src/e2e/auth.spec.ts",
+                            "line": 138,
+                            "column": 10
+                          }
+                        }
+                      ],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "skipped"
+                }
+              ],
+              "id": "d748ac400d08b85935ef-3a2ec7a5b1a0257338ec",
+              "file": "auth.spec.ts",
+              "line": 136,
+              "column": 7
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "file-upload.spec.ts",
+      "file": "file-upload.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "File Upload Flow",
+          "file": "file-upload.spec.ts",
+          "line": 5,
+          "column": 6,
+          "specs": [
+            {
+              "title": "should show file upload component in task details",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [
+                    {
+                      "type": "skip",
+                      "location": {
+                        "file": "/Users/mickelsamuel/Projects/Nimbus Tasks/apps/web/src/e2e/file-upload.spec.ts",
+                        "line": 39,
+                        "column": 12
+                      }
+                    }
+                  ],
+                  "expectedStatus": "skipped",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 3,
+                      "parallelIndex": 3,
+                      "status": "skipped",
+                      "duration": 5293,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-09-20T15:57:21.636Z",
+                      "annotations": [
+                        {
+                          "type": "skip",
+                          "location": {
+                            "file": "/Users/mickelsamuel/Projects/Nimbus Tasks/apps/web/src/e2e/file-upload.spec.ts",
+                            "line": 39,
+                            "column": 12
+                          }
+                        }
+                      ],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "skipped"
+                }
+              ],
+              "id": "d240948938e2e45fd2aa-94a2bfe8952bfa51ac96",
+              "file": "file-upload.spec.ts",
+              "line": 12,
+              "column": 7
+            },
+            {
+              "title": "should handle file selection via input",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [
+                    {
+                      "type": "skip",
+                      "location": {
+                        "file": "/Users/mickelsamuel/Projects/Nimbus Tasks/apps/web/src/e2e/file-upload.spec.ts",
+                        "line": 72,
+                        "column": 12
+                      }
+                    }
+                  ],
+                  "expectedStatus": "skipped",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 8,
+                      "parallelIndex": 0,
+                      "status": "skipped",
+                      "duration": 3227,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-09-20T15:57:23.744Z",
+                      "annotations": [
+                        {
+                          "type": "skip",
+                          "location": {
+                            "file": "/Users/mickelsamuel/Projects/Nimbus Tasks/apps/web/src/e2e/file-upload.spec.ts",
+                            "line": 72,
+                            "column": 12
+                          }
+                        }
+                      ],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "skipped"
+                }
+              ],
+              "id": "d240948938e2e45fd2aa-4ab06dd58ec601a76979",
+              "file": "file-upload.spec.ts",
+              "line": 43,
+              "column": 7
+            },
+            {
+              "title": "should validate file types",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [
+                    {
+                      "type": "skip",
+                      "location": {
+                        "file": "/Users/mickelsamuel/Projects/Nimbus Tasks/apps/web/src/e2e/file-upload.spec.ts",
+                        "line": 104,
+                        "column": 12
+                      }
+                    }
+                  ],
+                  "expectedStatus": "skipped",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 1,
+                      "status": "skipped",
+                      "duration": 3073,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-09-20T15:57:26.351Z",
+                      "annotations": [
+                        {
+                          "type": "skip",
+                          "location": {
+                            "file": "/Users/mickelsamuel/Projects/Nimbus Tasks/apps/web/src/e2e/file-upload.spec.ts",
+                            "line": 104,
+                            "column": 12
+                          }
+                        }
+                      ],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "skipped"
+                }
+              ],
+              "id": "d240948938e2e45fd2aa-d7cf5b6087aead2d432e",
+              "file": "file-upload.spec.ts",
+              "line": 76,
+              "column": 7
+            },
+            {
+              "title": "should validate file size limits",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [
+                    {
+                      "type": "skip",
+                      "location": {
+                        "file": "/Users/mickelsamuel/Projects/Nimbus Tasks/apps/web/src/e2e/file-upload.spec.ts",
+                        "line": 138,
+                        "column": 12
+                      }
+                    }
+                  ],
+                  "expectedStatus": "skipped",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 3,
+                      "parallelIndex": 3,
+                      "status": "skipped",
+                      "duration": 3054,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-09-20T15:57:26.957Z",
+                      "annotations": [
+                        {
+                          "type": "skip",
+                          "location": {
+                            "file": "/Users/mickelsamuel/Projects/Nimbus Tasks/apps/web/src/e2e/file-upload.spec.ts",
+                            "line": 138,
+                            "column": 12
+                          }
+                        }
+                      ],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "skipped"
+                }
+              ],
+              "id": "d240948938e2e45fd2aa-eb759568b1f8398003e0",
+              "file": "file-upload.spec.ts",
+              "line": 108,
+              "column": 7
+            },
+            {
+              "title": "should show upload progress",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [
+                    {
+                      "type": "skip",
+                      "location": {
+                        "file": "/Users/mickelsamuel/Projects/Nimbus Tasks/apps/web/src/e2e/file-upload.spec.ts",
+                        "line": 183,
+                        "column": 12
+                      }
+                    }
+                  ],
+                  "expectedStatus": "skipped",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 4,
+                      "parallelIndex": 4,
+                      "status": "skipped",
+                      "duration": 2998,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-09-20T15:57:26.978Z",
+                      "annotations": [
+                        {
+                          "type": "skip",
+                          "location": {
+                            "file": "/Users/mickelsamuel/Projects/Nimbus Tasks/apps/web/src/e2e/file-upload.spec.ts",
+                            "line": 183,
+                            "column": 12
+                          }
+                        }
+                      ],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "skipped"
+                }
+              ],
+              "id": "d240948938e2e45fd2aa-c4ad7d26f4b28fea993b",
+              "file": "file-upload.spec.ts",
+              "line": 142,
+              "column": 7
+            },
+            {
+              "title": "should handle drag and drop upload",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [
+                    {
+                      "type": "skip",
+                      "location": {
+                        "file": "/Users/mickelsamuel/Projects/Nimbus Tasks/apps/web/src/e2e/file-upload.spec.ts",
+                        "line": 216,
+                        "column": 12
+                      }
+                    }
+                  ],
+                  "expectedStatus": "skipped",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 6,
+                      "parallelIndex": 5,
+                      "status": "skipped",
+                      "duration": 3093,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-09-20T15:57:27.269Z",
+                      "annotations": [
+                        {
+                          "type": "skip",
+                          "location": {
+                            "file": "/Users/mickelsamuel/Projects/Nimbus Tasks/apps/web/src/e2e/file-upload.spec.ts",
+                            "line": 216,
+                            "column": 12
+                          }
+                        }
+                      ],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "skipped"
+                }
+              ],
+              "id": "d240948938e2e45fd2aa-f7697728ebd111e2adcf",
+              "file": "file-upload.spec.ts",
+              "line": 187,
+              "column": 7
+            },
+            {
+              "title": "should display uploaded files list",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [
+                    {
+                      "type": "skip",
+                      "location": {
+                        "file": "/Users/mickelsamuel/Projects/Nimbus Tasks/apps/web/src/e2e/file-upload.spec.ts",
+                        "line": 238,
+                        "column": 12
+                      }
+                    }
+                  ],
+                  "expectedStatus": "skipped",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 8,
+                      "parallelIndex": 0,
+                      "status": "skipped",
+                      "duration": 2932,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-09-20T15:57:27.484Z",
+                      "annotations": [
+                        {
+                          "type": "skip",
+                          "location": {
+                            "file": "/Users/mickelsamuel/Projects/Nimbus Tasks/apps/web/src/e2e/file-upload.spec.ts",
+                            "line": 238,
+                            "column": 12
+                          }
+                        }
+                      ],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "skipped"
+                }
+              ],
+              "id": "d240948938e2e45fd2aa-362d9d8c97e1c720af56",
+              "file": "file-upload.spec.ts",
+              "line": 220,
+              "column": 7
+            },
+            {
+              "title": "should allow file download",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [
+                    {
+                      "type": "skip",
+                      "location": {
+                        "file": "/Users/mickelsamuel/Projects/Nimbus Tasks/apps/web/src/e2e/file-upload.spec.ts",
+                        "line": 261,
+                        "column": 12
+                      }
+                    }
+                  ],
+                  "expectedStatus": "skipped",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 1,
+                      "status": "skipped",
+                      "duration": 2534,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-09-20T15:57:29.475Z",
+                      "annotations": [
+                        {
+                          "type": "skip",
+                          "location": {
+                            "file": "/Users/mickelsamuel/Projects/Nimbus Tasks/apps/web/src/e2e/file-upload.spec.ts",
+                            "line": 261,
+                            "column": 12
+                          }
+                        }
+                      ],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "skipped"
+                }
+              ],
+              "id": "d240948938e2e45fd2aa-2f0c426967738f59a6f5",
+              "file": "file-upload.spec.ts",
+              "line": 242,
+              "column": 7
+            },
+            {
+              "title": "should allow file deletion",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [
+                    {
+                      "type": "skip",
+                      "location": {
+                        "file": "/Users/mickelsamuel/Projects/Nimbus Tasks/apps/web/src/e2e/file-upload.spec.ts",
+                        "line": 294,
+                        "column": 12
+                      }
+                    }
+                  ],
+                  "expectedStatus": "skipped",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 4,
+                      "parallelIndex": 4,
+                      "status": "skipped",
+                      "duration": 2667,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-09-20T15:57:30.017Z",
+                      "annotations": [
+                        {
+                          "type": "skip",
+                          "location": {
+                            "file": "/Users/mickelsamuel/Projects/Nimbus Tasks/apps/web/src/e2e/file-upload.spec.ts",
+                            "line": 294,
+                            "column": 12
+                          }
+                        }
+                      ],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "skipped"
+                }
+              ],
+              "id": "d240948938e2e45fd2aa-24685c3acc57114bcf8c",
+              "file": "file-upload.spec.ts",
+              "line": 265,
+              "column": 7
+            },
+            {
+              "title": "should show file preview for images",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [
+                    {
+                      "type": "skip",
+                      "location": {
+                        "file": "/Users/mickelsamuel/Projects/Nimbus Tasks/apps/web/src/e2e/file-upload.spec.ts",
+                        "line": 307,
+                        "column": 12
+                      }
+                    }
+                  ],
+                  "expectedStatus": "skipped",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 3,
+                      "parallelIndex": 3,
+                      "status": "skipped",
+                      "duration": 2599,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-09-20T15:57:30.033Z",
+                      "annotations": [
+                        {
+                          "type": "skip",
+                          "location": {
+                            "file": "/Users/mickelsamuel/Projects/Nimbus Tasks/apps/web/src/e2e/file-upload.spec.ts",
+                            "line": 307,
+                            "column": 12
+                          }
+                        }
+                      ],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "skipped"
+                }
+              ],
+              "id": "d240948938e2e45fd2aa-55a3ec08756f48980580",
+              "file": "file-upload.spec.ts",
+              "line": 298,
+              "column": 7
+            },
+            {
+              "title": "should handle multiple file uploads",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [
+                    {
+                      "type": "skip",
+                      "location": {
+                        "file": "/Users/mickelsamuel/Projects/Nimbus Tasks/apps/web/src/e2e/file-upload.spec.ts",
+                        "line": 344,
+                        "column": 12
+                      }
+                    }
+                  ],
+                  "expectedStatus": "skipped",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 9,
+                      "parallelIndex": 2,
+                      "status": "skipped",
+                      "duration": 2808,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-09-20T15:57:32.485Z",
+                      "annotations": [
+                        {
+                          "type": "skip",
+                          "location": {
+                            "file": "/Users/mickelsamuel/Projects/Nimbus Tasks/apps/web/src/e2e/file-upload.spec.ts",
+                            "line": 344,
+                            "column": 12
+                          }
+                        }
+                      ],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "skipped"
+                }
+              ],
+              "id": "d240948938e2e45fd2aa-65d62f406b0caa8043ec",
+              "file": "file-upload.spec.ts",
+              "line": 311,
+              "column": 7
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "tasks.spec.ts",
+      "file": "tasks.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "Task Management",
+          "file": "tasks.spec.ts",
+          "line": 3,
+          "column": 6,
+          "specs": [
+            {
+              "title": "should display tasks list",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 6,
+                      "parallelIndex": 5,
+                      "status": "failed",
+                      "duration": 12542,
+                      "error": {
+                        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m()\u001b[22m failed\n\nLocator:  locator('[data-testid=\"tasks-list\"]').or(locator('.tasks-container')).or(locator('text=Tasks'))\nExpected: visible\nReceived: <element(s) not found>\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for locator('[data-testid=\"tasks-list\"]').or(locator('.tasks-container')).or(locator('text=Tasks'))\u001b[22m\n",
+                        "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m()\u001b[22m failed\n\nLocator:  locator('[data-testid=\"tasks-list\"]').or(locator('.tasks-container')).or(locator('text=Tasks'))\nExpected: visible\nReceived: <element(s) not found>\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for locator('[data-testid=\"tasks-list\"]').or(locator('.tasks-container')).or(locator('text=Tasks'))\u001b[22m\n\n    at /Users/mickelsamuel/Projects/Nimbus Tasks/apps/web/src/e2e/tasks.spec.ts:23:34",
+                        "location": {
+                          "file": "/Users/mickelsamuel/Projects/Nimbus Tasks/apps/web/src/e2e/tasks.spec.ts",
+                          "column": 34,
+                          "line": 23
+                        },
+                        "snippet": "  21 |     )\n  22 |\n> 23 |     await expect(tasksContainer).toBeVisible({ timeout: 10000 })\n     |                                  ^\n  24 |   })\n  25 |\n  26 |   test('should open create task dialog', async ({ page }) => {"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "/Users/mickelsamuel/Projects/Nimbus Tasks/apps/web/src/e2e/tasks.spec.ts",
+                            "column": 34,
+                            "line": 23
+                          },
+                          "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m()\u001b[22m failed\n\nLocator:  locator('[data-testid=\"tasks-list\"]').or(locator('.tasks-container')).or(locator('text=Tasks'))\nExpected: visible\nReceived: <element(s) not found>\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for locator('[data-testid=\"tasks-list\"]').or(locator('.tasks-container')).or(locator('text=Tasks'))\u001b[22m\n\n\n  21 |     )\n  22 |\n> 23 |     await expect(tasksContainer).toBeVisible({ timeout: 10000 })\n     |                                  ^\n  24 |   })\n  25 |\n  26 |   test('should open create task dialog', async ({ page }) => {\n    at /Users/mickelsamuel/Projects/Nimbus Tasks/apps/web/src/e2e/tasks.spec.ts:23:34"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-09-20T15:57:30.389Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/Users/mickelsamuel/Projects/Nimbus Tasks/apps/web/test-results/tasks-Task-Management-should-display-tasks-list-chromium/test-failed-1.png"
+                        },
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "/Users/mickelsamuel/Projects/Nimbus Tasks/apps/web/test-results/tasks-Task-Management-should-display-tasks-list-chromium/video.webm"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "/Users/mickelsamuel/Projects/Nimbus Tasks/apps/web/test-results/tasks-Task-Management-should-display-tasks-list-chromium/error-context.md"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "/Users/mickelsamuel/Projects/Nimbus Tasks/apps/web/src/e2e/tasks.spec.ts",
+                        "column": 34,
+                        "line": 23
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "d2d3f88df070d751ab05-2c8324db3a8484cd784d",
+              "file": "tasks.spec.ts",
+              "line": 15,
+              "column": 7
+            },
+            {
+              "title": "should open create task dialog",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [
+                    {
+                      "type": "skip",
+                      "location": {
+                        "file": "/Users/mickelsamuel/Projects/Nimbus Tasks/apps/web/src/e2e/tasks.spec.ts",
+                        "line": 46,
+                        "column": 12
+                      }
+                    }
+                  ],
+                  "expectedStatus": "skipped",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 8,
+                      "parallelIndex": 0,
+                      "status": "skipped",
+                      "duration": 2763,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-09-20T15:57:30.515Z",
+                      "annotations": [
+                        {
+                          "type": "skip",
+                          "location": {
+                            "file": "/Users/mickelsamuel/Projects/Nimbus Tasks/apps/web/src/e2e/tasks.spec.ts",
+                            "line": 46,
+                            "column": 12
+                          }
+                        }
+                      ],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "skipped"
+                }
+              ],
+              "id": "d2d3f88df070d751ab05-97a9fd330751d248573f",
+              "file": "tasks.spec.ts",
+              "line": 26,
+              "column": 7
+            },
+            {
+              "title": "should validate required fields in task creation",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [
+                    {
+                      "type": "skip",
+                      "location": {
+                        "file": "/Users/mickelsamuel/Projects/Nimbus Tasks/apps/web/src/e2e/tasks.spec.ts",
+                        "line": 78,
+                        "column": 12
+                      }
+                    }
+                  ],
+                  "expectedStatus": "skipped",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 1,
+                      "status": "skipped",
+                      "duration": 2527,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-09-20T15:57:32.038Z",
+                      "annotations": [
+                        {
+                          "type": "skip",
+                          "location": {
+                            "file": "/Users/mickelsamuel/Projects/Nimbus Tasks/apps/web/src/e2e/tasks.spec.ts",
+                            "line": 78,
+                            "column": 12
+                          }
+                        }
+                      ],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "skipped"
+                }
+              ],
+              "id": "d2d3f88df070d751ab05-1ba6590214a1dddb6fc5",
+              "file": "tasks.spec.ts",
+              "line": 50,
+              "column": 7
+            },
+            {
+              "title": "should create a new task successfully",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [
+                    {
+                      "type": "skip",
+                      "location": {
+                        "file": "/Users/mickelsamuel/Projects/Nimbus Tasks/apps/web/src/e2e/tasks.spec.ts",
+                        "line": 127,
+                        "column": 12
+                      }
+                    }
+                  ],
+                  "expectedStatus": "skipped",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 3,
+                      "parallelIndex": 3,
+                      "status": "skipped",
+                      "duration": 2783,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-09-20T15:57:32.659Z",
+                      "annotations": [
+                        {
+                          "type": "skip",
+                          "location": {
+                            "file": "/Users/mickelsamuel/Projects/Nimbus Tasks/apps/web/src/e2e/tasks.spec.ts",
+                            "line": 127,
+                            "column": 12
+                          }
+                        }
+                      ],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "skipped"
+                }
+              ],
+              "id": "d2d3f88df070d751ab05-ad092bdf87776282e056",
+              "file": "tasks.spec.ts",
+              "line": 82,
+              "column": 7
+            },
+            {
+              "title": "should filter tasks by status",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [
+                    {
+                      "type": "skip",
+                      "location": {
+                        "file": "/Users/mickelsamuel/Projects/Nimbus Tasks/apps/web/src/e2e/tasks.spec.ts",
+                        "line": 157,
+                        "column": 12
+                      }
+                    }
+                  ],
+                  "expectedStatus": "skipped",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 4,
+                      "parallelIndex": 4,
+                      "status": "skipped",
+                      "duration": 2995,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-09-20T15:57:32.740Z",
+                      "annotations": [
+                        {
+                          "type": "skip",
+                          "location": {
+                            "file": "/Users/mickelsamuel/Projects/Nimbus Tasks/apps/web/src/e2e/tasks.spec.ts",
+                            "line": 157,
+                            "column": 12
+                          }
+                        }
+                      ],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "skipped"
+                }
+              ],
+              "id": "d2d3f88df070d751ab05-500708fb6b9a6a7f721f",
+              "file": "tasks.spec.ts",
+              "line": 131,
+              "column": 7
+            },
+            {
+              "title": "should open task details dialog",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 8,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 2734,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "No tasks available to click on\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-09-20T15:57:33.308Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d2d3f88df070d751ab05-5236a7f8aa1fee3e272c",
+              "file": "tasks.spec.ts",
+              "line": 161,
+              "column": 7
+            },
+            {
+              "title": "should update task status via drag and drop",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [
+                    {
+                      "type": "skip",
+                      "location": {
+                        "file": "/Users/mickelsamuel/Projects/Nimbus Tasks/apps/web/src/e2e/tasks.spec.ts",
+                        "line": 187,
+                        "column": 10
+                      }
+                    }
+                  ],
+                  "expectedStatus": "skipped",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 1,
+                      "status": "skipped",
+                      "duration": 1941,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-09-20T15:57:34.589Z",
+                      "annotations": [
+                        {
+                          "type": "skip",
+                          "location": {
+                            "file": "/Users/mickelsamuel/Projects/Nimbus Tasks/apps/web/src/e2e/tasks.spec.ts",
+                            "line": 187,
+                            "column": 10
+                          }
+                        }
+                      ],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "skipped"
+                }
+              ],
+              "id": "d2d3f88df070d751ab05-b80a5bacd2483e1e842d",
+              "file": "tasks.spec.ts",
+              "line": 185,
+              "column": 7
+            },
+            {
+              "title": "should search tasks",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [
+                    {
+                      "type": "skip",
+                      "location": {
+                        "file": "/Users/mickelsamuel/Projects/Nimbus Tasks/apps/web/src/e2e/tasks.spec.ts",
+                        "line": 206,
+                        "column": 12
+                      }
+                    }
+                  ],
+                  "expectedStatus": "skipped",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 3,
+                      "parallelIndex": 3,
+                      "status": "skipped",
+                      "duration": 1977,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-09-20T15:57:35.462Z",
+                      "annotations": [
+                        {
+                          "type": "skip",
+                          "location": {
+                            "file": "/Users/mickelsamuel/Projects/Nimbus Tasks/apps/web/src/e2e/tasks.spec.ts",
+                            "line": 206,
+                            "column": 12
+                          }
+                        }
+                      ],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "skipped"
+                }
+              ],
+              "id": "d2d3f88df070d751ab05-3ae2066e623ed9ccfae1",
+              "file": "tasks.spec.ts",
+              "line": 190,
+              "column": 7
+            },
+            {
+              "title": "should paginate through tasks",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 4,
+                      "parallelIndex": 4,
+                      "status": "passed",
+                      "duration": 2404,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "Pagination not available or no additional pages\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-09-20T15:57:35.767Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d2d3f88df070d751ab05-8e076feb227ddc7c59a4",
+              "file": "tasks.spec.ts",
+              "line": 210,
+              "column": 7
+            },
+            {
+              "title": "should show task count and statistics",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [
+                    {
+                      "type": "skip",
+                      "location": {
+                        "file": "/Users/mickelsamuel/Projects/Nimbus Tasks/apps/web/src/e2e/tasks.spec.ts",
+                        "line": 246,
+                        "column": 12
+                      }
+                    }
+                  ],
+                  "expectedStatus": "skipped",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 9,
+                      "parallelIndex": 2,
+                      "status": "skipped",
+                      "duration": 2331,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-09-20T15:57:35.830Z",
+                      "annotations": [
+                        {
+                          "type": "skip",
+                          "location": {
+                            "file": "/Users/mickelsamuel/Projects/Nimbus Tasks/apps/web/src/e2e/tasks.spec.ts",
+                            "line": 246,
+                            "column": 12
+                          }
+                        }
+                      ],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "skipped"
+                }
+              ],
+              "id": "d2d3f88df070d751ab05-ebe7b92dabfc911a278e",
+              "file": "tasks.spec.ts",
+              "line": 235,
+              "column": 7
+            },
+            {
+              "title": "should handle empty state",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 8,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 1585,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "Checked for empty state handling\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-09-20T15:57:36.076Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d2d3f88df070d751ab05-8dd985a675a5a5c459b9",
+              "file": "tasks.spec.ts",
+              "line": 250,
+              "column": 7
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2025-09-20T15:56:49.870Z",
+    "duration": 53603.546,
+    "expected": 5,
+    "skipped": 21,
+    "unexpected": 5,
+    "flaky": 0
+  }
+}

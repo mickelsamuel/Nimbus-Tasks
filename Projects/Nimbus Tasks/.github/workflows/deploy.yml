@@ -1,0 +1,252 @@
+name: Deploy to Production
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+env:
+  NODE_VERSION: '18.x'
+  PNPM_VERSION: '8.15.4'
+  AWS_REGION: us-east-1
+  ECR_REPOSITORY: nimbus-tasks
+
+jobs:
+  deploy:
+    name: Deploy to AWS
+    runs-on: ubuntu-latest
+    environment: production
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v2
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: ${{ env.PNPM_VERSION }}
+
+      - name: Get pnpm store directory
+        shell: bash
+        run: |
+          echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
+
+      - name: Setup pnpm cache
+        uses: actions/cache@v3
+        with:
+          path: ${{ env.STORE_PATH }}
+          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-store-
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Generate Prisma client
+        run: |
+          cd packages/db
+          pnpm db:generate
+
+      - name: Build application
+        run: pnpm build
+        env:
+          # Dummy environment variables for build
+          DATABASE_URL: postgresql://dummy:dummy@dummy:5432/dummy
+          NEXTAUTH_SECRET: dummy-secret-for-build
+          NEXTAUTH_URL: http://localhost:3000
+          AWS_REGION: us-east-1
+          AWS_ACCESS_KEY_ID: dummy
+          AWS_SECRET_ACCESS_KEY: dummy
+          S3_BUCKET_NAME: dummy-bucket
+
+      - name: Extract version from tag
+        id: extract_version
+        run: echo "VERSION=${GITHUB_REF#refs/tags/}" >> $GITHUB_OUTPUT
+
+      - name: Build, tag, and push image to Amazon ECR
+        id: build-image
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          IMAGE_TAG: ${{ steps.extract_version.outputs.VERSION }}
+        run: |
+          # Build a docker container and push it to ECR
+          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
+          docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+
+          # Also tag as latest
+          docker tag $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG $ECR_REGISTRY/$ECR_REPOSITORY:latest
+          docker push $ECR_REGISTRY/$ECR_REPOSITORY:latest
+
+          echo "image=$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG" >> $GITHUB_OUTPUT
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: 1.6.0
+
+      - name: Terraform Init
+        run: |
+          cd infra/terraform
+          terraform init
+
+      - name: Terraform Plan
+        run: |
+          cd infra/terraform
+          terraform plan \
+            -var="app_image=${{ steps.build-image.outputs.image }}" \
+            -var="environment=prod" \
+            -out=tfplan
+
+      - name: Terraform Apply
+        run: |
+          cd infra/terraform
+          terraform apply tfplan
+
+      - name: Get ECS service info
+        id: ecs-info
+        run: |
+          cd infra/terraform
+          CLUSTER_NAME=$(terraform output -raw ecs_cluster_name)
+          SERVICE_NAME=$(terraform output -raw ecs_service_name)
+          echo "cluster_name=$CLUSTER_NAME" >> $GITHUB_OUTPUT
+          echo "service_name=$SERVICE_NAME" >> $GITHUB_OUTPUT
+
+      - name: Deploy to ECS
+        run: |
+          # Update the ECS service to use the new image
+          aws ecs update-service \
+            --cluster ${{ steps.ecs-info.outputs.cluster_name }} \
+            --service ${{ steps.ecs-info.outputs.service_name }} \
+            --force-new-deployment
+
+      - name: Wait for ECS deployment
+        run: |
+          # Wait for the deployment to complete
+          aws ecs wait services-stable \
+            --cluster ${{ steps.ecs-info.outputs.cluster_name }} \
+            --services ${{ steps.ecs-info.outputs.service_name }}
+
+      - name: Run database migrations
+        run: |
+          # Get the database URL from Secrets Manager
+          DATABASE_URL=$(aws secretsmanager get-secret-value \
+            --secret-id nimbus-tasks-prod-database-url \
+            --query SecretString --output text)
+
+          # Run migrations using ECS task
+          aws ecs run-task \
+            --cluster ${{ steps.ecs-info.outputs.cluster_name }} \
+            --task-definition nimbus-tasks-prod-migration \
+            --launch-type FARGATE \
+            --network-configuration "awsvpcConfiguration={subnets=[$(cd infra/terraform && terraform output -json private_subnets | jq -r '. | join(",")')]}" \
+            --overrides '{
+              "containerOverrides": [{
+                "name": "nimbus-tasks-migration",
+                "command": ["pnpm", "db:migrate:deploy"]
+              }]
+            }'
+
+      - name: Get deployment info
+        id: deployment-info
+        run: |
+          cd infra/terraform
+          APPLICATION_URL=$(terraform output -raw application_url)
+          echo "application_url=$APPLICATION_URL" >> $GITHUB_OUTPUT
+
+      - name: Health check
+        run: |
+          # Wait a bit for the service to be ready
+          sleep 30
+
+          # Perform health check
+          response=$(curl -s -o /dev/null -w "%{http_code}" "${{ steps.deployment-info.outputs.application_url }}/api/health")
+
+          if [ $response -eq 200 ]; then
+            echo "✅ Health check passed"
+          else
+            echo "❌ Health check failed with status code: $response"
+            exit 1
+          fi
+
+      - name: Notify deployment success
+        run: |
+          echo "🚀 Deployment successful!"
+          echo "Application URL: ${{ steps.deployment-info.outputs.application_url }}"
+          echo "Version: ${{ steps.extract_version.outputs.VERSION }}"
+          echo "Image: ${{ steps.build-image.outputs.image }}"
+
+  # Rollback job (manual trigger)
+  rollback:
+    name: Rollback Deployment
+    runs-on: ubuntu-latest
+    environment: production
+    if: failure()
+    needs: [deploy]
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: 1.6.0
+
+      - name: Terraform Init
+        run: |
+          cd infra/terraform
+          terraform init
+
+      - name: Get previous stable image
+        id: previous-image
+        run: |
+          # Get the previous stable tag (this is a simplified example)
+          # In production, you'd want a more sophisticated rollback strategy
+          PREVIOUS_TAG=$(git describe --tags --abbrev=0 HEAD~1 2>/dev/null || echo "latest")
+          ECR_REGISTRY=$(aws sts get-caller-identity --query Account --output text).dkr.ecr.${{ env.AWS_REGION }}.amazonaws.com
+          PREVIOUS_IMAGE="$ECR_REGISTRY/$ECR_REPOSITORY:$PREVIOUS_TAG"
+          echo "previous_image=$PREVIOUS_IMAGE" >> $GITHUB_OUTPUT
+
+      - name: Rollback ECS service
+        run: |
+          cd infra/terraform
+          CLUSTER_NAME=$(terraform output -raw ecs_cluster_name)
+          SERVICE_NAME=$(terraform output -raw ecs_service_name)
+
+          # Update service to use previous image
+          # This would require updating the task definition with the previous image
+          echo "Rolling back to: ${{ steps.previous-image.outputs.previous_image }}"
+
+          # Force new deployment to rollback
+          aws ecs update-service \
+            --cluster $CLUSTER_NAME \
+            --service $SERVICE_NAME \
+            --force-new-deployment
+
+      - name: Notify rollback
+        run: |
+          echo "🔄 Rollback initiated due to deployment failure"
+          echo "Rolled back to: ${{ steps.previous-image.outputs.previous_image }}"

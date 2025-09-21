@@ -1,0 +1,474 @@
+name: Deploy to Production
+
+on:
+  workflow_dispatch:
+    inputs:
+      image_tag:
+        description: 'Docker image tag to deploy'
+        required: true
+        type: string
+      confirm_production:
+        description: 'Type "DEPLOY_TO_PRODUCTION" to confirm'
+        required: true
+        type: string
+
+env:
+  NODE_VERSION: '18.x'
+  PNPM_VERSION: '8.15.4'
+
+jobs:
+  validate-inputs:
+    name: Validate Inputs
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    steps:
+      - name: Validate confirmation
+        run: |
+          if [ "${{ github.event.inputs.confirm_production }}" != "DEPLOY_TO_PRODUCTION" ]; then
+            echo "Error: You must type 'DEPLOY_TO_PRODUCTION' to confirm production deployment"
+            exit 1
+          fi
+
+      - name: Validate image tag format
+        run: |
+          if [[ ! "${{ github.event.inputs.image_tag }}" =~ ^[a-zA-Z0-9._-]+:[a-zA-Z0-9._-]+$ ]]; then
+            echo "Error: Invalid image tag format. Expected format: registry/image:tag"
+            exit 1
+          fi
+
+  terraform-plan-prod:
+    name: Terraform Plan (Production)
+    runs-on: ubuntu-latest
+    needs: [validate-inputs]
+    timeout-minutes: 15
+
+    defaults:
+      run:
+        working-directory: infra/terraform
+
+    outputs:
+      plan-hash: ${{ steps.plan.outputs.hash }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: "~1.7.0"
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION }}
+
+      - name: Terraform Init
+        run: terraform init
+
+      - name: Terraform Workspace Select/Create
+        run: |
+          terraform workspace select production || terraform workspace new production
+
+      - name: Terraform Plan
+        id: plan
+        run: |
+          terraform plan \
+            -var="app_image=${{ github.event.inputs.image_tag }}" \
+            -var="environment=production" \
+            -var="deletion_protection=true" \
+            -var="app_count=3" \
+            -var="enable_backups=true" \
+            -out=tfplan-prod
+
+          # Generate plan hash for verification
+          terraform show -json tfplan-prod | jq -r '.planned_values' | sha256sum | cut -d' ' -f1 > plan-hash.txt
+          echo "hash=$(cat plan-hash.txt)" >> $GITHUB_OUTPUT
+
+      - name: Upload Terraform Plan
+        uses: actions/upload-artifact@v3
+        with:
+          name: terraform-plan-prod
+          path: |
+            infra/terraform/tfplan-prod
+            infra/terraform/plan-hash.txt
+
+      - name: Comment PR with Plan
+        if: github.event_name == 'pull_request'
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const fs = require('fs');
+            const plan = fs.readFileSync('infra/terraform/tfplan-prod', 'utf8');
+
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: `## Terraform Production Plan
+
+              \`\`\`terraform
+              ${plan}
+              \`\`\`
+
+              **Image Tag:** \`${{ github.event.inputs.image_tag }}\`
+              **Plan Hash:** \`${{ steps.plan.outputs.hash }}\`
+              `
+            });
+
+  security-review:
+    name: Security Review
+    runs-on: ubuntu-latest
+    needs: [terraform-plan-prod]
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Download Terraform Plan
+        uses: actions/download-artifact@v3
+        with:
+          name: terraform-plan-prod
+          path: infra/terraform
+
+      - name: Security scan of Terraform plan
+        uses: aquasecurity/trivy-action@master
+        with:
+          scan-type: 'config'
+          scan-ref: 'infra/terraform'
+          format: 'sarif'
+          output: 'trivy-results.sarif'
+
+      - name: Upload Trivy scan results
+        uses: github/codeql-action/upload-sarif@v2
+        with:
+          sarif_file: 'trivy-results.sarif'
+
+      - name: Check for critical vulnerabilities
+        run: |
+          # Parse SARIF and fail if critical vulnerabilities found
+          if jq '.runs[0].results[] | select(.level == "error")' trivy-results.sarif | grep -q "error"; then
+            echo "❌ Critical security vulnerabilities found in Terraform configuration"
+            exit 1
+          else
+            echo "✅ No critical security vulnerabilities found"
+          fi
+
+  deploy-production:
+    name: Deploy to Production
+    runs-on: ubuntu-latest
+    needs: [security-review]
+    environment:
+      name: production
+      url: ${{ steps.deploy.outputs.app_url }}
+    timeout-minutes: 45
+
+    defaults:
+      run:
+        working-directory: infra/terraform
+
+    outputs:
+      app-url: ${{ steps.deploy.outputs.app_url }}
+      deployment-time: ${{ steps.deploy.outputs.deployment_time }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: "~1.7.0"
+          terraform_wrapper: false
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID_PROD }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY_PROD }}
+          aws-region: ${{ secrets.AWS_REGION }}
+
+      - name: Download Terraform Plan
+        uses: actions/download-artifact@v3
+        with:
+          name: terraform-plan-prod
+          path: infra/terraform
+
+      - name: Verify Plan Hash
+        run: |
+          STORED_HASH=$(cat plan-hash.txt)
+          CURRENT_HASH=$(terraform show -json tfplan-prod | jq -r '.planned_values' | sha256sum | cut -d' ' -f1)
+
+          if [ "$STORED_HASH" != "$CURRENT_HASH" ]; then
+            echo "❌ Plan hash mismatch! Plan may have been tampered with."
+            echo "Stored: $STORED_HASH"
+            echo "Current: $CURRENT_HASH"
+            exit 1
+          fi
+
+          echo "✅ Plan hash verified"
+
+      - name: Terraform Init
+        run: terraform init
+
+      - name: Terraform Workspace Select
+        run: terraform workspace select production
+
+      - name: Pre-deployment backup
+        run: |
+          echo "Creating pre-deployment backup..."
+
+          # Create RDS snapshot
+          aws rds create-db-snapshot \
+            --db-instance-identifier $(terraform output -raw rds_instance_id) \
+            --db-snapshot-identifier "pre-deploy-$(date +%Y%m%d-%H%M%S)" \
+            --region ${{ secrets.AWS_REGION }}
+
+          echo "✅ Pre-deployment backup created"
+
+      - name: Terraform Apply
+        id: deploy
+        run: |
+          echo "deployment_time=$(date -u +%Y-%m-%dT%H:%M:%SZ)" >> $GITHUB_OUTPUT
+
+          terraform apply -auto-approve tfplan-prod
+
+          # Export outputs
+          echo "app_url=$(terraform output -raw app_url)" >> $GITHUB_OUTPUT
+
+      - name: Wait for deployment stabilization
+        run: |
+          echo "Waiting for deployment to stabilize..."
+          sleep 180
+
+          # Extended health check with retries
+          HEALTH_URL="${{ steps.deploy.outputs.app_url }}/health"
+
+          for i in {1..15}; do
+            echo "Health check attempt $i/15..."
+
+            if curl -f -s "$HEALTH_URL" | jq -e '.status == "healthy"' > /dev/null; then
+              echo "✅ Application is healthy!"
+              break
+            fi
+
+            if [ $i -eq 15 ]; then
+              echo "❌ Health checks failed after 15 attempts"
+              exit 1
+            fi
+
+            echo "Health check failed, retrying in 30s..."
+            sleep 30
+          done
+
+      - name: Verify deployment metrics
+        run: |
+          echo "Verifying deployment metrics..."
+
+          # Check ECS service is stable
+          SERVICE_ARN=$(terraform output -raw ecs_service_arn)
+          aws ecs wait services-stable \
+            --cluster $(terraform output -raw ecs_cluster_name) \
+            --services "$SERVICE_ARN" \
+            --region ${{ secrets.AWS_REGION }}
+
+          echo "✅ ECS service is stable"
+
+  smoke-test-production:
+    name: Production Smoke Tests
+    runs-on: ubuntu-latest
+    needs: [deploy-production]
+    timeout-minutes: 20
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: ${{ env.PNPM_VERSION }}
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Install Playwright browsers
+        run: pnpm exec playwright install --with-deps
+
+      - name: Run production smoke tests
+        run: pnpm test:smoke:production
+        env:
+          BASE_URL: ${{ needs.deploy-production.outputs.app-url }}
+          CI: true
+          ENVIRONMENT: production
+
+      - name: Run performance tests
+        run: pnpm test:performance
+        env:
+          BASE_URL: ${{ needs.deploy-production.outputs.app-url }}
+          CI: true
+
+      - name: Upload smoke test report
+        uses: actions/upload-artifact@v3
+        if: always()
+        with:
+          name: production-smoke-test-report
+          path: smoke-test-report/
+          retention-days: 30
+
+  rollback-check:
+    name: Rollback Readiness Check
+    runs-on: ubuntu-latest
+    needs: [deploy-production]
+    if: failure()
+    timeout-minutes: 10
+
+    defaults:
+      run:
+        working-directory: infra/terraform
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: "~1.7.0"
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID_PROD }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY_PROD }}
+          aws-region: ${{ secrets.AWS_REGION }}
+
+      - name: Prepare rollback plan
+        run: |
+          echo "🔄 Preparing rollback plan..."
+
+          # Get previous successful deployment image
+          PREVIOUS_IMAGE=$(aws ecs describe-services \
+            --cluster $(terraform output -raw ecs_cluster_name) \
+            --services $(terraform output -raw ecs_service_name) \
+            --query 'services[0].deployments[1].taskDefinition' \
+            --output text | xargs aws ecs describe-task-definition --task-definition | \
+            jq -r '.taskDefinition.containerDefinitions[0].image')
+
+          echo "Previous image: $PREVIOUS_IMAGE"
+          echo "ROLLBACK_IMAGE=$PREVIOUS_IMAGE" >> $GITHUB_ENV
+
+      - name: Create rollback issue
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const { data: issue } = await github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: '🚨 Production Deployment Failed - Rollback Required',
+              body: `
+              ## Production Deployment Failure
+
+              **Failed Deployment:**
+              - Image: \`${{ github.event.inputs.image_tag }}\`
+              - Time: \`${{ needs.deploy-production.outputs.deployment-time }}\`
+              - Workflow: [${context.runId}](${context.payload.repository.html_url}/actions/runs/${context.runId})
+
+              **Rollback Information:**
+              - Previous Image: \`${process.env.ROLLBACK_IMAGE}\`
+              - RDS Snapshot: Check AWS Console for latest pre-deployment snapshot
+
+              ## Immediate Actions Required:
+              1. Review deployment logs
+              2. Determine if rollback is needed
+              3. If rollback needed, trigger rollback workflow with previous image
+
+              ## Health Status:
+              - App URL: ${{ needs.deploy-production.outputs.app-url }}
+              - Check monitoring dashboards immediately
+
+              @platform-team @sre-oncall
+              `,
+              labels: ['production', 'deployment-failure', 'urgent']
+            });
+
+            console.log('Created rollback issue:', issue.html_url);
+
+  notify-deployment:
+    name: Notify Deployment
+    runs-on: ubuntu-latest
+    needs: [smoke-test-production]
+    if: always()
+
+    steps:
+      - name: Notify Slack on Success
+        if: needs.smoke-test-production.result == 'success'
+        uses: 8398a7/action-slack@v3
+        with:
+          status: success
+          channel: '#production-deployments'
+          text: |
+            🎉 Nimbus Tasks deployed to PRODUCTION successfully!
+
+            *Deployment Details:*
+            • Image: `${{ github.event.inputs.image_tag }}`
+            • Deployed by: @${{ github.actor }}
+            • Deployment time: ${{ needs.deploy-production.outputs.deployment-time }}
+            • App URL: ${{ needs.deploy-production.outputs.app-url }}
+
+            🚀 Production is live and healthy!
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL_PROD }}
+
+      - name: Notify Slack on Failure
+        if: needs.smoke-test-production.result == 'failure'
+        uses: 8398a7/action-slack@v3
+        with:
+          status: failure
+          channel: '#production-deployments'
+          text: |
+            🚨 URGENT: Nimbus Tasks production deployment FAILED!
+
+            *Failure Details:*
+            • Image: `${{ github.event.inputs.image_tag }}`
+            • Deployed by: @${{ github.actor }}
+            • Workflow: ${{ github.workflow }}
+            • Run: ${{ github.run_id }}
+
+            @channel @sre-oncall
+            Immediate investigation required!
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL_PROD }}
+
+      - name: Create deployment record
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const deploymentStatus = '${{ needs.smoke-test-production.result }}' === 'success' ? 'success' : 'failure';
+
+            await github.rest.repos.createDeployment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              ref: context.sha,
+              environment: 'production',
+              description: `Deploy ${{ github.event.inputs.image_tag }} to production`,
+              auto_merge: false
+            });
+
+            await github.rest.repos.createDeploymentStatus({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              deployment_id: deployment.data.id,
+              state: deploymentStatus,
+              environment_url: '${{ needs.deploy-production.outputs.app-url }}',
+              description: deploymentStatus === 'success' ? 'Deployment successful' : 'Deployment failed'
+            });

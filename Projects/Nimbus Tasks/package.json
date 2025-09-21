@@ -1,0 +1,53 @@
+{
+  "name": "nimbus-tasks",
+  "private": true,
+  "version": "0.1.0",
+  "description": "Multi-tenant task/notes/collab SaaS platform",
+  "keywords": [
+    "saas",
+    "tasks",
+    "collaboration",
+    "multi-tenant"
+  ],
+  "license": "MIT",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "build": "turbo build",
+    "dev": "turbo dev",
+    "dev:stack": "npm run docker:up && npm run dev:wait-for-services && turbo dev",
+    "dev:wait-for-services": "node scripts/wait-for-services.js",
+    "lint": "turbo lint",
+    "format": "prettier --write \"**/*.{ts,tsx,md}\"",
+    "clean": "turbo clean",
+    "type-check": "turbo type-check",
+    "test:unit": "turbo test",
+    "test:coverage": "turbo test:coverage",
+    "test:e2e": "turbo test:e2e",
+    "test:e2e:ci": "turbo test:e2e --reporter=html --reporter=json --reporter=junit",
+    "db:push": "turbo db:push",
+    "db:seed": "turbo db:seed",
+    "db:seed:enhanced": "node scripts/enhanced-seed.js",
+    "docker:up": "docker-compose -f infra/docker-compose.yml up -d",
+    "docker:down": "docker-compose -f infra/docker-compose.yml down",
+    "docker:logs": "docker-compose -f infra/docker-compose.yml logs -f",
+    "docker:status": "docker-compose -f infra/docker-compose.yml ps",
+    "cleanup:plan": "tsx scripts/monorepo_cleanup.ts plan",
+    "cleanup:apply": "tsx scripts/monorepo_cleanup.ts apply",
+    "cleanup:verify": "turbo lint && turbo type-check && turbo build && turbo test && turbo test:e2e"
+  },
+  "devDependencies": {
+    "@turbo/gen": "^1.10.7",
+    "prettier": "^3.0.3",
+    "tsx": "^3.14.0",
+    "turbo": "^1.10.7",
+    "typescript": "^5.2.2"
+  },
+  "engines": {
+    "node": ">=18.0.0",
+    "pnpm": ">=8.0.0"
+  },
+  "packageManager": "pnpm@8.15.4"
+}

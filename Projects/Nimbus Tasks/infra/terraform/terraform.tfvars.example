@@ -1,0 +1,40 @@
+# General Configuration
+project_name = "nimbus-tasks"
+environment  = "prod"
+aws_region   = "us-east-1"
+
+# Network Configuration
+vpc_cidr               = "10.0.0.0/16"
+public_subnet_cidrs    = ["10.0.1.0/24", "10.0.2.0/24"]
+private_subnet_cidrs   = ["10.0.101.0/24", "10.0.102.0/24"]
+
+# ECS Configuration
+app_port        = 3000
+app_count       = 2
+fargate_cpu     = 512
+fargate_memory  = 1024
+app_image       = "your-account-id.dkr.ecr.us-east-1.amazonaws.com/nimbus-tasks:latest"
+
+# Database Configuration
+db_name               = "nimbus_tasks"
+db_username           = "nimbus_admin"
+db_instance_class     = "db.t3.micro"
+db_allocated_storage  = 20
+
+# Domain and SSL (optional)
+domain_name     = "tasks.yourdomain.com"
+certificate_arn = "arn:aws:acm:us-east-1:123456789012:certificate/12345678-1234-1234-1234-123456789012"
+
+# Monitoring
+enable_xray    = true
+enable_logging = true
+
+# Security
+allowed_cidr_blocks = ["0.0.0.0/0"]  # Restrict this in production
+
+# S3 Configuration
+s3_bucket_force_destroy = false  # Set to true for dev/staging
+
+# Redis Configuration
+redis_node_type = "cache.t3.micro"
+redis_port      = 6379
